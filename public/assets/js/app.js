@@ -4,7 +4,7 @@ angular.module('MainModule', [
     'Transporter',
     'ui.bootstrap'
 ])
-    .config(['$stateProvider', function($stateProvider) {
+    .config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
 
         $stateProvider
             .state('home', {
@@ -66,5 +66,11 @@ angular.module('MainModule', [
                 url: '/email_activation',
                 templateUrl: '../views/pages/email_activation.html',
                 controller: "EmailActivationController"
-            })
+            });
+
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
+
     }]);

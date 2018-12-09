@@ -145,9 +145,53 @@ angular.module('ControllersModule', [])
             return re.test(String(email).toLowerCase());
         }
 
-        $scope.signUp = () => {
+        let phone;
 
-            //let phone = $scope.phone;
+        let beginSignup = (phone) => {
+            showLoader();
+
+            Transporter.signup({
+                fullname: $scope.fullname,
+                org: $scope.org,
+                work: $scope.work_location,
+                home: $scope.home_location,
+                email: $scope.email,
+                phone: phone,
+                username: $scope.username,
+                password: $scope.password
+            }).then(response => {
+                $log.log("Response: ", response);
+
+                hideLoader();
+
+                switch (response.data){
+                    case "username_exists":
+                        $("#username").notify("Username is not available. Please choose another.", { position: "bottom-center" });
+                        break;
+                    case "email_exists":
+                        $("#email").notify("Email is registered. Please login if you have an account.", { position: "bottom-center" });
+                        break;
+                    case "phone_exists":
+                        $("#phone").notify("Phone is registered. Please login if you have an account.", { position: "bottom-center" });
+                        break;
+                    case "db_error":
+                        $("#signupform").notify("Error. Please try again later.", { position: "bottom-center" });
+                        break;
+                    case "signup_successful":
+                        store.set("user", {email: $scope.email});
+                        rootShared.user["email"] = $scope.email;
+
+                        $("#signup").hide();
+                        $("#email_confirmation").show();
+                        break;
+                    default:
+                        $("#signupform").notify("There has been a problem and we don't know the reason. Please try again later.", { position: "bottom-center" });
+                        break;
+                }
+            })
+        };
+
+        $scope.signUp = () => {
 
             if(!$scope.fullname) {
                 $("#fullname").notify("Please enter your full name.", { position: "bottom-center" });
@@ -173,18 +217,6 @@ angular.module('ControllersModule', [])
             else if(!$scope.phone) {
                 $("#phone").notify("Please enter your phone number.", { position: "bottom-center" });
             }
-            else if($scope.phone.startsWith("0") && $scope.phone.trim().length === 11) {
-                $scope.phone.slice(1);
-            }
-            else if($scope.phone.startsWith("+234")) {
-                $scope.phone.slice(4);
-            }
-            else if($scope.phone.startsWith("234")) {
-                $scope.phone.slice(3)
-            }
-            else if($scope.phone.trim().length < 10 || $scope.phone.trim().length > 14) {
-                $("#phone").notify("Please enter a valid phone number.", { position: "bottom-center" });
-            }
             else if(!$scope.username) {
                 $("#username").notify("Please choose a username.", { position: "bottom-center" });
             }
@@ -194,49 +226,24 @@ angular.module('ControllersModule', [])
             else if($scope.password && $scope.password.trim().length < 8) {
                 $("#password").notify("You password must have at least 8 characters.", { position: "bottom-center" });
             }
-            else {
-                showLoader();
-
-                Transporter.signup({
-                    fullname: $scope.fullname,
-                    org: $scope.org,
-                    work: $scope.work_location,
-                    home: $scope.home_location,
-                    email: $scope.email,
-                    phone: phone,
-                    username: $scope.username,
-                    password: $scope.password
-                }).then(response => {
-                    $log.log("Response: ", response);
-
-                    hideLoader();
-
-                    switch (response.data){
-                        case "username_exists":
-                            $("#username").notify("Username is not available. Please choose another.", { position: "bottom-center" });
-                            break;
-                        case "email_exists":
-                            $("#email").notify("Email is registered. Please login if you have an account.", { position: "bottom-center" });
-                            break;
-                        case "phone_exists":
-                            $("#phone").notify("Phone is registered. Please login if you have an account.", { position: "bottom-center" });
-                            break;
-                        case "db_error":
-                            $("#signupform").notify("Error. Please try again later.", { position: "bottom-center" });
-                            break;
-                        case "signup_successful":
-                            store.set("user", {email: $scope.email});
-                            rootShared.user["email"] = $scope.email;
-
-                            $("#signup").hide();
-                            $("#email_confirmation").show();
-                            break;
-                        default:
-                            $("#signupform").notify("There has been a problem and we don't know the reason. Please try again later.", { position: "bottom-center" });
-                            break;
-                    }
-                })
+            else if($scope.phone.startsWith("0") && $scope.phone.length === 11) {
+                phone = $scope.phone.slice(1);
+                beginSignup(phone);
             }
+            else if($scope.phone.startsWith("+234") && $scope.phone.length === 14) {
+                phone = $scope.phone.slice(4);
+                beginSignup(phone);
+            }
+            else if($scope.phone.startsWith("234") && $scope.phone.length === 13) {
+                phone = $scope.phone.slice(3);
+                beginSignup(phone);
+            }
+            else if($scope.phone.trim().length < 10 || $scope.phone.trim().length > 14) {
+                $("#phone").notify("Please enter a valid phone number.", { position: "bottom-center" });
+            }
+            /*else {
+                beginSignup();
+            }*/
         };
 
         $scope.resendCode = () => {
@@ -395,19 +402,15 @@ angular.module('ControllersModule', [])
                     email: $scope.onlineemail,
                     amount: $scope.onlineamount,
                 }).then(response => {
-                    console.log("Resposne: ", response);
                     if(response.status) {
                         hideLoader();
 
-                        payWithPaystack(response.email, $scope.onlineamount, response.ref, function(response) {
+                        payWithPaystack(response.email, $scope.onlineamount*100, response.ref, function(response) {
                             console.log("Response from paystack: ", response);
 
                             if (response.reference) {
 
                                 $(".paymentsuccess").css("display", "block");
-
-                                //rootShared.showNotification("Payment concluded. Pulling up chat time balance.");
-
 
                                 /*$timeout(function() {
                                     rootShared.startCallRequest();

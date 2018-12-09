@@ -601,9 +601,8 @@ module.exports =(app, express) => {
                         let payment = new PaymentJournal();
 
                         payment.paymentid = id;
-                        payment.paymenttype = "ussd";
+                        payment.paymenttype = "Ussd";
                         payment.amount = req.body.amount;
-                        payment.success = true;
                         payment.success = new Date();
 
                         payment.save((err, success) => {
@@ -680,6 +679,7 @@ module.exports =(app, express) => {
     });
 
     apiRouter.post("/ct/payevents", (req, res) => {
+        let secret = "sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1";
         var hash = crypto.createHmac('sha512', config.secret).update(JSON.stringify(req.body)).digest('hex');
 
         if (hash === req.headers['x-paystack-signature']) {

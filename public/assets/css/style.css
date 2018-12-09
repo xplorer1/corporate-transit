@@ -854,3 +854,18 @@ button#contact-btn {
     padding: 10px 0;
     text-align: center;
 }
+
+.paymentsuccess {
+    font-size: 20pt;
+    color: rgb(33, 186, 69);
+    text-align: center;
+    padding: 20pt 0;
+}
+
+.paymentsuccess a {
+    color: rgb(33, 186, 69);
+}
+
+.oninst, .bktrans, .usd {
+    padding: 10px 0;
+}

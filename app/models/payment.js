@@ -13,9 +13,9 @@ let PaymentJournalSchema = new Schema({
             message: '{VALUE} is not a valid email!'
         }
     },
-    paymentid: { type: String, required: true, index: { unique: true } },
-    paymenttype: { type: String},
-    amount: { type: Number, required: true },
+    paymentid: { type: String, required: true},
+    paymenttype: { type: String, required: true},
+    amount: { type: Number, required: true, default: 0 },
     created: { type: Date, default: Date.now }
 });
 
