@@ -1,0 +1,157 @@
+<article ng-controller="FaqsPageController" class="">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+        <a class="navbar-brand" ui-sref="home">CT</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon">&#9776;</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="routes">Routes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking">Book a trip</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment">Payment</a>
+                </li>
+                <li class="nav-item active border">
+                    <a class="nav-link" ui-sref="login">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="otherpages">
+        <section class="container-fluid how_it_works_bg h-100">
+
+            <div class="jumbotron tran-jumb">
+                <h1 class="display-4 heading_text">JOIN . BOOK . BOARD . PAY</h1>
+                <p class="lead">It's That Easy!</p>
+            </div>
+
+        </section>
+
+        <!-- commute sec -->
+        <section class="container-fluid commute_sec w-100" id="howitcommute">
+
+            <div class="commute_content w-100">
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                    <!--<img src="../../assets/img/icons/join.png" class="col-10 col-centered">-->
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
+                    <div class="col-sm-12 col-lg-9 h-50 commute-text-container">
+                        <div class="h-25 big-txt blue">JOIN CT</div>
+
+                        <div class="h-25 smallest-txt grey">Click below to sign up to start your perfect journey!</div>
+
+                        <div class="h-25 w-100">
+                            <button class="w-100 h-100 light-bg-button" ng-click="signup">Ride With Us!</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- get you ahead -->
+        <section class="container-fluid commute_sec w-100">
+
+            <div class="ahead_content w-100">
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
+                    <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered">
+                        <div class="h-25 big-txt">BOOK A RIDE</div>
+                        <br>
+                        <div class="h-25 smallest-txt">Only booked trips are guaranteed. CT offers flexible and bulk booking options; Morning ONLY, Evening ONLY, Return and more. Sign In <a href="">here</a> to browse and book your trip now.</div>
+                        <div class="h-25 w-100">
+                            <button class="w-100 h-100 dark-bg-button">Ride With Us!</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                    <!--<img src="../../assets/img/icons/book.png" class="col-10 col-centered">-->
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ride in comfort -->
+        <section class="container-fluid comfort_sec w-100">
+
+            <div class="commute_content w-100">
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                    <!--<img src="../../assets/img/icons/man.png" class="col-10 col-centered">-->
+
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
+
+                    <div class="col-sm-12 col-lg-9 h-50 commute-text-container">
+                        <div class="h-25 big-txt blue">BOARD</div>
+
+                        <div class="h-25 smallest-txt grey">Board and alight at our designated pick up points. Boarding time is 30 minutes before scheduled trip time ( T- 30 minutes)!</div>
+
+                        <div class="h-25 w-100">
+                            <button class="w-100 h-100 dark-no-bg-button">Ride With Us!</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="container-fluid comfort_sec w-100">
+
+            <div class="comfort_content w-100">
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                    <!--<img src="../../assets/img/icons/pay.png" class="col-10 col-centered">-->
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
+                    <div class="col-sm-12 col-lg-9 h-50 commute-text-container">
+                        <div class="h-25 big-txt blue">TAP TO PAY</div>
+
+                        <div class="h-25 smallest-txt grey">Pay the smart way when you ride with Corporate Transit. <br><br>Tap to PAY with
+                            our payment cards when you board. Online and Offline card funding options
+                            <br>
+                            <br> No Cash required/accepted</div>
+                        <br><br>
+
+                        <div class="h-25 w-100">
+                            <button class="w-100 h-100 light-bg-button">Ride With Us!</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+
+    <div class="somebar">
+        <div class="bottombar">
+            <div class="bar">
+                <div class="privacy link">Terms And Conditions</div>
+                <div class="privacy link">Privacy Policy</div>
+                <div class="privacy link">Faqs</div>
+                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link">Facebook</div>
+                <div class="twitter link">Twitter</div>
+                <div class="instagram link">Instagram</div>
+            </div>
+            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+        </div>
+    </div>
+</article>
+

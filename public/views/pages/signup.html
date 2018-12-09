@@ -1,0 +1,184 @@
+
+<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="SignUpPageController">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+        <a class="navbar-brand" ui-sref="home">CT</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon">&#9776;</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="routes">Routes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking">Book a trip</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment">Payment</a>
+                </li>
+                <!--<li class="nav-item active border">
+                    <a class="nav-link" ui-sref="login">Sign Up</a>
+                </li>-->
+            </ul>
+        </div>
+    </nav>
+    <div class="column formcolumn" id="signup">
+        <h2 class="ui image header">
+            <div class="content">
+                Create an Account
+            </div>
+        </h2>
+        <form class="ui large form" novalidate name="signupform" id="signupform">
+            <div class="ui stacked secondary  segment">
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="fullname" id="fullname" placeholder="Full Name" ng-model="fullname">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="org" id="org" placeholder="Organization" ng-model="org">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label></label>
+                    <select class="ui search dropdown" id="work_location" name="work_location" ng-model="work_location">
+                        <option disabled value="">Select Work Location</option>
+                        <option value="Ikeja">Ikeja</option>
+                        <option value="Magodo">Magodo</option>
+                        <option value="Omole">Omole</option>
+                        <option value="Ogba">Ogba</option>
+                        <option value="Festac">Festac</option>
+                        <option value="Ikorodu">Ikorodu</option>
+                        <option value="Lekki">Lekki</option>
+                        <option value="VI">VI</option>
+                        <option value="Ikoyi">Ikoyi</option>
+                        <option value="Ajah">Ajah</option>
+                        <option value="Epe">Epe</option>
+                        <option value="Yaba">Yaba</option>
+                        <option value="Surulere">Surulere</option>
+                        <option value="Iyana-Ipaja">Iyana-Ipaja</option>
+                        <option value="Anthony">Anthony</option>
+                        <option value="Maryland">Maryland</option>
+                        <option value="Isolo">Isolo</option>
+                        <option value="Apapa">Apapa</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label></label>
+                    <select class="ui search dropdown" id="home_location" name="home_location" ng-model="home_location">
+                        <option disabled value="">Select Home Location</option>
+                        <option value="Ikeja">Ikeja</option>
+                        <option value="Magodo">Magodo</option>
+                        <option value="Omole">Omole</option>
+                        <option value="Ogba">Ogba</option>
+                        <option value="Festac">Festac</option>
+                        <option value="Ikorodu">Ikorodu</option>
+                        <option value="Lekki">Lekki</option>
+                        <option value="VI">VI</option>
+                        <option value="Ikoyi">Ikoyi</option>
+                        <option value="Ajah">Ajah</option>
+                        <option value="Epe">Epe</option>
+                        <option value="Yaba">Yaba</option>
+                        <option value="Surulere">Surulere</option>
+                        <option value="Iyana-Ipaja">Iyana-Ipaja</option>
+                        <option value="Anthony">Anthony</option>
+                        <option value="Maryland">Maryland</option>
+                        <option value="Isolo">Isolo</option>
+                        <option value="Apapa">Apapa</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="email" id="email" placeholder="E-mail address" ng-model="email">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="tel" name="phone" id="phone" placeholder="Phone" ng-model="phone">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="username" id="username" placeholder="username" ng-model="username">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" id="password" placeholder="Password" ng-model='password'>
+                    </div>
+                </div>
+
+                <div class="ui fluid large teal submit button" ng-click="signUp()">Create Account</div>
+                <div class="lds-dual-ring srchbar"></div>
+            </div>
+        </form>
+
+        <div class="ui message">
+            Already has an account? <a ui-sref="login">Login</a>
+        </div>
+    </div>
+
+    <div class="column formcolumn" id="email_confirmation" style="display: none">
+        <div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="act_title">Account successfully created.</div>
+        </div>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div>
+            <div class="act_text">
+                Please check your email for verification code to activate your account. Also check your spam/junk folders in case it's not in your inbox.
+            </div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <span class="info_text">If you didn't find it. Please click on the button below.</span>
+        </div>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div>
+            <div class="ui fluid large teal submit button" ng-click="resendCode()">Resend Activation Code</div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+        </div>
+    </div>
+
+    <div class="somebar">
+        <div class="bottombar">
+            <div class="bar">
+                <div class="privacy link">Terms And Conditions</div>
+                <div class="privacy link">Privacy Policy</div>
+                <div class="privacy link">Faqs</div>
+                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link">Facebook</div>
+                <div class="twitter link">Twitter</div>
+                <div class="instagram link">Instagram</div>
+            </div>
+            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+        </div>
+    </div>
+</div>

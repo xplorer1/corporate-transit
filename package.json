@@ -1,0 +1,32 @@
+{
+  "name": "ct_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Chijioke Ugwuanyi",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "compression": "^1.7.3",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.3.10",
+    "morgan": "^1.9.1",
+    "node-mailer": "^0.1.1",
+    "node-persist": "^3.0.1",
+    "node-uuid": "^1.4.8",
+    "nodemailer": "^4.6.8",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "paystack": "^2.0.1"
+  }
+}

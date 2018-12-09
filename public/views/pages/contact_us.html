@@ -1,0 +1,97 @@
+<article ng-controller="ContactPageController" >
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+        <a class="navbar-brand" ui-sref="home">CT</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon">&#9776;</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="routes">Routes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking">Book a trip</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment">Payment</a>
+                </li>
+                <li class="nav-item active border">
+                    <a class="nav-link" ui-sref="login">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="otherpages">
+        <section>
+            <div class="container" style="padding-top: 100px;padding-bottom: 100px;">
+                <div class="row">
+                    <div class="col-md-6 pull-left">
+                        <h3>Get in touch</h3>
+                        <p>Please fill out the quick form and we will be in touch ASAP</p>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <form id="contactForm">
+                                    <div id="status"></div>
+                                    <div class="form-group">
+                                        <label for="name" class="control-label">Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                            <input type="text" ng-model="name" class="form-control" id="name" name='name' data-parsley-required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email" class="control-label">Email</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                                            <input type="text" ng-model="email" class="form-control" id="email" name='email' data-parsley-required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message">Message</label>
+                                        <textarea class="form-control" ng-model="message" name="message" rows="5" id="message" data-parsley-required></textarea>
+                                    </div>
+                                    <button id="contact-btn" type="submit" class="btn btn-primary pull-right" ng-click="sendComplaint()" style="padding: 10px;">SEND IT</button>
+                                    <div class="contact_us_loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 pull-right">
+                        <h3>Connect with us</h3>
+                        <p>For support: <a href="mailto:support@fint.com">support@corporatetransit.com</a></p>
+                        <p>For general questions: <a href="mailto:info@fint.ng">info@corporatetransit.ng </a></p>
+                        <p>For questions on career opportunities: <a href="mailto:work@fint.ng">work@corporatetransit.ng</a></p>
+                        <br/><h3>Call/Message us</h3>
+                        <!--                    <p>For Borrower enquiries:<br/>09060000612 (Call/Whatsapp)</p>-->
+                        <p>For enquiries:<br/>09098645115 (Call/Whatsapp)</p>
+                        <!--                    <p>For Technical/Platform enquiries:<br/>08159804668 (Call/Whatsapp)</p>-->
+                        <br/><h3>Our Office</h3>
+                        <p>23 Dayo Street, Ikoyi, Lagos, Nigeria</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="somebar">
+        <div class="bottombar">
+            <div class="bar">
+                <div class="privacy link">Terms And Conditions</div>
+                <div class="privacy link">Privacy Policy</div>
+                <div class="privacy link">Faqs</div>
+                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link">Facebook</div>
+                <div class="twitter link">Twitter</div>
+                <div class="instagram link">Instagram</div>
+            </div>
+            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+        </div>
+    </div>
+
+</article>

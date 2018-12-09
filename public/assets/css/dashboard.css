@@ -1,0 +1,530 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: 'Averta';
+    src:  url('../fonts/AvertaDemoPECuttedDemo-Regular.otf') format('opentype');
+}
+
+body {
+    font-family: "Averta", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/*.profiledata, .bottombar {
+    width: 100%;
+    margin: 0 auto;
+}*/
+
+.topbarcontainer {
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 1010px;
+}
+
+.profiledata {
+    text-align: center;
+    /*display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    margin: 0 auto;
+    padding-top: 80px;
+    max-width: 1010px;
+    padding-bottom: 80px;*/
+}
+
+#searchprofile {
+    font-family: "Averta", sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid lightgrey;
+    font-size: 16px;
+    padding: 11px 20px;
+    background: #E8E8E8;
+    outline: white !important;
+}
+
+.midbaritem {
+    /*display: flex;*/
+    /*position: absolute;*/
+    /*right: 0;*/
+    margin-top: 13px;
+    width: 100%;
+    text-align: center;
+}
+
+/*.rightbaritem {
+    margin-top: 24px;
+    width: 100%;
+    text-align: right;
+}*/
+
+.loginbutton {
+    padding: 10px 30px;
+    text-decoration: none;
+    border: 2px solid lightgrey;
+    color: black;
+}
+
+.searchrightbar {
+    margin-right: 100px !important;
+}
+
+.leftbaritem {
+    margin-left: 100px;
+    margin-top: 12px;
+    font-size: 25pt;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+}
+
+.speakbutton {
+    padding: 10px 40px;
+    border: 2px solid lightgrey;
+    cursor: pointer;
+    background: #E8E8E8;
+    color: black;
+}
+
+.profiletopbar {
+    font-family: "Averta",sans-serif;
+    display: flex;
+    background: white;
+    height: 75px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.bottombar {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    height: 75px;
+}
+
+.bar {
+    display: flex;
+}
+
+span.header_title {
+    color: black;
+}
+
+.photo {
+    margin-top: -15px;
+}
+
+.photo img {
+    width: 185px;
+    border-radius: 50%;
+    height: 185px;
+
+    webkit-flex-basis: 0;
+    -ms-flex-preferred-size: 0;
+    /* flex-basis: 0; */
+    /* -webkit-box-flex: 1; */
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    /* flex-grow: 1; */
+    /*margin-right: 90px;*/
+}
+
+.speakerstats {
+    display: flex;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+
+.speakbutton a {
+    border: none;
+    background: #E8E8E8;
+}
+
+.stats {
+    padding: 0 20px 0 0;
+    /*border: 2px solid lightgrey;*/
+    line-height: 2;
+}
+
+.details {
+    /*padding: 0 50px;*/
+}
+
+.location {
+    padding-bottom: 5px;
+}
+
+.link {
+    padding: 0 15px;
+    line-height: 5;
+}
+
+.ui-loader.ui-corner-all.ui-body-a.ui-loader-default {
+    display: none !important;
+}
+
+.speakerdesc {
+   /* max-width: 1010px;
+    margin: 0 auto;*/
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+.speakerdetails {
+    padding: 40px 0;
+}
+
+.speakerphotos {
+    /*max-width: 1010px;*/
+    margin: 0 auto;
+    display: flex;
+    margin-bottom: 100px;
+    /*justify-content: center;*/
+}
+
+.speakerphoto img {
+    width: 33%;
+    height: 33%;
+    padding: 15px 20px 0 0;
+    box-sizing: border-box;
+}
+
+
+.popupContainer {
+    position: fixed;
+    width: 330px;
+    height: auto;
+    background: #FFF;
+    display: block;
+    opacity: 1;
+    z-index: 11000;
+    right: -140px;
+    top: 91px !important;
+    margin-right: 240px;
+    margin-left: 0 !important;
+    left: unset !important;
+}
+
+input#rate, input#choice {
+    padding: 10px 15px;
+    width: 87%;
+}
+
+.balancetext, .ratetext {
+    color: #db2828;
+    text-align: center;
+}
+.continue button {
+    background: #E8E8E8;
+    color: black;
+    border: 2px solid lightgrey;
+}
+
+.buycredit button {
+    background: white;
+    color: black;
+    border: 2px solid lightgray;
+}
+
+a#startchat {
+    background: #E8E8E8;
+    color: black;
+    border: 2px solid lightgrey;
+}
+
+.balance {
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.modalacct {
+    text-align: center;
+}
+
+button {
+    cursor: pointer;
+}
+
+.continuetel {
+    text-align: center !important;
+}
+
+
+.popupHeader {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.popupHeader {
+    background: #F4F4F2;
+    position: relative;
+    padding: 10px 20px;
+    border-bottom: 1px solid #DDD;
+    font-weight: bold;
+}
+
+.popupHeader .modal_close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 7px 15px;
+    background: #E4E4E2;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 16px;
+}
+
+.popupBody {
+    padding: 20px;
+    border: 1px solid lightgrey;
+}
+
+.action_btns {
+    clear: both;
+    overflow: hidden;
+}
+
+.action_btns a {
+    display: block;
+    background: #E8E8E8;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#seekerphone, #seekeremail, #seekerfullname {
+    font-family: "Averta", sans-serif !important;
+    display: block;
+    width: 92%;
+    padding: 10px;
+    border: 1px solid #DDD;
+}
+
+.continue button {
+    background: #E8E8E8;
+    color: black;
+    border: 2px solid lightgrey;
+    margin-right: 7px;
+}
+
+.buycredit button {
+    background: white;
+    color: black;
+    border: 2px solid lightgray;
+}
+
+.accountbuttons {
+    display: flex;
+}
+
+.accountbutton {
+    padding: 10px 30px;
+}
+
+#slideimages {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button.material-icons {
+    width: 0;
+    background: bottom;
+    border: none;
+}
+
+.modal-content {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)}
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+span.fullname {
+    font-size: 30pt;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+.available {
+    border: 2px solid #bcd4bc;
+    color: white;
+    padding: 4px 18px;
+    /* background: forestgreen; */
+    color: forestgreen;
+    font-size: 0.7em;
+    margin-right: 10px;
+}
+
+.notavailable {
+    border: 2px solid #ffc9c9;
+    color: white;
+    /* background: #de6767; */
+    color: #de6767;
+    padding: 4px 18px;
+    font-size: 0.7em;
+    margin-right: 10px;
+}
+
+.available, .notavailable {
+    line-height: 2;
+    /* padding: 0 5px; */
+    border-radius: 4px;
+}
+
+.inttitle {
+    color: #de6767;
+}
+
+.somebar {
+    border-top: 1px solid lightgrey;
+    height: 75px;
+    position: fixed;
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+    background: white;
+}
+
+.numchats, .chatrate {
+    line-height: 0.5;
+}
+
+.speakerphoto {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 0 21%
+}
+
+.backlink {
+    margin-top: 25px;
+    width: 100%;
+}
+
+#backtosearch {
+    padding: 10px 40px;
+    border: 2px solid lightgrey;
+    cursor: pointer;
+    background: #E8E8E8;
+    color: black;
+}
+
+/*styling for the profile nav bar */
+
+.searchtopbar {
+    font-family: "Averta",sans-serif;
+    display: flex;
+    height: 75px;
+    background: white;
+    border-bottom: 1px solid lightgrey;
+}
+
+.searchrightbar {
+    margin-right: 100px !important;
+}
+
+.sbtn {
+    margin-left: 12px;
+    cursor: pointer;
+    background: none;
+    margin-top: 12px;
+}
+
+
+span.speaker, #expertfullname {
+    font-weight: bolder;
+}
+
+.pagecontent {
+    opacity: 0;
+}
+
+.selectdropdown select {
+    padding: 10px 5px;
+}
+
+.d_jumb_title {
+    text-align: center;
+}
+
+@media (max-width: 1000px) {
+
+    .jumb_col {
+        height: auto !important;
+        -webkit-box-flex: 0;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .somebar {
+        position: inherit;
+        height: 100%;
+    }
+
+    .bottombar {
+        display: block;
+        height: 100%
+    }
+    
+    .bar {
+        display: block;
+    }
+
+    .link {
+        line-height: 3;
+    }
+}
+
+.payment {
+    padding: 40px 0;
+}
+
+.payment span {
+    font-size: 30pt;
+}
+
+.div {
+    padding: 20px 0;
+}
+
+span.navbar-toggler-icon {
+    font-size: 20pt;
+}

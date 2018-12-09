@@ -1,0 +1,227 @@
+
+<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="PaymentPageController">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+        <a class="navbar-brand" ui-sref="home">CT</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon">&#9776;</span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="routes">Routes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking">Book a trip</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment">Payment</a>
+                </li>
+                <li class="nav-item active border">
+                    <a class="nav-link" ui-sref="signup">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="paymentsuccess" style="display: none">
+            <div>
+                Your transaction was successful. Your balance is:
+            </div>
+            <div>
+                Thanks for choosing us. If your have any inquiries or complaints, please click <a ui-sref="contact_us">here.</a>
+            </div>
+        </div>
+
+        <div class="paytitle">
+            <h2 class="">
+                Fund your payment card here.
+            </h2>
+        </div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="block">
+            Corporate Transit operates a cashless model. All fares are paid using our payment cards, which allows you make seamless payments by simply tapping the card on a hardware while onboard. Planning, tracking and managing your transportation expenses has never been more convenient.
+        </div>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="block">
+            Payment cards may be funded online via bank transfer or offline via USSD. Please note that cards would also serve as ID and only card-carrying members are allowed to ride.
+        </div>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="block">
+            P.S; Registered members may pick up their cards on-board or request for delivery.
+        </div>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+    </div>
+
+    <div>
+
+    </div>
+    <div>
+        <div class="ui fluid large teal submit button payonline">
+            Pay via Online Instant
+        </div>
+    </div>
+
+    <div>
+        <div class="ui fluid large teal submit button payussd">
+            Pay via Ussd
+        </div>
+    </div>
+
+    <div>
+        <div class="ui fluid large teal submit button paybanktransfer">
+            Pay via Bank Transfer
+        </div>
+    </div>
+
+    <div class="ui tiny modal onlineinstant">
+        <i class="close icon"></i>
+        <div class="header">
+            Pay via online instant
+        </div>
+        <div class="ui stacked secondary  segment">
+            <div class="field modalfield">
+                <div class="ui left icon input modalinput">
+                    <i class="user icon"></i>
+                    <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
+                </div>
+            </div>
+
+            <div class="field modalfield">
+                <div class="ui left icon input modalinput">
+                    <i class="lock icon"></i>
+                    <input type="number" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
+                </div>
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="ui fluid large teal submit button" ng-click="pay()">Pay</div>
+            <div class="paymentloader"></div>
+        </div>
+    </div>
+
+    <div class="ui tiny modal ussd">
+        <i class="close icon"></i>
+        <div class="header">
+            Pay via ussd
+        </div>
+        <div class="ui stacked secondary  segment">
+            <div class="field modalfield">
+                <div class="ui left icon input modalinput">
+                    <i class="user icon"></i>
+                    <input type="text" ng-model="ussdemail"  id="ussdemail" name="ussdemail" placeholder="E-mail address">
+                </div>
+            </div>
+
+            <div class="field modalfield">
+                <div class="ui left icon input modalinput">
+                    <i class="lock icon"></i>
+                    <input type="number" ng-model="amount" id="ussdamount" name="ussdamount" placeholder="Amount">
+                </div>
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="ui fluid large teal submit button" ng-click="payWithPaystackUssd()">Pay</div>
+        </div>
+    </div>
+
+    <div class="ui tiny modal banktransfer">
+        <i class="close icon"></i>
+        <div class="header">
+            Make payments into any of the below listed bank accounts
+        </div>
+        <div class="routes-jumb">
+
+            <div class="table_cont row">
+
+                <div class="col-4 h-50">
+                    <div class="row route-block header">
+                        Bank Name
+                    </div>
+
+                    <div class="row route-block">
+                        Guaranty Trust Bank
+                    </div>
+
+                    <div class="row route-block">
+                        Zenith Bank
+                    </div>
+
+                    <div class="row route-block">
+                        UBA
+                    </div>
+
+                    <div class="row route-block">
+                        Access Bank
+                    </div>
+                </div>
+
+                <div class="col-4 h-50">
+                    <div class="row route-block header">
+                        Account Number
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <h6 class="display-5">Please Note that value would reflect on your card within 30 minutes of payment receipt.
+            </h6>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+        </div>
+    </div>
+
+    <div class="row"><div class="column">&nbsp;</div></div>
+    <div class="row"><div class="column">&nbsp;</div></div>
+
+    <div class="somebar">
+        <div class="bottombar">
+            <div class="bar">
+                <div class="privacy link">Terms And Conditions</div>
+                <div class="privacy link">Privacy Policy</div>
+                <div class="privacy link">Faqs</div>
+                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link">Facebook</div>
+                <div class="twitter link">Twitter</div>
+                <div class="instagram link">Instagram</div>
+            </div>
+            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+        </div>
+    </div>
+</div>
