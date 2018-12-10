@@ -15,7 +15,6 @@ let bcrypt = require('bcrypt-nodejs');
 let cheerio = require('cheerio');
 let fs = require('fs');
 let path = require('path');
-let paystack = require('paystack')('SECRET_KEY');
 
 let corporatemail = "customerservice@corporatetransit.com.ng";
 
@@ -157,7 +156,7 @@ module.exports =(app, express) => {
     });
 
     apiRouter.post("/ct/login", (req, res) => {
-        console.log("Req: ", req.body);
+        console.log("Req login: ", req.body);
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found. Verify your parameters"});
         if(!req.body.password) return res.json({status: false, data: "password_required", reason: "Password not found. Verify your parameters"});
 
@@ -166,28 +165,27 @@ module.exports =(app, express) => {
             if(err) return res.json({status: false, data: "Error"+err});
             console.log("User: ", user);
 
-            if(!user.verified) {
-                let vcode = uuid.v4();
-
-                user.vcode = vcode;
-
-                mailer.sendEmailVerificationMail(vcode, req.body.email);
-
-                return res.json({status: false, data: "not_activated", reason: "Email not verified. Advice user, activation code has been sent to the email address used during registration. Then open to the account/email activation page"});
-            }
-
             if(user) {
-                let token = jwt.sign({
-                    name: user.fullname,
-                    email: req.body.email,
-                    username: user.username,
-                }, supersecret, {
-                    expiresIn: 432000 // expires in 5 days
-                });
+                if(!user.verified) {
+                    let vcode = uuid.v4();
 
-                return res.json({status: true, data: "login_successful", reason: "Login is successful.", token: token});
+                    user.vcode = vcode;
+
+                    mailer.sendEmailVerificationMail(vcode, req.body.email);
+
+                    return res.json({status: false, data: "not_activated", reason: "Email not verified. Then open to the account/email activation page"});
+                }else {
+                    let token = jwt.sign({
+                        name: user.fullname,
+                        email: req.body.email,
+                        username: user.username,
+                    }, supersecret, {
+                        expiresIn: 432000 // expires in 5 days
+                    });
+
+                    return res.json({status: true, data: "login_successful", reason: "Login is successful.", token: token});
+                }
             }
-
             if(!user) {
                 return res.json({status: false, data: "account_notfound", reason: "The email or password is incorrect. Advice to check and try again, or register if they have no account."});
             }
@@ -540,6 +538,10 @@ module.exports =(app, express) => {
                     bank: {
                         code: req.body.bankcode,
                         account_number: req.body.account_number
+                    },
+                    "headers": {
+                        "Authorization": "Bearer sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1",
+                        "Content-Type": "application/json"
                     }
                 }).then(response => {
                     if(response.status === "pending") return res.json({status: false, data: "pending", reason: "Transaction is being processed."});
@@ -575,9 +577,11 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/ussdcode", (req, res) => {
+    apiRouter.post("/ct/payviaussd", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email required."});
         if(!req.body.amount) return res.json({status: false, data: "amount_required", reason: "Amount to pay supplied."});
+
+        let secret = "sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1";
 
         User.findOne({email: req.body.email}, (err, user) => {
             if(err) res.json({status: false, data: "db_error", reason: "Advice user to try again."});
@@ -590,6 +594,10 @@ module.exports =(app, express) => {
                     amount: req.body.amount,
                     ussd: {
                         type: "737"
+                    },
+                    "headers": {
+                        "Authorization": "Bearer sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1",
+                        "Content-Type": "application/json"
                     }
                 }).then(response => {
                     if(response.status === true) {
@@ -611,7 +619,7 @@ module.exports =(app, express) => {
                             let transaction = new TransactionJournal();
 
                             transaction.paymentid = id;
-                            transaction.paymenttype = "ussd";
+                            transaction.paymenttype = "Ussd";
                             transaction.amount = req.body.amount;
                             transaction.success = true;
                             transaction.success = new Date();
@@ -622,8 +630,11 @@ module.exports =(app, express) => {
                             });
                         });
                     }
+                    else {
+                        console.log("Response: ", response);
+                    }
                 }).catch(err => {
-                    console.log("err: ", err);
+                    console.log("Error here: ", err);
 
                     let id = crypto.randomBytes(20, (err, buffer) => {
                         return buffer.toString('hex');
@@ -634,7 +645,6 @@ module.exports =(app, express) => {
                     payment.paymentid = id;
                     payment.paymenttype = "ussd";
                     payment.amount = req.body.amount;
-                    payment.success = false;
                     payment.success = new Date();
 
                     payment.save(err => {
@@ -680,7 +690,7 @@ module.exports =(app, express) => {
 
     apiRouter.post("/ct/payevents", (req, res) => {
         let secret = "sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1";
-        var hash = crypto.createHmac('sha512', config.secret).update(JSON.stringify(req.body)).digest('hex');
+        let hash = crypto.createHmac('sha512', config.secret).update(JSON.stringify(req.body)).digest('hex');
 
         if (hash === req.headers['x-paystack-signature']) {
             let req = req.body;

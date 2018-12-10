@@ -4,7 +4,7 @@ angular.module('ControllersModule', [])
     .controller('ContactPageController', ['$scope', '$log', 'Transporter', ContactPageController])
     .controller('FaqsPageController', ['$scope', FaqsPageController])
     .controller('How_It_WorksPageController', ['$scope', How_It_WorksPageController])
-    .controller('PaymentPageController', ['$scope', 'Transporter', PaymentPageController])
+    .controller('PaymentPageController', ['$scope', '$log', 'Transporter', PaymentPageController])
     .controller('PricingPageController', ['$scope', PricingPageController])
     .controller('SignUpPageController', ['$scope',  '$log', 'Transporter', SignUpPageController])
     .controller('LoginPageController', ['$scope', '$log', 'Transporter', '$state', LoginPageController])
@@ -346,7 +346,7 @@ angular.module('ControllersModule', [])
         }
     }
 
-    function PaymentPageController($scope, Transporter) {
+    function PaymentPageController($scope, $log, Transporter) {
 
         function validateEmail(email) {
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -412,9 +412,6 @@ angular.module('ControllersModule', [])
 
                                 $(".paymentsuccess").css("display", "block");
 
-                                /*$timeout(function() {
-                                    rootShared.startCallRequest();
-                                }, 2000);*/
                             }
                         },
                         function() {
@@ -427,7 +424,21 @@ angular.module('ControllersModule', [])
         };
 
         $scope.payWithPaystackUssd = function payWithPaystack() {
+            if(!$scope.ussdemail) $("#ussdemail").notify("Please enter your email address.", { position: "bottom-center" });
+            else if(!validateEmail($scope.ussdemail)) $("#ussdemail").notify("Please enter a valid email address.", { position: "bottom-center" });
+            else if(!$scope.ussdamount) $("#ussdamount").notify("Please enter amount you'd like to pay.", { position: "bottom-center" });
+            else {
+                showLoader();
 
+                Transporter.payviaussd({
+                    email: $scope.ussdemail,
+                    amount: $scope.ussdamount
+                }).then(response => {
+                    hideLoader();
+
+                    $log.log("Response: ", response);
+                })
+            }
         }
     }
 

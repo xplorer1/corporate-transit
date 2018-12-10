@@ -3,5 +3,5 @@ let rootShared = {};
 rootShared["seed"] = {};
 rootShared["user"] = {};
 
-rootShared.seed["baseurl"] = "http://localhost:80";
+rootShared.seed["baseurl"] = "http://localhost";
 rootShared.seed["currency"] = {name: "Naira", symbol: "₦"};

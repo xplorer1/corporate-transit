@@ -17,12 +17,12 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="booking">Book a trip</a>
                 </li>
-                <li class="nav-item active">
+                <!--<li class="nav-item active">
                     <a class="nav-link" ui-sref="payment">Payment</a>
                 </li>
                 <li class="nav-item active border">
                     <a class="nav-link" ui-sref="signup">Sign Up</a>
-                </li>
+                </li>-->
             </ul>
         </div>
     </nav>
@@ -127,79 +127,47 @@
             <div class="field modalfield">
                 <div class="ui left icon input modalinput">
                     <i class="lock icon"></i>
-                    <input type="number" ng-model="amount" id="ussdamount" name="ussdamount" placeholder="Amount">
+                    <input type="number" ng-model="ussdamount" id="ussdamount" name="ussdamount" placeholder="Amount">
                 </div>
             </div>
 
             <div class="row"><div class="column">&nbsp;</div></div>
             <div class="ui fluid large teal submit button" ng-click="payWithPaystackUssd()">Pay</div>
+            <div class="paymentloader"></div>
         </div>
     </div>
 
-    <div class="ui tiny modal banktransfer">
+    <div class="ui small modal banktransfer">
         <i class="close icon"></i>
         <div class="header">
             Make payments into any of the below listed bank accounts
         </div>
-        <div class="routes-jumb">
-
-            <div class="table_cont row">
-
-                <div class="col-4 h-50">
-                    <div class="row route-block header">
-                        Bank Name
-                    </div>
-
-                    <div class="row route-block">
-                        Guaranty Trust Bank
-                    </div>
-
-                    <div class="row route-block">
-                        Zenith Bank
-                    </div>
-
-                    <div class="row route-block">
-                        UBA
-                    </div>
-
-                    <div class="row route-block">
-                        Access Bank
-                    </div>
-                </div>
-
-                <div class="col-4 h-50">
-                    <div class="row route-block header">
-                        Account Number
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-
-            <h6 class="display-5">Please Note that value would reflect on your card within 30 minutes of payment receipt.
-            </h6>
-
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-        </div>
+        <table class="ui unstackable celled table">
+            <thead>
+                <tr>
+                    <th>Bank Name</th>
+                    <th>Account Number</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td data-label="Name">GT Bank</td>
+                <td data-label="Age">""</td>
+            </tr>
+            <tr>
+                <td data-label="Name">Zenith Bank</td>
+                <td data-label="Age">""</td>
+            </tr>
+            <tr>
+                <td data-label="Name">UBA</td>
+                <td data-label="Age">""</td>
+            </tr>
+            <tr>
+                <td data-label="Name">Access Bank</td>
+                <td data-label="Age">""</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="row"><div class="column">&nbsp;</div></div>
