@@ -1,9 +1,9 @@
 
 <div class="ui middle aligned center aligned grid forms otherpages" ng-controller="SignUpPageController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <a class="navbar-brand" ui-sref="home">CT</a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon">&#9776;</span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -20,11 +20,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="login">Payment</a>
                 </li>
-                <!--<li class="nav-item active border">
+                <li class="nav-item active border">
                     <a class="nav-link" ui-sref="login">Sign Up</a>
-                </li>-->
+                </li>
             </ul>
-        </div>
+        </div> -->
     </nav>
     <div class="column formcolumn" id="signup">
         <h2 class="ui image header">
@@ -33,19 +33,19 @@
             </div>
         </h2>
         <form class="ui large form" novalidate name="signupform" id="signupform">
-            <div class="ui stacked secondary  segment">
+            <div class="ui stacked secondary  segment removestyle">
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        <input type="text" name="fullname" id="fullname" placeholder="Full Name" ng-model="fullname">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="text" name="fullname" id="fullname" placeholder="Full Name" ng-model="fullname">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        <input type="text" name="org" id="org" placeholder="Organization" ng-model="org">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="text" name="org" id="org" placeholder="Organization" ng-model="org">
                     </div>
                 </div>
 
@@ -101,29 +101,29 @@
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        <input type="text" name="email" id="email" placeholder="E-mail address" ng-model="email">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="text" name="email" id="email" placeholder="E-mail address" ng-model="email">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        <input type="tel" name="phone" id="phone" placeholder="Phone" ng-model="phone">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="tel" name="phone" id="phone" placeholder="Phone" ng-model="phone">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        <input type="text" name="username" id="username" placeholder="Username" ng-model="username">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="text" name="username" id="username" placeholder="Username" ng-model="username">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="lock icon"></i>
-                        <input type="password" name="password" id="password" placeholder="Password" ng-model='password'>
+                        <!-- <i class="lock icon"></i> -->
+                        <input class="inpt" type="password" name="password" id="password" placeholder="Password" ng-model='password'>
                     </div>
                 </div>
 

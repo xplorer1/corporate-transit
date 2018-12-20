@@ -420,6 +420,8 @@ a {
     margin: 0 auto;
     width: 100%;
     background: white;
+    margin-top: 30px;
+    box-shadow: 0 1px 6px rgba(57,73,76,0.35);
 }
 
 .numchats, .chatrate {
@@ -493,7 +495,21 @@ span.speaker, #expertfullname {
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 350px) {
+    .otherpages {
+        margin: 100px 25px !important;
+    }
+
+    .table_cont {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 800px) {
+    .why-title {
+        visibility: hidden;
+    }
     .somebar {
         position: inherit;
         height: 100%;

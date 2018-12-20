@@ -9,7 +9,7 @@ function TransporterFnc($http, $q) {
     let baseurl = function(){ return rootShared.seed.baseurl; };
 
     transporter.signup = function(userData) {
-        return $http.post(baseurl()+"/api/ct/signup", userData).then(
+        return $http.post(baseurl()+"/api/signup", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -19,7 +19,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.login = function(userData) {
-        return $http.post(baseurl()+"/api/ct/login", userData).then(
+        return $http.post(baseurl()+"/api/login", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -29,7 +29,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.booktrip = function(userData) {
-        return $http.post(baseurl()+"/api/ct/booking", userData).then(
+        return $http.post(baseurl()+"/api/booking", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -39,7 +39,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.resendcode = function(userData) {
-        return $http.post(baseurl()+"/api/ct/resendvcode", userData).then(
+        return $http.post(baseurl()+"/api/resendvcode", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -49,7 +49,17 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.contactus = function(userData) {
-        return $http.post(baseurl()+"/api/ct/contactus", userData).then(
+        return $http.post(baseurl()+"/api/contactus", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.forgotpassword = function(userData) {
+        return $http.post(baseurl()+"/api/forgotpassword", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -59,7 +69,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.fund_ct = function(userData) {
-        return $http.post(baseurl()+"/api/ct/fund_ct", userData).then(
+        return $http.post(baseurl()+"/api/fund_ct", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -69,7 +79,37 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.payviaussd = function(userData) {
-        return $http.post(baseurl()+"/api/ct/payviaussd", userData).then(
+        return $http.post(baseurl()+"/api/payviaussd", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.confirm = function(userData) {
+        return $http.post(baseurl()+"/api/confirm", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.checkcode = function(userData) {
+        return $http.post(baseurl()+"/api/checkcode", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.resetpassword = function(userData) {
+        return $http.post(baseurl()+"/api/resetpassword", userData).then(
             function(response){
                 return $q.when(response.data);
             },

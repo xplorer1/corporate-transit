@@ -4,21 +4,23 @@ module.exports = {
     sendEmailVerificationMail: function sendEmailVerificationMail(confirmlink, recipients){
 
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
         let mailOptions = {
-            from: '"Hello From Corporate Transit" <hello@corporatetransit.com.ng>', // sender address
+            from: '"Hello From Corporate Transit" <chijioke543@gmail.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Welcome ✔', // Subject line
             text: 'Hello! Welcome to Corporate Transit and thank you for signing up. Click or copy this link to your browser to confirm your email and activate your account.' + confirmlink + ' All future notifications will be sent to this email address. Thank you for choosing us!', // plaintext body
             html: 'Hello!<br><br>Welcome to Corporate Transit and thank you for signing up. Click or copy this link to your browser to confirm your email and activate your account.<br><br><strong>' + confirmlink + '</strong><br><br> All future notifications will be sent to this email address.<br><br>Thank you for choosing us!<br><br>' // html body
         };
+
+        console.log("mail options: ", mailOptions);
 
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
@@ -29,11 +31,11 @@ module.exports = {
 
     sendPasswordResetMail: function sendPasswordResetMail(fullname, recipients, pwdresetlink){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
@@ -56,11 +58,11 @@ module.exports = {
 
     sendPasswordChangedMail: function sendPasswordChangedMail(fullname, recipients){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
@@ -81,13 +83,13 @@ module.exports = {
         });
     },
 
-    sendSuccessfulBookingMail: function sendSuccessfulBookingMail(fullname, recipients){
+    sendSuccessfulBookingMail: function sendSuccessfulBookingMail(fullname, recipients, booking){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
@@ -96,9 +98,9 @@ module.exports = {
             from: '"Hello From Corporate Transit" <hello@corporatetransit.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Booking Successful. ✔', // Subject line
-            text: 'Hello ' + fullname + '!This is to inform you that your booking was successful. Find below the details of you booking.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br>' // html body
-        };
+            text: 'Hello ' + fullname + '!This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + 'Booking Id: ' + booking.id + 'Departure: ' + booking.from + 'Destination: ' + booking.to + 'Route: ' + booking.route + 'Booking Date' + booking.bookedon, // plaintext body
+            html: 'Hello ' + fullname + '!<br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + '<br><br>' + 'Booking Id: ' + booking.id + '<br><br>' + ' From: ' + booking.from + '<br><br>' + 'To: ' + booking.to + '<br><br>' + 'Route: ' + booking.route + '<br><br>' + 'Booking Date: ' + booking.bookedon // html body // html body
+        }; //
 
         // send mail with defined transport object
         transporter.sendMail(mailOptions, function(error, info){
@@ -110,11 +112,11 @@ module.exports = {
 
     sendComplaintRecieptMail: function sendComplaintRecieptMail(fullname, recipients){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
@@ -137,11 +139,11 @@ module.exports = {
 
     sendComplaintMail: function sendComplaintMail(name, email, complaint, recipient){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
@@ -164,11 +166,11 @@ module.exports = {
 
     sendBookingCancelledMail: function sendBookingCancelledMail(fullname, recipients){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
@@ -189,20 +191,20 @@ module.exports = {
         });
     },
 
-    sendCardNumberMail: function sendCardNumberMail(fullname, recipients, cardnumber){
+    sendCardNumberMail: function sendCardNumberMail(fullname, recipient, cardnumber){
         let transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            host: 'smtp.gmail.com',
+            port: 465,
             auth: {
-                user: 'qpgi7hlq23fr3h2y@ethereal.email',
-                pass: 'uNQnJfJRekwf1dEJtg'
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
             }
         });
 
         // setup e-mail data with unicode symbols
         let mailOptions = {
-            from: '"Hello From Corporate Transit" <hello@corporatetransit.com>', // sender address
-            to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            from: '"Hello From Corporate Transit" <chijioke543@gmail.com>', // sender address
+            to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Your card number! ✔', // Subject line
             text: 'Hello ' + fullname + 'Hello. This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
             html: 'Hello ' + fullname + '!<br><br>Hello. This is your card number. ' + cardnumber + ' Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body

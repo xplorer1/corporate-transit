@@ -21,45 +21,53 @@ let corporatemail = "customerservice@corporatetransit.com.ng";
 module.exports =(app, express) => {
     let apiRouter = express.Router();
 
-    apiRouter.get("/ct/confirm/:vcode", (req, res) => {
-        let vcode = req.params.vcode;
-
-        console.log("vcode: ", vcode);
+    apiRouter.post("/confirm", (req, res) => {
+        let vcode = req.body.token;
 
         if(vcode) {
-            User.findOne({vcode: vcode}, "email fullname", (err, user) => {
+            User.findOne({vcode: vcode}, {"email" : 1, "fullname" : 1}, (err, user) => {
                 if(err) return res.json({status: false, data: "Email verification error."});
+
                 if(user) {
+                    console.log("username: ", user.username);
+
                     let cardnumber;
 
                     cardnumber = "";
 
-                    user.verified = true;
-                    user.verifiedon = new Date();
-                    user.ct_cardnumber = cardnumber;
-                    user.ct_cardstatus = "assigned";
+                    User.updateOne({email: user.email}, {
+                        $set: {
+                            verified: true,
+                            verifiedon: new Date(),
+                            ct_cardnumber: cardnumber,
+                            ct_cardstatus: "assigned"
+                        }
+                    }, (err, verified) => {
+                        if (err) return res.json({status: false, data: err});
 
-                    user.save();
+                        if (verified.nModified === 1) {
 
-                    mailer.sendCardNumberMail(status.fullname, user.email, cardnumber);
+                            //mailer.sendCardNumberMail(user.fullname, user.email, cardnumber);
 
-                    let $ = cheerio.load(fs.readFileSync('./public/views/pages/email_activation.html'));
-
-                    $("#user").val(user.email);
-
-                    return res.send($.html());
-
-                    //return res.json({status: true, data: "account_activation_successful", user: user.email, reason: "Account has been successful confirmed. User can now login."})
+                            return res.json({status: true, data: "Verified", user: user.email});
+                        }
+                        else {
+                            return res.json({status: false, data: "There has been a problem."})
+                        }
+                    });
                 }
                 else {
-                    return res.json({status: false, data: "account_activation_unsuccessful", reason: "Incorrect activation code entered. Advice user to check their email and verify they have not tampered with the link."})
+                    return res.json({status: false, data: "token_notfound"})
                 }
             })
         }
-        console.log("NO params")
+        else {
+            console.log("url not familiar.");
+            return res.sendFile('views/pages/notfound.html', {root: './public'});
+        }
     });
 
-    apiRouter.post("/ct/signup", (req, res) => {
+    apiRouter.post("/signup", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found. Verify your parameters"});
         if(!req.body.home) return res.json({status: false, data: "home_required", reason: "Home address not found. Verify your parameters"});
         if(!req.body.work) return res.json({status: false, data: "work_required", reason: "Workplace not found. Verify your parameters"});
@@ -104,7 +112,7 @@ module.exports =(app, express) => {
                                     if(err) console.log("Error saving user.");
 
                                     if(success) {
-                                        mailer.sendEmailVerificationMail("http://api.corporatetransit.com.ng/api/ct/confirm/"+vcode, req.body.email);
+                                        mailer.sendEmailVerificationMail("https://corporatetransit.com.ng/verify/?"+vcode, req.body.email);
 
                                         return res.json({status: true, data: "signup_successful", reason: "Account successfully created. Advice user to also check their spam folder in case they don't find it in their primary inbox."})
                                     }
@@ -123,7 +131,7 @@ module.exports =(app, express) => {
         })
     });
 
-    apiRouter.post("/ct/resendvcode", (req, res) => {
+    apiRouter.post("/resendvcode", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found. Check your parameters."});
 
         User.findOne({email: req.body.email}, "verified", (err, status) => {
@@ -133,21 +141,22 @@ module.exports =(app, express) => {
 
             if(status.verified) return res.json({status: false, data: "account_activated", reason: "Account is already activated. Advice to login."});
             if(!status.verified) {
-                let user = new User();
                 let vcode = uuid.v4();
 
-                user.vcode = vcode;
-                user.verified = false;
+                User.update({email: req.body.email}, {$set: {vcode: vcode, verified: false}}, (err, user) => {
+                    console.log("user: ", user);
 
-                user.save((err, success) => {
-                    if (err) console.log("Error saving user.");
+                    if (err) {
+                        console.log("Error saving user.");
 
-                    if (success) {
-                        mailer.sendEmailVerificationMail(vcode, req.body.email);
-
-                        return res.json({status: true, data: "vcode_sent", reason: "Verification link has been sent to user's email address. Open account/email confirmation page.  Advice user to also check their spam folder in case they don't find it in their primary inbox."});
+                        return res.json({status: false, data: err})
                     }
-                })
+                    if(user) {
+                        mailer.sendEmailVerificationMail("https://corporatetransit.com.ng/verify/?"+vcode, req.body.email);
+
+                        return res.json({status: true, data: "vcode_sent", reason: "Verification link has been sent to user's email address. confirmation page."});
+                    }
+                });
             }
             else {
                 return res.json({status: false, data: "unknown_error", reason: "An unknown error has occurred. Advice user to try again."});
@@ -155,12 +164,10 @@ module.exports =(app, express) => {
         })
     });
 
-    apiRouter.post("/ct/login", (req, res) => {
-        console.log("Req login: ", req.body);
+    apiRouter.post("/login", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found. Verify your parameters"});
         if(!req.body.password) return res.json({status: false, data: "password_required", reason: "Password not found. Verify your parameters"});
 
-        //bcrypt.compare('somePassword', hash, function(err, res) { if(res) { // Passwords match } else { // Passwords don't match } });
         User.findOne({email: req.body.email, password: req.body.password}, "verified fullname username", (err, user) => {
             if(err) return res.json({status: false, data: "Error"+err});
             console.log("User: ", user);
@@ -192,74 +199,79 @@ module.exports =(app, express) => {
         })
     });
 
-    apiRouter.post("/ct/forgotpassword", (req, res) => {
+    apiRouter.post("/forgotpassword", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email Address Required."});
 
-        User.findOne({email: req.body.email}, "resetPasswordExpires resetpasswordtoken", (err, user) => {
+        User.findOne({email: req.body.email}, (err, user) => {
             if(err) return res.json({status: false, data: "Database error."+err});
-            if(!user) return res.json({status: false, data: "user_notfound", reason: "The email entered does not match any account. Advice to verify their input and try again or register."});
+
+            if(!user) return res.json({status: false, data: "user_notfound", reason: "Advice to verify their input and try again or register."});
+
             if(user) {
-                let resettoken = crypto.randomBytes(20, (err, buffer) => {
-                    return buffer.toString('hex');
+                let resettoken = uuid.v4();
+
+                let expirydate = new Date() + 3600000;
+
+                User.findOneAndUpdate({email: req.body.email}, {$set: {resetpasswordtoken: resettoken, resetpasswordexpires: expirydate}}, (err, reset) =>{
+                    if(err) console.log("err: ", err);
+
+                    if(reset) {
+                        jwt.sign({
+                            email: req.body.email,
+                            }, supersecret, {
+                                expiresIn: 360 // expires in 1 hour
+                            }
+                        );
+                        mailer.sendPasswordResetMail(user.fullname, req.body.email, "https://corporatetransit.com/api/reset/?"+resettoken);
+                        return res.json({status: true, data: "password_resetlink_sent", reason: "Password reset link to user's email address.", resettoken: resettoken});
+                    }
                 });
-
-                /*jwt.sign({
-                    email: user.req.body.email,
-                }, supersecret, {
-                    expiresIn: 360 // expires in 1 hour
-                });*/
-
-                user.resetPasswordExpires = Date.now() + 3600000;
-                user.resetpasswordtoken = resettoken;
-
-                user.save(function(err) {
-                    console.log("Error saving reset password expiry date ", err);
-                });
-
-                mailer.sendPasswordResetMail(user.fullname, req.body.email, "https://corporatetransit.com/resetpassword/"+resettoken);
-                return res.json({status: true, data: "password_resetlink_sent", reason: "Password reset link to user's email address.", resettoken: resettoken});
             }
         })
     });
 
-    apiRouter.get("/ct/reset/:token", (req, res) => {
-        let token = req.params.token;
+    apiRouter.post("/checkcode", (req, res) => {
+        let token = req.body.token;
 
-        User.findOne({resetpasswordtoken: token, resetpasswordexpires: { $gt: Date.now() }}, (err, valid) => {
-            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again."});
-            if(!valid) return res.json({status: false, data: "invalid_token", reason: "Password reset token invalid."});
+        if(token) {
+            User.findOne({resetpasswordtoken: token}, (err, valid) => {
+                if(err) return res.json({status: false, data: "db_error", reason: err});
 
-            if(valid) {
-                console.log("Password reset page send!");
-                return res.send("https://corporatetransit.com/resetpassword.html/"+req.params.token);
-                //reply user with page to reset password.
-            }
-            else {
-                console.log("Password reset token expired.");
-                return res.send("https://corporatetransit.com/token-expired.html");
-            }
-        })
+                if(!valid) {
+                    return res.json({status: false, data: "invalid_token", reason: "Password reset token invalid."});
+                }
+                if(valid) {
+                    return res.json({status: true, data: "token_valid", reason: "Password token is valid."});
+                }
+                else {
+                    return res.json({status: false, data: "unknown_error", reason: "Password token is valid."});
+                }
+            })
+        }
+        else {
+            return res.json({status: false, data: "notfound", reason: "Token was not found."});
+        }
     });
 
-    apiRouter.post("/ct/resetpassword", (req, res) => {
-        if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email Required."});
+    apiRouter.post("/resetpassword", (req, res) => {
+
         if(!req.body.token) return res.json({status: false, data: "token_required", reason: "Token required."});
         if(!req.body.password) return res.json({status: false, data: "password_required", reason: "Password Required."});
 
-        User.findOne({resetpasswordtoken: req.body.token, resetpasswordexpires: { $gt: Date.now() }}, "fullname", function(err, user) {
+        User.findOne({resetpasswordtoken: req.body.token, resetpasswordexpires: { $lt: Date.now() }}, {"fullname": 1, "email" : 1}, function(err, user) {
             if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again."});
             if(!user) return res.json({status: false, data: "Password reset token invalid or has expired. Advice user to try again."});
+
             if(user) {
+                User.updateOne({email: user.email}, {$set: {password: req.body.password, resetpasswordexpires: undefined, resetpasswordtoken: undefined}}, (err, changed) => {
+                    if(err) console.log("error changing password: ", err);
 
-                user.password = req.body.password;
-                user.resetpasswordtoken = undefined;
-                user.resetpasswordexpires = undefined;
+                    if(changed) {
+                        //mailer.sendPasswordChangedMail(user.fullname, req.body.email);
 
-                user.save(err => console.log("err saving new password: ", err));
-
-                mailer.sendPasswordChangedMail(user.fullname, req.body.email);
-
-                return res.json({status: true, data: "password_change_successful", reason: "Password Successfully Changed."});
+                        return res.json({status: true, data: "password_change_successful", reason: "Password Successfully Changed."});
+                    }
+                });
             }
         })
     });
@@ -294,7 +306,7 @@ module.exports =(app, express) => {
         }
     });*/
 
-    apiRouter.post("/ct/booking",(req, res) => { //check token
+    apiRouter.post("/booking",(req, res) => { //check token
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
         if(!req.body.ct_cardnumber) return res.json({status: false, data: "ct_cardnumber_required", reason: "Corporate Transit card number required."});
@@ -309,10 +321,10 @@ module.exports =(app, express) => {
         let bookingid = req.body.ct_cardnumber+"_"+id;
 
         jwt.verify(token, supersecret, function (err, decoded) {
-            console.log("Decoded: ", decoded);
 
             if (err) {
-                return res.sendFile('index.html');
+                console.log("err: ", err);
+                //return res.sendFile('views/pages/login.html', {root: "./public"});
             }
             else {
                 User.findOne({email: decoded.email}, function(err, user) {
@@ -321,39 +333,71 @@ module.exports =(app, express) => {
                     if(!user) return res.json({status: false, data: "user_not_found", reason: "User with email address not registered."});
 
                     if(user) {
-                        //{ $set: { queue: [], queuecount: 0 }}
-                        Slot.findOneAndUpdate({slotcount: {$lt: 30}, 'users.email': {$ne: decoded.email}}, {$push: {"users": {email: decoded.email}, added: new Date()}, $inc: {slotcount: 1}, availableseats: -1}, {new: true}, (err, docs) =>{
+
+                        Slot.findOne({"users.email": decoded.email}, (err, email) => {
                             if(err) console.log("err: ", err);
-                            console.log("docs", docs);
-                            if(docs) {
-                                let bookingjournal = new BookingJournal();
 
-                                bookingjournal.email = decoded.email;
-                                bookingjournal.booking.route = req.body.route;
-                                bookingjournal.booking.frequency = req.body.frequency;
-                                bookingjournal.booking.bookingid = bookingid;
-                                bookingjournal.booking.bookedon = new Date();
-                                bookingjournal.booking.from = req.body.from;
-                                bookingjournal.booking.status = "Pending";
-                                bookingjournal.booking.to = req.body.to;
-                                bookingjournal.booking.ct_cardnumber = req.body.ct_cardnumber;
+                            if(email) {
+                                return res.json({status: false, data: "slot_email"})
+                            }
+                            else if(!email) {
 
-                                bookingjournal.save(err => {
-                                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                                Slot.findOneAndUpdate({slotid : bookingid}, {$push: {"users": {email: decoded.email}}}, {new: true, upsert: true}, (err, docs) => {
+                                    if(err) console.log("err: ", err);
 
-                                    mailer.sendSuccessfulBookingMail(user.fullname, req.body.email);
+                                    console.log("docs", docs);
 
-                                    return res.json({status: true, data: "booking_successful.", reason: "Booking is successful."})
-                                });
+                                    if(docs) {
+                                        if(docs) {
+                                            let bookingjournal = new BookingJournal();
+
+                                            bookingjournal.email = decoded.email;
+                                            bookingjournal.booking.route = req.body.route;
+                                            bookingjournal.booking.frequency = req.body.frequency;
+                                            bookingjournal.booking.bookingid = bookingid;
+                                            bookingjournal.booking.bookedon = new Date();
+                                            bookingjournal.booking.from = req.body.from;
+                                            bookingjournal.booking.bookingstatus = "Pending";
+                                            bookingjournal.booking.to = req.body.to;
+                                            bookingjournal.booking.ct_cardnumber = req.body.ct_cardnumber;
+
+                                            let booking_info = {status: "Pending", id: bookingid, from: req.body.from, to: req.body.to, route: req.body.route, bookedon: new Date().toLocaleString()};
+                                            bookingjournal.save(err => {
+                                                if(err) {
+                                                    console.log("err: ", err);
+                                                    return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                                                }
+
+                                                SeatCount.findOneAndUpdate({busid: bookingid}, {$inc: {availableseats: 1}}, {upsert: true}, (err, seatcount) => {
+                                                    if(err) console.log("err: ", err);
+
+                                                    console.log("seatcount: ", seatcount);
+
+                                                    //mailer.sendSuccessfulBookingMail(user.fullname, req.body.email, booking_info);
+
+                                                    return res.json({status: true, data: "booking_successful.", reason: "Booking is successful."})
+                                                });
+                                            });
+                                            }
+                                    }
+                                    else {
+                                        console.log("no docs!")
+                                    }
+                                })
                             }
                         });
+                                                                        //{$push: {"queue": {caller: req.body.phone}}, $inc: {queuecount: 1}
+                                //});
+                    }else {
+                        console.log("no user")
+                        //return res.sendFile("notfound.html");
                     }
                 });
             }
         });
     });
 
-    apiRouter.post("/ct/bookingcancellation", (req, res) => {
+    apiRouter.post("/bookingcancellation", (req, res) => {
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
         jwt.verify(token, supersecret, function (err, decoded) {
@@ -378,13 +422,15 @@ module.exports =(app, express) => {
                                 return res.json({status: true, data: bookings, reason: "Bookings found."});
                             }
                         })
+                    }else {
+                        return res.sendFile("login.html");
                     }
                 });
             }
         });
     });
 
-    apiRouter.post("/ct/cancelbooking", (req, res) => {
+    apiRouter.post("/cancelbooking", (req, res) => {
         if(!req.body.bookingid) return res.json({status: false, data: "bookingid_required", reason: "No booking id supplied."});
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
@@ -443,7 +489,7 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/paymenthistory", (req, res) => {
+    apiRouter.post("/paymenthistory", (req, res) => {
         if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
 
         User.findOne({email: req.body.email}, (err, client) => {
@@ -462,7 +508,7 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/transactionhistory", (req, res) => {
+    apiRouter.post("/transactionhistory", (req, res) => {
         if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
 
         User.findOne({email: req.body.email}, (err, client) => {
@@ -482,7 +528,7 @@ module.exports =(app, express) => {
 
     });
 
-    apiRouter.post('/ct/fund_ct', (req, res) => {
+    apiRouter.post('/fund_ct', (req, res) => {
         if (!req.body.email) return res.json({status: false, message: 'Email not found.'});
         if (!req.body.amount) return res.json({status: false, message: 'Payment amount is required. Pick a bundle.'});
 
@@ -520,7 +566,7 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/onlineinstant", (req, res) => {  //come back later and save this to transaction and payment.
+    apiRouter.post("/onlineinstant", (req, res) => {  //come back later and save this to transaction and payment.
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email required."});
         if(!req.body.amount) return res.json({status: false, data: "amount_required", reason: "Amount to pay supplied."});
         if(!req.body.bankcode) return res.json({status: false, data: "bankcode_required", reason: "Bank Code Required"});
@@ -577,7 +623,7 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/payviaussd", (req, res) => {
+    apiRouter.post("/payviaussd", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email required."});
         if(!req.body.amount) return res.json({status: false, data: "amount_required", reason: "Amount to pay supplied."});
 
@@ -658,7 +704,7 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/contactus", (req, res) => {
+    apiRouter.post("/contactus", (req, res) => {
         if(!req.body.name) return res.json({status: false, data: "name_required", reason: "Name not supplied."});
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email not supplied."});
         if(!req.body.complaint) return res.json({status: false, data: "complaint_required", reason: "Complaint body not supplied."});
@@ -688,61 +734,77 @@ module.exports =(app, express) => {
         });
     });
 
-    apiRouter.post("/ct/payevents", (req, res) => {
-        let secret = "sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1";
-        let hash = crypto.createHmac('sha512', config.secret).update(JSON.stringify(req.body)).digest('hex');
-
-        if (hash === req.headers['x-paystack-signature']) {
-            let req = req.body;
-
-            console.log("Request paystack: ", request);
+    apiRouter.post("/payevents", (req, res) => {
+        //apiRouter.post("/payevents", (req, res) => {
+            console.log("came in here: ", req.body);
 
             if(!req.body.email) return res.json({status: false, data: "Email not found."});
             if(!req.body.reference) return res.json({status: false, data: "Reference missing."});
-            // Retrieve the request's body
-            // Do something with event
 
-            PaymentJournal.find({ paymentid: req.body.reference, success: false }, function(err, payments) {
-                console.log("Payments: ", payments);
 
-                if (err) console.log(err);
+            return res.json({status: true, data: req.body});
 
-                if(req.body.status === "success"){
-                    payments.forEach(function(ctp){
-                        if(ctp.total * 100 <= Number(event.data.amount)){
-                            ctp.success = true;
-                            ctp.save(function(err){
-                                if(!err){
-                                    User.findOne({payments: ctp.cid}, function(err, payamount){
-                                        if(!err && payamount){
-                                            payamount.balance = payamount.balance + ctp.amount;
-                                            payamount.save();
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
 
-            // paystack.transactions.verify(req.body.reference, function(error, body) {
-            //     console.log(error);
-            //     console.log(body);
-            // });
+            /* let secret = "sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1";
+           let hash = crypto.createHmac('sha512', config.secret).update(JSON.stringify(req.body)).digest('hex');
 
-            return res.sendStatus(200);
-        }
+           if (hash === req.headers['x-paystack-signature']) {
+               let req = req.body;
+
+               console.log("Request paystack: ", request);
+
+               if(!req.body.email) return res.json({status: false, data: "Email not found."});
+               if(!req.body.reference) return res.json({status: false, data: "Reference missing."});
+               // Retrieve the request's body
+               // Do something with event
+
+               PaymentJournal.find({ paymentid: req.body.reference, success: false }, function(err, payments) {
+                   console.log("Payments: ", payments);
+
+                   if (err) console.log(err);
+
+                   if(req.body.status === "success"){
+                       payments.forEach(function(ctp){
+                           if(ctp.total * 100 <= Number(event.data.amount)){
+                               ctp.success = true;
+                               ctp.save(function(err){
+                                   if(!err){
+                                       User.findOne({payments: ctp.cid}, function(err, payamount){
+                                           if(!err && payamount){
+                                               payamount.balance = payamount.balance + ctp.amount;
+                                               payamount.save();
+                                           }
+                                       });
+                                   }
+                               });
+                           }
+                       });
+                   }
+               });
+
+               // paystack.transactions.verify(req.body.reference, function(error, body) {
+               //     console.log(error);
+               //     console.log(body);
+               // });
+
+               return res.sendStatus(200);
+           } */
+        //});
+
     });
 
-    apiRouter.post("/ct/cardpayment", (req, res) => {
+    apiRouter.post("/cardpayment", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found."});
         if(!req.body.ct_cardnumber) return res.json({status: false, data: "ct_cardnumber_required", reason: "User card number not found."});
         if(!req.body.amount) return res.json({status: false, data: "amount_required", reason: "Amount user paid is required."});
 
+        User.findOne({email: req.body.email, ct_cardnumber: req.body.ct_cardnumber}, (err, user) => {
+
+        })
+
     });
 
-    apiRouter.post("/ct/banktransfer", (req, res) => {
+    apiRouter.post("/banktransfer", (req, res) => {
 
     });
 

@@ -1,6 +1,6 @@
 
 <div class="ui middle aligned center aligned grid forms otherpages" ng-controller="PaymentPageController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <a class="navbar-brand" ui-sref="home">CT</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
@@ -17,12 +17,6 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="booking">Book a trip</a>
                 </li>
-                <!--<li class="nav-item active">
-                    <a class="nav-link" ui-sref="payment">Payment</a>
-                </li>
-                <li class="nav-item active border">
-                    <a class="nav-link" ui-sref="signup">Sign Up</a>
-                </li>-->
             </ul>
         </div>
     </nav>
@@ -86,21 +80,21 @@
     </div>
 
     <div class="ui tiny modal onlineinstant">
-        <i class="close icon"></i>
+        <i class="close icon">&times;</i>
         <div class="header">
             Pay via online instant
         </div>
-        <div class="ui stacked secondary  segment">
+        <div class="ui stacked secondary  segment removestyle">
             <div class="field modalfield">
                 <div class="ui left icon input modalinput">
-                    <i class="user icon"></i>
+                    <!--<i class="user icon">&times;</i>-->
                     <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
                 </div>
             </div>
 
             <div class="field modalfield">
                 <div class="ui left icon input modalinput">
-                    <i class="lock icon"></i>
+                    <!--<i class="lock icon"></i>-->
                     <input type="number" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
                 </div>
             </div>
@@ -116,7 +110,7 @@
         <div class="header">
             Pay via ussd
         </div>
-        <div class="ui stacked secondary  segment">
+        <div class="ui stacked secondary  segment removestyle">
             <div class="field modalfield">
                 <div class="ui left icon input modalinput">
                     <i class="user icon"></i>

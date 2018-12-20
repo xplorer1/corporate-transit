@@ -17,6 +17,11 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/booking.html',
                 controller: 'BookingPageController'
             })
+            .state('booking_history', {
+                url: '/booking_history',
+                templateUrl: '../views/pages/booking_history.html',
+                controller: 'BookingPageController'
+            })
             .state('contact_us', {
                 url: '/contact_us',
                 templateUrl: '../views/pages/contact_us.html',
@@ -29,8 +34,7 @@ angular.module('MainModule', [
             })
             .state('how_it_works', {
                 url: '/how_it_works',
-                templateUrl: '../views/pages/how_it_works.html',
-                controller: 'How_It_WorksPageController'
+                templateUrl: '../views/pages/how_it_works.html'
             })
             .state('payment', {
                 url: '/payment',
@@ -44,8 +48,12 @@ angular.module('MainModule', [
             })
             .state('routes', {
                 url: '/routes',
-                templateUrl: '../views/pages/routes.html',
-                controller: 'RoutesPageController'
+                templateUrl: '../views/pages/routes.html'
+            })
+            .state('verify', {
+                url: '/verify/:vcode',
+                templateUrl: '../views/pages/verify.html',
+                controller: 'SignUpPageController'
             })
             .state('signup', {
                 url: '/signup',
@@ -66,6 +74,20 @@ angular.module('MainModule', [
                 url: '/email_activation',
                 templateUrl: '../views/pages/email_activation.html',
                 controller: "EmailActivationController"
+            })
+            .state('forgotpassword', {
+                url: '/forgotpassword',
+                templateUrl: '../views/pages/forgotpassword.html',
+                controller: "LoginPageController"
+            })
+            .state('reset', {
+                url: '/reset/:resetcode',
+                templateUrl: '../views/pages/resetpassword.html',
+                controller: "LoginPageController"
+            })
+            .state('notfound', {
+                url: '/notfound',
+                templateUrl: '../views/pages/notfound.html',
             });
 
         $locationProvider.html5Mode({

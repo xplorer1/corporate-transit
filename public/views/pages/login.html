@@ -1,9 +1,9 @@
 <div class="ui middle aligned center aligned grid forms otherpages" ng-controller="LoginPageController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <a class="navbar-brand" ui-sref="home">CT</a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon">&#9776;</span>
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
@@ -23,28 +23,28 @@
                     <a class="nav-link" ui-sref="signup">Sign Up</a>
                 </li>
             </ul>
-        </div>
+        </div> -->
     </nav>
 
-    <div class="column formcolumn">
+    <div class="column otherpages formcolumn">
         <h2 class="ui image header">
             <div class="content">
                 Log-in to your account
             </div>
         </h2>
-        <form class="ui large form" novalidate name="loginform" id="loginform">
+        <form class="ui large form" novalidate name="loginform">
 
-            <div class="ui stacked secondary  segment">
+            <div class="ui stacked secondary  segment removestyle">
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="user icon"></i>
+                        <!-- <i class="user icon"></i> -->
                         <input type="text" ng-model="email"  id="email" name="email" placeholder="E-mail address">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
-                        <i class="lock icon"></i>
+                        <!-- <i class="lock icon"></i> -->
                         <input type="password" ng-model="password" id="password" name="password" placeholder="Password">
                     </div>
                 </div>
@@ -57,7 +57,7 @@
         <div class="ui message">
             Don't have an account? <a ui-sref="signup">Register</a>
         </div>
-        <a ui-sref="forgotpassword">Forgot your password?</a>
+        <a ui-sref="forgotpassword" class="forgotp">Forgot your password?</a>
     </div>
 
     <div class="somebar">

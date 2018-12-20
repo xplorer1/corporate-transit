@@ -1,10 +1,10 @@
 
 <article ng-controller="BookingPageController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <a class="navbar-brand" ui-sref="home">CT</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon">&#9776;</span>
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
@@ -20,9 +20,6 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="payment">Payment</a>
                 </li>
-                <!--<li class="nav-item active border">
-                    <a class="nav-link" ui-sref="login">Sign Up</a>
-                </li>-->
             </ul>
         </div>
     </nav>
@@ -35,14 +32,24 @@
                 </div>
             </h2>
             <form class="ui large form" novalidate name="bookingform">
-                <div class="ui stacked secondary  segment">
+                <div class="ui stacked secondary  segment removestyle">
 
                     <div class="field">
                         <label></label>
                         <select class="ui search dropdown" name="trip_route" id="trip_route" ng-model="trip_route">
                             <option disabled value="">Select route</option>
-                            <option value="ik-vi">Ikeja – Victoria Island</option>
-                            <option value="yb-vi">Yaba – Victoria Island</option>
+                            <option value="Ikeja - Victoria Island">Ikeja – Victoria Island</option>
+                            <option value="Yaba - Victoria Island">Yaba – Victoria Island</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label></label>
+                        <select class="ui search dropdown" name="booking_type" id="booking_type" ng-model="booking_type">
+                            <option disabled value="">Select booking type</option>
+                            <option value="Morning Only">Morning Only</option>
+                            <option value="Evening Only">Evening Only</option>
+                            <option value="Return">Return</option>
                         </select>
                     </div>
 
@@ -50,10 +57,10 @@
                         <label></label>
                         <select class="ui search dropdown" name="trip_frequency" id="trip_frequency" ng-model="trip_frequency">
                             <option disabled value="">Trip Frequency</option>
-                            <option value="daily">Daily</option>
-                            <option value="5days">5 Days</option>
-                            <option value="10days">10 days</option>
-                            <option value="1month">1 month</option>
+                            <option value="Daily">Daily</option>
+                            <option value="5 days">5 Days</option>
+                            <option value="10 days">10 days</option>
+                            <option value="1 month">1 month</option>
                         </select>
                     </div>
 
