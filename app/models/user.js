@@ -34,6 +34,7 @@ let UserSchema = new Schema({
     verifiedon: { type: Date, select: false },
     vcode: { type: String },
     work: { type: String },
+    gender: { type: String },
     ct_cardnumber: {type: String},
     ct_cardstatus: {type: String},
     home: { type: String },

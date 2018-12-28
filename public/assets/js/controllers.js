@@ -1,14 +1,16 @@
 angular.module('ControllersModule', [])
     .controller('MainPageController', ['$scope', '$state', '$log', '$window', MainPageController])
-    .controller('BookingPageController', ['$scope', '$log', 'Transporter', BookingPageController])
-    .controller('ContactPageController', ['$scope', '$log', 'Transporter', ContactPageController])
-    .controller('PaymentPageController', ['$scope', '$log', 'Transporter', PaymentPageController])
+    .controller('BookingPageController', ['$scope', '$log', 'Transporter', '$state', BookingPageController])
+    .controller('ContactPageController', ['$scope', '$log', 'Transporter', '$state', ContactPageController])
+    .controller('PaymentPageController', ['$scope', '$log', 'Transporter', '$state', PaymentPageController])
+    .controller('PaymentHistoryController', ['$scope', '$log', 'Transporter', '$state', PaymentHistoryController])
     .controller('SignUpPageController', ['$scope',  '$log', 'Transporter', '$stateParams', '$state', SignUpPageController])
     .controller('LoginPageController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', LoginPageController])
-    .controller('EmailActivationController', ['$scope', EmailActivationController]);
+    .controller('LandingController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', LandingController])
+    .controller('HowItWorksController', ['$scope', '$log', '$state', '$stateParams', HowItWorksController])
+    .controller('BookingHistoryController', ['$scope', '$log', '$state', 'Transporter', BookingHistoryController]);
 
     function MainPageController($scope, $state, $log, $window) {
-
         $scope.determineDest = (destination) => {
             store.set("user", {destination: destination});
 
@@ -20,84 +22,32 @@ angular.module('ControllersModule', [])
 
         angular.element($window).bind("scroll", () => {
 
-            $("#navbar").css("background", "#333");
-            $(".navother").css("background", "white");
+            $("#navbar").css("background", "#4d5862");
+            $(".navother").css("background", "#20669b");
             $(".nav-item.active.border").css("background", "none");
             $("#navbar a").css("color", "white");
             $(".navother a").css("color", "white");
 
             if ($window.pageYOffset < 2) {
                 $("#navbar").css("background", "none");
-                $(".navother").css("background", "white");
-                $(".nav-item.active.border").css("background", "#37A000");
+                $(".navother").css("background", "#20669b");
+                $(".nav-item.active.border").css("background", "#4d5862");
                 $("#navbar a").css("color", "white");
-                $(".navother a").css("color", "black");
+                $(".navother a").css("color", "white");
             }
         });
     }
 
-    function BookingPageController($scope, $log, Transporter) {
-        function showLoader() {
-            $(".bookingloader").css("display", "block");
-        }
+    function ContactPageController($scope, $log, Transporter, $state) {
+        $scope.determineDest = (destination) => {
+            store.set("user", {destination: destination});
 
-        function hideLoader() {
-            $(".bookingloader").css("display", "none");
-        }
+            $log.log("destination; ", destination);
 
-        let user = store.get("user");
+            rootShared.user["destination"] = destination;
+            $state.go("login");
+        };
 
-        let email = rootShared.user["email"] || user.email;
-
-        if(email) {
-            $scope.bookTrip = () => {
-                console.log("ct_cardnumber", $scope.ct_cardnumber);
-                if(!$scope.trip_route) {
-                    $("#trip_route").notify("Please select your route.", { position: "bottom-center" });
-                }
-                else if(!$scope.trip_frequency) {
-                    $("#trip_frequency").notify("Please select your trip frequency.", { position: "bottom-center" });
-                }
-                else if(!$scope.booking_type) {
-                    $("#booking_type").notify("Please select your booking type.", { position: "bottom-center" });
-                }
-                else if(!$("#demo1").val()) {
-                    $("#demo1").notify("Please select trip date range.", { position: "bottom-center" });
-                }
-                else if(!$("#demo2").val()) {
-                    $("#demo2").notify("Please select trip date range.", { position: "bottom-center" });
-                }
-                else if(!$scope.ct_cardnumber) {
-                    $("#ct_cardnumber").notify("Please enter your card number. Find this in your signup confirmation email.", { position: "bottom-center" });
-                }
-                else {
-                    showLoader();
-
-                    Transporter.booktrip({
-                        email: email,
-                        route: $scope.trip_route,
-                        frequency: $scope.trip_frequency,
-                        bookingtype: $scope.booking_type,
-                        from: $("#demo1").val(),
-                        to: $("#demo2").val(),
-                        ct_cardnumber: $scope.ct_cardnumber,
-                        token: user.token
-                    }).then(response => {
-                        hideLoader();
-
-                        if(response.status) {
-                            $(".booktrip").notify("Your booking was successful.", "success", { position: "bottom-center" });
-                        }
-                        else if(response.data === "slot_email") {
-                            $(".booktrip").notify("You have already booked this trip.", "error", { position: "bottom-center" });
-                        }
-                    })
-                }
-            }
-        }
-    }
-
-    function ContactPageController($scope, $log, Transporter) {
         function showLoader() {
             $(".contact_us_loader").css("display", "block");
         }
@@ -132,19 +82,16 @@ angular.module('ControllersModule', [])
                     email: $scope.email,
                     complaint: $scope.message
                 }).then(response => {
-                    $log.log("Response: ", response);
-                    hideLoader();
+                    //hideLoader();
 
-
+                    if(response.status) {
+                        $("#email").notify("Message received. You will get a notification shortly.", "success", { position: "bottom-center" });
+                    }else {
+                        $("#email").notify("Sorry, there has been a problem. Please try again later.", { position: "bottom-center" });
+                    }
                 })
             }
         }
-    }
-    
-    function EmailActivationController() {
-
-        store.set("user", {email: $("#user").val()});
-        //rootShared.user["email"] = $("#user").val();
     }
 
     function SignUpPageController($scope, $log, Transporter, $stateParams, $state) {
@@ -197,6 +144,7 @@ angular.module('ControllersModule', [])
                 fullname: $scope.fullname,
                 org: $scope.org,
                 work: $scope.work_location,
+                gender: $scope.gender,
                 home: $scope.home_location,
                 email: $scope.email,
                 phone: phone,
@@ -224,8 +172,8 @@ angular.module('ControllersModule', [])
                         store.set("user", {email: $scope.email});
                         rootShared.user["email"] = $scope.email;
 
-                        $("#signup").hide();
-                        $("#email_confirmation").show();
+                        $("#signup").hide(slow);
+                        $("#email_confirmation").show(slow);
                         break;
                     default:
                         $("#signupform").notify("There has been a problem. Please try again later.", { position: "bottom-center" });
@@ -264,6 +212,9 @@ angular.module('ControllersModule', [])
             }
             else if(!$scope.username) {
                 $("#username").notify("Username is required.", { position: "bottom-center" });
+            }
+            else if(!$scope.gender) {
+                $("#gender").notify("Gender is required.", { position: "bottom-center" });
             }
             else if(!$scope.password) {
                 $("#password").notify("Password is required.", { position: "bottom-center" });
@@ -316,7 +267,7 @@ angular.module('ControllersModule', [])
                         break;
                     case "vcode_sent":
 
-                        $("#email_confirmation").notify("Activation email sent to your email address.", { position: "bottom-center" });
+                        $("#email_confirmation").notify("Activation email sent to your email address.", "success", { position: "bottom-center" });
                         break;
                     default:
                         $("#signupform").notify("There has been a problem and we don't know the reason. Please try again later.", { position: "bottom-center" });
@@ -327,8 +278,6 @@ angular.module('ControllersModule', [])
     }
 
     function LoginPageController($scope, $log, Transporter, $state, $stateParams) {
-
-        $log.log("resetcode: ", $stateParams.resetcode);
 
         if($stateParams.resetcode) {
             Transporter.checkcode({
@@ -351,8 +300,7 @@ angular.module('ControllersModule', [])
 
                     }
                 }
-
-                $(".ui.active.dimmer").css("display", "none");
+                //$(".ui.active.dimmer").css("display", "none");
 
             });
         }
@@ -404,14 +352,19 @@ angular.module('ControllersModule', [])
                             $("#loginform").notify("Your account has not been verified. Activation link has been sent to your email address. Also check your spam/junk folders.", { position: "bottom-center" });
                             break;
                         case "login_successful":
+                            let user = store.get("user");
+
                             rootShared.user["email"] = $scope.email;
                             rootShared.user["token"] = response.token;
 
-                            store.set("user", {email: $scope.email, token: response.token});
+                            let expiry = new Date().getTime();
 
-                            if(rootShared.user["destination"]) {
-                                $state.go(rootShared.user["destination"]);
-                            } else $state.go("home");
+                            store.set("user", {email: $scope.email, token: response.token, expires_in: expiry});
+                            console.log("response.user: ", response.user);
+
+                            store.set("user_data", response.user);
+
+                            $state.go("landing");
                             break;
                         case "account_notfound":
                             $("#loginform").notify("Invalid username or password.", { position: "bottom-center" });
@@ -472,17 +425,203 @@ angular.module('ControllersModule', [])
 
                     if(response.status) {
                         $(".resetbutton").notify("Your password has been successfully changed.", { position: "bottom-center" });
-                        $("#loginbutton").css("display", "block");
+
+                        setTimeout(() => {
+                            $state.go("login");
+                        }, 2000)
                     }else {
                         $(".resetbutton").notify("Password change unsuccessful. Please try again later.", { position: "bottom-center" });
-                        $("#loginbutton").css("display", "none");
                     }
                 })
             }
         }
     }
 
-    function PaymentPageController($scope, $log, Transporter) {
+    function BookingPageController($scope, $log, Transporter, $state) {
+
+        let user = store.get("user");
+
+        let time_now = new Date().getTime();
+
+        let diff = (time_now - user.expires_in)/3600;
+
+        console.log("diff: ", diff);
+
+        if (diff > 3600) {
+            $state.go("login");
+        }
+
+        function showLoader() {
+            $(".bookingloader").css("display", "block");
+        }
+
+        function hideLoader() {
+            $(".bookingloader").css("display", "none");
+        }
+
+        let email = rootShared.user["email"] || user.email;
+        $scope.booking_validity = () => {
+            console.log("trip hertz: ", $scope.trip_frequency  === "1 Day");
+            if($scope.trip_frequency === "1 Day") {
+                $(".date1").css("display", "none");
+                $(".mod_one").text("Trip Date")
+            }
+        };
+
+        if(email) {
+            $scope.bookTrip = () => {
+                if(!$scope.trip_route) {
+                    $("#trip_route").notify("Please select your route.", { position: "bottom-center" });
+                }
+                else if(!$scope.trip_frequency) {
+                    $("#trip_frequency").notify("Please select your booking validity.", { position: "bottom-center" });
+                }
+                else if(!$scope.booking_type) {
+                    $("#booking_type").notify("Please select your booking type.", { position: "bottom-center" });
+                }
+                else if(!$("#demo1").val()) {
+                    $("#demo1").notify("Please select trip date range.", { position: "bottom-center" });
+                }
+                else if(!$("#demo2").val()) {
+                    $("#demo2").notify("Please select trip date range.", { position: "bottom-center" });
+                }
+                else if(!$scope.ct_cardnumber) {
+                    $("#ct_cardnumber").notify("Please enter your card number. Find this in your signup confirmation email.", { position: "bottom-center" });
+                }
+                else {
+                    showLoader();
+
+                    Transporter.booktrip({
+                        email: email,
+                        route: $scope.trip_route,
+                        frequency: $scope.trip_frequency,
+                        bookingtype: $scope.booking_type,
+                        from: $("#demo1").val(),
+                        to: $("#demo2").val(),
+                        ct_cardnumber: $scope.ct_cardnumber,
+                        token: user.token
+                    }).then(response => {
+                        //hideLoader();
+
+                        if(response.status) {
+                            $(".booktrip").notify("Your booking was successful.", "success", { position: "bottom-center" });
+                        }
+                        else if(response.data === "slot_email") {
+                            $(".booktrip").notify("You have already booked this trip.", "error", { position: "bottom-center" });
+                        }
+                    })
+                }
+            }
+        }else {
+            $state.go("login");
+        }
+    }
+
+    function BookingHistoryController($scope, $log, $state, Transporter) {
+        let user = store.get("user");
+
+        console.log("user: ", user);
+
+        let time_now = new Date().getTime();
+
+        let diff = (time_now - user.expires_in)/3600;
+
+        if (diff > 3600) {
+            $state.go("login");
+        }
+
+        if(user.email) {
+            Transporter.getbookinghistory({
+                email: user.email
+            }).then(response => {
+
+                $(".ui.active.dimmer").css("display", "none");
+
+                if(response.status) {
+                    if(response.data.length > 0) {
+                        $scope.booking_history = response.data;
+                        $scope.fullname = response.fullname;
+                    }else{
+                        console.log("no booking history found.");
+                    }
+                }else {
+                    console.log("there has been an unknown problem.")
+                }
+            })
+        }else {
+            $state.go("login");
+        }
+
+        $(".close").click(() => {
+            $('.c_trip')
+                .modal('hide')
+            ;
+        });
+
+        $scope.modifyTrip = (id, status)  => {
+
+            rootShared.booking_id = id;
+
+            if(status === "Pending") {
+                $('.c_trip')
+                    .modal('show')
+                ;
+            }else {
+                //return
+            }
+        };
+
+        $scope.modifyChoice = (choice) => {
+            console.log("choice: ", choice);
+
+            if(choice === "no") {
+                $('.c_trip')
+                    .modal('hide')
+                ;
+            }else if(choice === "yes") {
+                Transporter.cancelbooking({
+                    bookingid: rootShared.booking_id,
+                    token: user.token
+                }).then(response => {
+                    $log.log("Response: ", response);
+                    if(response.status) {
+                        $(".header").notify("Booking Successfully cancelled.", "success", { position: "bottom-center" });
+
+                        setTimeout(() => {
+                            $('.c_trip')
+                                .modal('hide')
+                            ;
+                        }, 2500);
+                    }
+                    else if(response.data === "token_expired" || response.data === "user_notfound") {
+                        $(".header").notify("Sorry. Access time expired. Redirecting to login now", { position: "bottom-center" });
+
+                        setTimeout(() => {
+                            $state.go("login");
+                        }, 1500)
+                    }else {
+                        $(".header").notify("Sorry. There has been a problem. Please try again.", { position: "bottom-center" });
+                    }
+                })
+            }
+        }
+    }
+
+    function PaymentPageController($scope, $log, Transporter, $state) {
+
+        let user = store.get("user");
+
+        console.log("user: ", user);
+
+        let time_now = new Date().getTime();
+
+        let diff = (time_now - user.expires_in)/3600;
+
+        console.log("diff: ", diff);
+
+        if (diff > 7200) {
+            $state.go("login");
+        }
 
         function validateEmail(email) {
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -500,6 +639,18 @@ angular.module('ControllersModule', [])
         $(".payonline").click(() => {
             $('.onlineinstant')
                 .modal('show')
+            ;
+        });
+
+        $(".close").click(() => {
+            $('.onlineinstant')
+                .modal('hide')
+            ;
+            $('.ussd')
+                .modal('hide')
+            ;
+            $('.banktransfer')
+                .modal('hide')
             ;
         });
 
@@ -542,7 +693,6 @@ angular.module('ControllersModule', [])
                         hideLoader();
 
                         payWithPaystack(response.email, $scope.onlineamount*100, response.ref, function(response) {
-                            console.log("Response from paystack: ", response);
 
                             if (response.reference) {
 
@@ -559,7 +709,7 @@ angular.module('ControllersModule', [])
             }
         };
 
-        $scope.payWithPaystackUssd = function payWithPaystack() {
+        $scope.payWithPaystackUssd = () => {
             if(!$scope.ussdemail) $("#ussdemail").notify("Please enter your email address.", { position: "bottom-center" });
             else if(!validateEmail($scope.ussdemail)) $("#ussdemail").notify("Please enter a valid email address.", { position: "bottom-center" });
             else if(!$scope.ussdamount) $("#ussdamount").notify("Please enter amount you'd like to pay.", { position: "bottom-center" });
@@ -575,5 +725,76 @@ angular.module('ControllersModule', [])
                     $log.log("Response: ", response);
                 })
             }
+        };
+    }
+
+    function PaymentHistoryController($scope, $log, Transporter, $state) {
+        let user = store.get("user");
+
+        console.log("user: ", user);
+
+        let time_now = new Date().getTime();
+
+        let diff = (time_now - user.expires_in)/3600;
+
+        if (diff > 3600) {
+            $state.go("login");
         }
+
+        if(user.email) {
+            Transporter.getpaymenthistory({
+                email: user.email
+            }).then(response => {
+
+                $(".ui.active.dimmer").css("display", "none");
+
+                if(response.status) {
+                    if(response.data.length > 0) {
+                        $scope.payments_history = response.data
+                    }else{
+                        console.log("no booking history found.");
+                    }
+                }else {
+                    console.log("there has been an unknown problem.")
+                }
+            })
+        }else {
+            $state.go("login");
+        }
+    }
+
+    function LandingController($scope, $log) {
+        let user = store.get("user_data");
+
+        let user_time = store.get("user");
+
+        let time_now = new Date().getTime();
+
+        let diff = (time_now - user_time.expires_in)/3600;
+
+        console.log("diff: ", diff);
+
+        if (diff > 3600) {
+            $state.go("login");
+        }
+        else {
+            $scope.fullname = "WELCOME "+user.fullname;
+            $scope.balance = user.balance;
+            $scope.work = user.work;
+            $scope.home = user.home;
+            $scope.ct_cardnumber = user.ct_cardnumber;
+
+            $(".ui.active.dimmer").css("display", "none");
+        }
+    }
+
+    function HowItWorksController($scope, $log, $state) {
+        $scope.determineDest = (destination) => {
+            store.set("user", {destination: destination});
+
+            $log.log("destination; ", destination);
+
+            rootShared.user["destination"] = destination;
+            $state.go("login");
+        };
     }

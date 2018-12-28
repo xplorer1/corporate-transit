@@ -20,21 +20,17 @@ angular.module('MainModule', [
             .state('booking_history', {
                 url: '/booking_history',
                 templateUrl: '../views/pages/booking_history.html',
-                controller: 'BookingPageController'
+                controller: 'BookingHistoryController'
             })
             .state('contact_us', {
                 url: '/contact_us',
                 templateUrl: '../views/pages/contact_us.html',
                 controller: 'ContactPageController'
             })
-            .state('faqs', {
-                url: '/faqs',
-                templateUrl: '../views/pages/faqs.html',
-                controller: 'FaqsPageController'
-            })
             .state('how_it_works', {
                 url: '/how_it_works',
-                templateUrl: '../views/pages/how_it_works.html'
+                templateUrl: '../views/pages/how_it_works.html',
+                controller: 'HowItWorksController'
             })
             .state('payment', {
                 url: '/payment',
@@ -65,16 +61,6 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/login.html',
                 controller: 'LoginPageController'
             })
-            .state('dashboard', {
-                url: '/dashboard',
-                templateUrl: '../views/pages/dashboard.html',
-                controller: 'DashboardController'
-            })
-            .state('email_activation', {
-                url: '/email_activation',
-                templateUrl: '../views/pages/email_activation.html',
-                controller: "EmailActivationController"
-            })
             .state('forgotpassword', {
                 url: '/forgotpassword',
                 templateUrl: '../views/pages/forgotpassword.html',
@@ -88,11 +74,20 @@ angular.module('MainModule', [
             .state('notfound', {
                 url: '/notfound',
                 templateUrl: '../views/pages/notfound.html',
+            })
+            .state('payment_history', {
+                url: '/payment_history',
+                templateUrl: '../views/pages/payment_history.html',
+                controller: "PaymentHistoryController"
+            })
+            .state('landing', {
+                url: '/landing',
+                templateUrl: '../views/pages/landing.html',
+                controller: "LandingController"
             });
 
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
         });
-
     }]);

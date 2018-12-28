@@ -1,12 +1,16 @@
 
 <div class="ui middle aligned center aligned grid forms otherpages" ng-controller="SignUpPageController">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="navbar-brand" ui-sref="home">CT</a>
+        <div class="ct_logo">
+            <a class="img_logo" ui-sref="home">
+                <img src="../../assets/img/logos/ctlogowhite.png" class="">
+            </a>
+        </div>
 
-        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon">&#9776;</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <!-- <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="how_it_works">How It Works</a>
@@ -39,70 +43,85 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="fullname" id="fullname" placeholder="Full Name" ng-model="fullname">
+                        <span class="ast">*</span>
                     </div>
+                </div>
+
+                <div class="field sel_field">
+                    <label></label>
+                    <select class="ui search dropdown" name="gender" id="gender" ng-model="gender">
+                        <option disabled value="">Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <span class="ast">*</span>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="org" id="org" placeholder="Organization" ng-model="org">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field sel_field">
                     <label></label>
                     <select class="ui search dropdown" id="work_location" name="work_location" ng-model="work_location">
-                        <option disabled value="">Select Work Location</option>
-                        <option value="Ikeja">Ikeja</option>
-                        <option value="Magodo">Magodo</option>
-                        <option value="Omole">Omole</option>
-                        <option value="Ogba">Ogba</option>
-                        <option value="Festac">Festac</option>
-                        <option value="Ikorodu">Ikorodu</option>
-                        <option value="Lekki">Lekki</option>
-                        <option value="VI">VI</option>
-                        <option value="Ikoyi">Ikoyi</option>
+                        <option disabled value="">Work Location</option>
                         <option value="Ajah">Ajah</option>
-                        <option value="Epe">Epe</option>
-                        <option value="Yaba">Yaba</option>
-                        <option value="Surulere">Surulere</option>
-                        <option value="Iyana-Ipaja">Iyana-Ipaja</option>
                         <option value="Anthony">Anthony</option>
-                        <option value="Maryland">Maryland</option>
-                        <option value="Isolo">Isolo</option>
                         <option value="Apapa">Apapa</option>
+                        <option value="Epe">Epe</option>
+                        <option value="Festac">Festac</option>
+                        <option value="Ikeja">Ikeja</option>
+                        <option value="Ikorodu">Ikorodu</option>
+                        <option value="Ikoyi">Ikoyi</option>
+                        <option value="Isolo">Isolo</option>
+                        <option value="Iyana-Ipaja">Iyana-Ipaja</option>
+                        <option value="Lekki">Lekki</option>
+                        <option value="Magodo">Magodo</option>
+                        <option value="Maryland">Maryland</option>
+                        <option value="Ogba">Ogba</option>
+                        <option value="Omole">Omole</option>
+                        <option value="Surulere">Surulere</option>
+                        <option value="VI">VI</option>
+                        <option value="Yaba">Yaba</option>
                     </select>
+                    <span class="ast">*</span>
                 </div>
 
-                <div class="field">
+                <div class="field sel_field">
                     <label></label>
                     <select class="ui search dropdown" id="home_location" name="home_location" ng-model="home_location">
-                        <option disabled value="">Select Home Location</option>
-                        <option value="Ikeja">Ikeja</option>
-                        <option value="Magodo">Magodo</option>
-                        <option value="Omole">Omole</option>
-                        <option value="Ogba">Ogba</option>
-                        <option value="Festac">Festac</option>
-                        <option value="Ikorodu">Ikorodu</option>
-                        <option value="Lekki">Lekki</option>
-                        <option value="VI">VI</option>
-                        <option value="Ikoyi">Ikoyi</option>
+                        <option disabled value="">Home Location</option>
                         <option value="Ajah">Ajah</option>
-                        <option value="Epe">Epe</option>
-                        <option value="Yaba">Yaba</option>
-                        <option value="Surulere">Surulere</option>
-                        <option value="Iyana-Ipaja">Iyana-Ipaja</option>
                         <option value="Anthony">Anthony</option>
-                        <option value="Maryland">Maryland</option>
-                        <option value="Isolo">Isolo</option>
                         <option value="Apapa">Apapa</option>
+                        <option value="Epe">Epe</option>
+                        <option value="Festac">Festac</option>
+                        <option value="Ikeja">Ikeja</option>
+                        <option value="Ikorodu">Ikorodu</option>
+                        <option value="Ikoyi">Ikoyi</option>
+                        <option value="Isolo">Isolo</option>
+                        <option value="Iyana-Ipaja">Iyana-Ipaja</option>
+                        <option value="Lekki">Lekki</option>
+                        <option value="Magodo">Magodo</option>
+                        <option value="Maryland">Maryland</option>
+                        <option value="Ogba">Ogba</option>
+                        <option value="Omole">Omole</option>
+                        <option value="Surulere">Surulere</option>
+                        <option value="VI">VI</option>
+                        <option value="Yaba">Yaba</option>
                     </select>
+                    <span class="ast">*</span>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="email" id="email" placeholder="E-mail address" ng-model="email">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -110,6 +129,7 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="tel" name="phone" id="phone" placeholder="Phone" ng-model="phone">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -117,6 +137,7 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="username" id="username" placeholder="Username" ng-model="username">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -124,10 +145,13 @@
                     <div class="ui left icon input">
                         <!-- <i class="lock icon"></i> -->
                         <input class="inpt" type="password" name="password" id="password" placeholder="Password" ng-model='password'>
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
-                <div class="ui fluid large teal submit button" ng-click="signUp()">Create Account</div>
+                <div class="si_btn">
+                    <div class="ui fluid large teal submit button" ng-click="signUp()">Create Account</div>
+                </div>
                 <div class="lds-dual-ring srchbar"></div>
             </div>
         </form>

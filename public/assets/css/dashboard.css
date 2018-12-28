@@ -165,6 +165,7 @@ span.header_title {
 .link {
     padding: 0 15px;
     line-height: 5;
+    color: white;
 }
 
 .ui-loader.ui-corner-all.ui-body-a.ui-loader-default {
@@ -413,13 +414,13 @@ a {
 }
 
 .somebar {
-    border-top: 1px solid lightgrey;
+    /*border-top: 1px solid lightgrey;*/
     height: 75px;
     position: fixed;
     bottom: 0;
     margin: 0 auto;
     width: 100%;
-    background: white;
+    background: rgb(32, 102, 155);
     margin-top: 30px;
     box-shadow: 0 1px 6px rgba(57,73,76,0.35);
 }

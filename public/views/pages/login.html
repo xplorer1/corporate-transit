@@ -1,6 +1,8 @@
 <div class="ui middle aligned center aligned grid forms otherpages" ng-controller="LoginPageController">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="navbar-brand" ui-sref="home">CT</a>
+        <a class="img_logo" ui-sref="home">
+            <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        </a>
 
         <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
@@ -26,13 +28,13 @@
         </div> -->
     </nav>
 
-    <div class="column otherpages formcolumn">
+    <div class="column formcolumn">
         <h2 class="ui image header">
             <div class="content">
                 Log-in to your account
             </div>
         </h2>
-        <form class="ui large form" novalidate name="loginform">
+        <form class="ui large form" novalidate name="loginform" id="loginform">
 
             <div class="ui stacked secondary  segment removestyle">
                 <div class="field">

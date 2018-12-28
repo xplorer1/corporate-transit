@@ -1,29 +1,138 @@
-<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="BookingController">
+<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="BookingHistoryController">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="navbar-brand" ui-sref="home">CT</a>
+        <a class="img_logo" ui-sref="home">
+            <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="routes">Routes</a>
+                </li>
+                <!-- <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking_history">View Booking History</a>
+                </li>-->
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment">Payment</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="column formcolumn">
-        <h2 class="ui image header">
-            <div class="content">
-                Provide your email address to reset your password.
-            </div>
-        </h2>
-        <form class="ui large form" novalidate name="loginform" id="loginform">
+    <div class="ui active dimmer">
+        <div class="ui loader"></div>
+    </div>
 
-            <div class="ui stacked secondary  segment removestyle">
-                <div class="field">
-                    <div class="ui left icon input">
-                        <!-- <i class="user icon"></i> -->
-                        <input type="text" ng-model="resetemail"  id="resetemail" name="resetemail" placeholder="E-mail address">
+    <section class="container-fluid bk_history routes_bg h-100">
+        <div class="routes-jumb">
+            <h3 class="display-5">Booking history for <span ng-bind="fullname"></span></h3>
+
+            <div class="table_cont row">
+                <table class="ui unstackable celled table" data-tooltip="Click on the id of a pending trip to modify it." data-position="top center">
+                    <thead>
+                        <tr>
+                            <th>Reference Id</th>
+                            <th>Booking Date</th>
+                            <th>Booking Type</th>
+                            <th>Booking Status</th>
+                            <th>Charge</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="entry in booking_history">
+                            <td class="b_id" data-label="id" ng-bind="entry.booking.bookingid" ng-click="modifyTrip(entry.booking.bookingid, entry.booking.bookingstatus)"></td>
+                            <td data-label="b_date" ng-bind="entry.booking.bookedon"></td>
+                            <td data-label="b_type" ng-bind="entry.booking.frequency"></td>
+                            <td data-label="b_status" ng-bind="entry.booking.bookingstatus"></td>
+                            <td data-label="charge" ng-bind="entry.booking.bookingcost">""</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            <!--<div class="col-3 h-50">
+
+                <div class="col-3 h-50">
+                    <div class="row route-block header">
+                        Booking Id
+                    </div>
+
+                    <div class="row route-block">
+                        ""
                     </div>
                 </div>
 
-                <div class="ui fluid large teal submit button" ng-click="verifyEmail()">Submit</div>
-                <div class="forgotloader"></div>
+                <div class="col-3 h-50">
+                    <div class="row route-block header">
+                        Booking Date
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+                </div>
+
+                <div class="col-3 h-50">
+                    <div class="row route-block header">
+                        Booking Type
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+                </div>
+
+                <div class="col-3 h-50">
+                    <div class="row route-block header">
+                        Booking Status
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+                </div>
+
+                <div class="col-3 h-50">
+                    <div class="row route-block header">
+                        Charge
+                    </div>
+
+                    <div class="row route-block">
+                        ""
+                    </div>
+                </div>
+            </div>-->
+
             </div>
-        </form>
-    </div>
+
+            <div class="ui tiny modal c_trip">
+                <i class="close">X</i>
+                <div class="header">
+                    Do you want to cancel the selected booking?
+                </div>
+                <div class="ui stacked secondary  segment removestyle_mod">
+                    <div class="field modalfield">
+                        <div class="ui fluid large teal submit button b_id" ng-click="modifyChoice('yes')">Yes</div>
+
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="ui fluid large teal submit button b_id" ng-click="modifyChoice('no')">No</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+        </div>
+
+    </section>
 
     <div class="somebar">
         <div class="bottombar">

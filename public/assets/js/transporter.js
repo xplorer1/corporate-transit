@@ -118,6 +118,36 @@ function TransporterFnc($http, $q) {
             });
     };
 
+    transporter.getbookinghistory = function(userData) {
+        return $http.post(baseurl()+"/api/bookinghistory", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.getpaymenthistory = function(userData) {
+        return $http.post(baseurl()+"/api/paymenthistory", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.cancelbooking = function(userData) {
+        return $http.post(baseurl()+"/api/cancelbooking", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
     // return our entire transporter object
     return transporter;
 }

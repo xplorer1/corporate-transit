@@ -1,7 +1,7 @@
 var storage = require('node-persist');
 
 module.exports = function(app) {
-    var dbSettings = {
+    let dbSettings = {
         set: function(settingname, settingvalue){
             storage.initSync();
 
@@ -15,7 +15,7 @@ module.exports = function(app) {
         get: function(settingname){
             storage.initSync();
 
-            var result = storage.getItemSync(settingname);
+            let result = storage.getItemSync(settingname);
             if(result) result = JSON.parse(result);
 
             return result

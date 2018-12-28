@@ -1,0 +1,93 @@
+
+<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="LandingController">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
+        <div class="ct_logo">
+            <a class="img_logo" ui-sref="home">
+                <img src="../../assets/img/logos/ctlogowhite.png" class="">
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+         <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="routes">Routes</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking">Book a trip</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment">Payment</a>
+                </li>
+                <li class="nav-item active border">
+                    <a class="nav-link" ui-sref="signup">Sign Up</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="ui active dimmer">
+        <div class="ui loader"></div>
+    </div>
+
+    <section class=" w-100 formcolumn_l">
+        <div class="ahead_content_l w-100">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col desk_top">
+                <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered text_div">
+                    <div class="h-25 big-txt white fname_d" ng-bind="fullname"></div>
+                    <div class="h-25 light-grey">Card Number: <span class="l_val_cn" ng-bind="ct_cardnumber"></span></div>
+                    <div class="h-25 light-grey">Available Balance: <span class="l_val_a" ng-bind="balance"></span></div>
+                    <div class="h-25 light-grey">Home Location: <span class="l_val" ng-bind="home"></span></div>
+                    <div class="h-25 light-grey">Work Location: <span class="l_val" ng-bind="work"></span></div>
+                    <div class="h-25 w-100">
+                        <button class="l_btn" ui-sref="booking">Book a trip</button>
+                        <button class="l_btn" ui-sref="payment">Top Up Card</button>
+                    </div>
+                </div>
+
+                <div class="l_img col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                    <img src="../../assets/img/icons/METR.png" class="">
+                </div>
+            </div>
+
+            <div class="commute_txt_cont c_l">
+                <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered">
+                    <div class="h-25 big-txt white f_name" ng-bind="fullname" ></div>
+                    <div class="h-25 light-grey">Card Number: <span class="l_val_cn" ng-bind="ct_cardnumber"></span></div>
+                    <div class="h-25 light-grey">Available Balance: <span class="l_val_a" ng-bind="balance"></span></div>
+                    <div class="h-25 light-grey">Home Location: <span class="l_val" ng-bind="home"></span></div>
+                    <div class="h-25 light-grey">Work Location: <span class="l_val" ng-bind="work"></span></div>
+                    <div class="h-25 w-100" id="btn_grp">
+                        <button class="l_btn" ui-sref="booking">Book a trip</button>
+                        <button class="l_btn" ui-sref="payment">Top Up Card</button>
+                    </div>
+                </div>
+
+                <div class="l_img col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                    <img src="../../assets/img/icons/METR.png" class="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="somebar">
+        <div class="bottombar">
+            <div class="bar">
+                <div class="privacy link">Terms And Conditions</div>
+                <div class="privacy link">Privacy Policy</div>
+                <div class="privacy link">Faqs</div>
+                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link">Facebook</div>
+                <div class="twitter link">Twitter</div>
+                <div class="instagram link">Instagram</div>
+            </div>
+            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+        </div>
+    </div>
+</div>

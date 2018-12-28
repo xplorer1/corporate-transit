@@ -42,7 +42,9 @@
 
 <ui-view>
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
-        <a class="navbar-brand" href="index.html">CT</a>
+        <a class="img_logo" href="index.html">
+            <img src="../assets/img/logos/ctlogowhite.png" class="i_img">
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
@@ -62,13 +64,16 @@
                     <a class="nav-link" ui-sref="routes">Routes</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" ng-click="determineDest('booking')">Book a trip</a>
+                    <a class="nav-link" ui-sref="contact_us">Contact Us</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" ng-click="determineDest('booking_history')">Booking History</a>
+                    <a class="nav-link" ui-sref="login">Book a trip</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" ng-click="determineDest('payment')">Payment</a>
+                    <a class="nav-link" ui-sref="login">Payment</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="login">Log In</a>
                 </li>
                 <li class="nav-item active border">
                     <a class="nav-link" ui-sref="signup">Sign Up</a>
@@ -79,8 +84,26 @@
     </nav>
 
     <section class="container-fluid top-section">
-        <div class="top-section-logo-cont">
-            <img src="../assets/img/logos/ctlogowhite.png" class="top-sec-logo col-lg-4 col-md-4 col-sm-10 col-xs-10">
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="top-section-logo-cont" id="text_cont">
+            <div class="logo_text">
+                Your Journey To Personal And Financial Success Starts Here!
+            </div>
+            <div class="centerbutton">
+                <a class="bigbutton button" ui-sref="signup">Sign Up</a>
+            </div>
         </div>
     </section>
 
@@ -94,7 +117,6 @@
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
                 <img src="../assets/img/icons/METR.png" class="col-10 col-centered">
-
             </div>
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
@@ -104,12 +126,10 @@
                     <div class="h-25 small-txt grey">To And From Work; More Conveniently Than Ever Before!</div>
 
                     <div class="h-25 w-100">
-                        <button class="w-100 h-100 light-bg-button" ui-sref="signup">Ride With Us!</button>
+                        <button class="w-100 h-100 light-bg-button" ui-sref="signup">Register</button>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
     </section>
@@ -126,7 +146,7 @@
                     <div class="h-25 small-txt light-grey">Your Journey To Personal And Financial Success Starts Here!</div>
                     <br>
                     <div class="h-25 w-100">
-                        <button class="w-100 h-100 dark-bg-button" ui-sref="signup">Ride With Us!</button>
+                        <button class="w-100 h-100 dark-bg-button" ui-sref="signup">Register</button>
                     </div>
                 </div>
             </div>
@@ -134,7 +154,6 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
                 <img src="../assets/img/icons/spaceship.png" class="col-10 col-centered">
             </div>
-
         </div>
     </section>
 
@@ -155,7 +174,7 @@
                     <div class="h-25 small-txt grey">Enjoy Relaxing Trips, Get To Work Energized!</div>
 
                     <div class="h-25 w-100">
-                        <button class="w-100 h-100 dark-no-bg-button" ui-sref="signup">Ride With Us!</button>
+                        <button class="w-100 h-100 dark-no-bg-button" ui-sref="signup">Register</button>
                     </div>
                 </div>
 
@@ -269,7 +288,7 @@
                     <div class="privacy link">Terms And Conditions</div>
                     <div class="privacy link">Privacy Policy</div>
                     <div class="privacy link">Faqs</div>
-                    <div class="contact link">Contact Us</div>
+                    <div class="contact link" ui-sref="contact_us">Contact Us</div>
 
                     <div class="facebook link">Facebook</div>
                     <div class="twitter link">Twitter</div>

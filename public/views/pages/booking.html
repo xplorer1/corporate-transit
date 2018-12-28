@@ -1,7 +1,8 @@
-
 <article ng-controller="BookingPageController">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="navbar-brand" ui-sref="home">CT</a>
+        <a class="img_logo" ui-sref="home">
+            <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
@@ -14,15 +15,19 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="routes">Routes</a>
                 </li>
-                <!--<li class="nav-item active">
-                    <a class="nav-link" ui-sref="booking">Book a trip</a>
-                </li>-->
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="booking_history">View Booking History</a>
+                </li>
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="payment">Payment</a>
                 </li>
             </ul>
         </div>
     </nav>
+
+    <!--<div class="ui active dimmer">
+        <div class="ui loader"></div>
+    </div>-->
 
     <div class="ui middle aligned center aligned grid forms otherpages">
         <div class="column formcolumn">
@@ -34,16 +39,17 @@
             <form class="ui large form" novalidate name="bookingform">
                 <div class="ui stacked secondary  segment removestyle">
 
-                    <div class="field">
+                    <div class="field sel_field">
                         <label></label>
                         <select class="ui search dropdown" name="trip_route" id="trip_route" ng-model="trip_route">
                             <option disabled value="">Select route</option>
                             <option value="Ikeja - Victoria Island">Ikeja – Victoria Island</option>
                             <option value="Yaba - Victoria Island">Yaba – Victoria Island</option>
                         </select>
+                        <span class="ast">*</span>
                     </div>
 
-                    <div class="field">
+                    <div class="field sel_field">
                         <label></label>
                         <select class="ui search dropdown" name="booking_type" id="booking_type" ng-model="booking_type">
                             <option disabled value="">Select booking type</option>
@@ -51,48 +57,55 @@
                             <option value="Evening Only">Evening Only</option>
                             <option value="Return">Return</option>
                         </select>
+                        <span class="ast">*</span>
                     </div>
 
-                    <div class="field">
+                    <div class="field sel_field">
                         <label></label>
-                        <select class="ui search dropdown" name="trip_frequency" id="trip_frequency" ng-model="trip_frequency">
-                            <option disabled value="">Trip Frequency</option>
-                            <option value="Daily">Daily</option>
-                            <option value="5 days">5 Days</option>
-                            <option value="10 days">10 days</option>
-                            <option value="1 month">1 month</option>
+                        <select class="ui search dropdown" name="trip_frequency" id="trip_frequency" ng-model="trip_frequency" ng-change="booking_validity()">
+                            <option disabled value="">Booking Validity</option>
+                            <option value="1 Day">1 Day</option>
+                            <option value="5 Days">5 Days</option>
+                            <option value="10 days">10 Days</option>
+                            <option value="1 Month">1 Month</option>
                         </select>
-                    </div>
-
-                    <h3>Range</h3>
-                    <div class="ui form">
-                        <div class="two fields">
-                            <div class="field">
-                                <div>
-                                    <label>From</label>
-                                    <input type="Text" id="demo1" name="date_from" ng-model="date_from"/>
-                                    <img class="date_img1" src="../../assets/img/date/cal.gif" onclick="javascript:NewCssCal('demo1', 'ddMMyyyy')" style="cursor:pointer"/>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div>
-                                    <label>To</label>
-                                    <input type="Text" id="demo2" name="date_to" ng-model="date_to"/>
-                                    <img class="date_img2" src="../../assets/img/date/cal.gif" onclick="javascript:NewCssCal('demo2', 'ddMMyyyy')" style="cursor:pointer"/>
-                                </div>
-                            </div>
-                        </div>
+                        <span class="ast">*</span>
                     </div>
                     <br/>
 
                     <div class="ui fluid icon input" data-tooltip="Find it in your sign up confirmation email if you don't have the card yet." data-position="top left">
                         <input type="text" placeholder="Enter Corporate Transit Card number." id="ct_cardnumber" ng-model="ct_cardnumber">
+                        <span class="ast">*</span>
+                    </div>
+
+                    <div class="range">
+                        <h3 class="mod">Range</h3>
+                        <div class="ui form">
+                            <div class="two fields">
+                                <div class="field date1">
+                                    <div>
+                                        <label class="mod mod_one">From</label>
+                                        <input type="Text" id="demo1" name="date_from" ng-model="date_from"/>
+                                        <img class="date_img1" src="../../assets/img/date/cal.gif" onclick="javascript:NewCssCal('demo1', 'ddMMyyyy')" style="cursor:pointer"/>
+                                        <span class="ast">*</span>
+                                    </div>
+                                </div>
+                                <div class="field date2">
+                                    <div>
+                                        <label class="mod mod_two">To</label>
+                                        <input type="Text" id="demo2" name="date_to" ng-model="date_to"/>
+                                        <img class="date_img2" src="../../assets/img/date/cal.gif" onclick="javascript:NewCssCal('demo2', 'ddMMyyyy')" style="cursor:pointer"/>
+                                        <span class="ast">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="ui fluid large teal submit button booktrip" ng-click="bookTrip()">Book Trip</div>
                     <div class="bookingloader"></div>
 
-                    <div>
+                    <div class="mod">
                         Please Note: All cancellations and modifications must be done 2 hours before scheduled trip time. Modifications are not guaranteed and are based on availability. Cancellations done after 2 hours would be charged cancellation fees.
                     </div>
                 </div>

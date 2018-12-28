@@ -1,7 +1,7 @@
 let nodemailer = require('nodemailer');
 
 module.exports = {
-    sendEmailVerificationMail: function sendEmailVerificationMail(confirmlink, recipients){
+    sendEmailVerificationMail: function sendEmailVerificationMail(firstname, confirmlink, recipient){
 
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -14,10 +14,12 @@ module.exports = {
 
         let mailOptions = {
             from: '"Hello From Corporate Transit" <chijioke543@gmail.com>', // sender address
-            to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
-            subject: 'Welcome ✔', // Subject line
-            text: 'Hello! Welcome to Corporate Transit and thank you for signing up. Click or copy this link to your browser to confirm your email and activate your account.' + confirmlink + ' All future notifications will be sent to this email address. Thank you for choosing us!', // plaintext body
-            html: 'Hello!<br><br>Welcome to Corporate Transit and thank you for signing up. Click or copy this link to your browser to confirm your email and activate your account.<br><br><strong>' + confirmlink + '</strong><br><br> All future notifications will be sent to this email address.<br><br>Thank you for choosing us!<br><br>' // html body
+            to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+                subject: 'WELCOME TO CORPORATE TRANSIT ✔', // Subject line
+            text: 'Hello ' + firstname + '! Thank you for choosing Corporate Transit. We are pleased to have you on board. To activate your account and verify your email, click or copy the link below to your browser.' + confirmlink + ' All future notifications will be sent to this email address. We look forward to enhancing your daily commute experience. For inquires and information; contact E: information@corporatetransit.com.ng \n' +
+            '                                                                T: 080011122222\n' +
+            '                                                                W: www.corporatetransit.com.ng\n', // plaintext body
+            html: 'Hello ' + firstname +'!<br><br>Thank you for choosing Corporate Transit. We are pleased to have you on board. <br><br>To activate your account and verify your email, click or copy the link below to your browser.<br><br><strong>' + confirmlink + '</strong><br><br> All future notifications will be sent to this email address.<br><br>We look forward to enhancing your daily commute experience.<br><br><br><br> For inquires and information; contact: <br><br>  E: information@corporatetransit.com.ng <br><br> T: 080011122222 <br><br>W: www.corporatetransit.com.ng' // html body
         };
 
         console.log("mail options: ", mailOptions);
@@ -124,9 +126,9 @@ module.exports = {
         let mailOptions = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
-            subject: 'Booking Successful. ✔', // Subject line
-            text: 'Hello ' + fullname + '!This is to inform you that your booking was successful. Find below the details of you booking.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br>' // html body
+            subject: 'Complaint Received. ✔', // Subject line
+            text: 'Hello ' + fullname + '!This is to inform you that your message was received. We will get in touch soon.', // plaintext body
+            html: 'Hello ' + fullname + '!<br><br>This is to inform you that your message was received. We will get in touch soon.<br>' // html body
         };
 
         // send mail with defined transport object
@@ -178,7 +180,7 @@ module.exports = {
         let mailOptions = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
-            subject: 'Booking Successful. ✔', // Subject line
+            subject: 'Booking Cancelled. ✔', // Subject line
             text: 'Hello ' + fullname + '!This is to inform you that your request to cancel your booking was successful. Thanks for choosing us.', // plaintext body
             html: 'Hello ' + fullname + '!<br><br>This is to inform you that your request to cancel your booking was successful. Thanks for choosing us.<br>' // html body
         };

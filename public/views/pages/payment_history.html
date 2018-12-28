@@ -1,0 +1,68 @@
+<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="PaymentHistoryController">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
+        <a class="img_logo" ui-sref="home">
+            <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <div class="ui active dimmer">
+        <div class="ui loader"></div>
+    </div>
+
+    <section class="container-fluid bk_history routes_bg h-100">
+
+        <div class="routes-jumb">
+
+            <h3 class="display-5">Payment history for <span ng-bind="fullname"></span></h3>
+
+            <h3 class="display-5">Available Balance: <span ng-bind="balance"></span></h3>
+
+            <div class="table_cont row">
+                <table class="ui unstackable celled table">
+                    <thead>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Paid On</th>
+                            <th>Payment Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="entry in payments_history">
+                            <td data-label="id" ng-bind="entry.booking.bookingid"></td>
+                            <td data-label="b_date" ng-bind="entry.booking.bookedon"></td>
+                            <td data-label="b_type" ng-bind="entry.booking.frequency"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+        </div>
+
+    </section>
+
+    <div class="somebar">
+        <div class="bottombar">
+            <div class="bar">
+                <div class="privacy link">Terms And Conditions</div>
+                <div class="privacy link">Privacy Policy</div>
+                <div class="privacy link">Faqs</div>
+                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link">Facebook</div>
+                <div class="twitter link">Twitter</div>
+                <div class="instagram link">Instagram</div>
+            </div>
+            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+        </div>
+    </div>
+</div>

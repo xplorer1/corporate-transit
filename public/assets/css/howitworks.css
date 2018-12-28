@@ -93,6 +93,7 @@ button, input, optgroup, select, textarea {
 .row-centered {
     text-align: center;
 }
+
 .col-centered {
     display: inline-block;
     float: none;
@@ -107,6 +108,7 @@ button, input, optgroup, select, textarea {
     margin-right: auto;
     margin-top: 40px;
 }
+
 .routes-jumb {
     background-color: rgba(0, 0, 0, 0);
     color: #fff;
@@ -136,35 +138,35 @@ button, input, optgroup, select, textarea {
 
 .container-fluid:nth-child(2) {
     background-color: #fff;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
 }
 .container-fluid:nth-child(3) {
     background-color: #2aa7dc;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
 }
 .container-fluid:nth-child(4) {
     background-color: #CBD3D9;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
     margin-bottom: 80px;
 }
 
 .container-fluid:nth-child(5) {
     background-color: #fff;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
 }
 .container-fluid:nth-child(5) {
     background-color: #FFF;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
     margin-bottom: 80px;
 }
 .container-fluid:nth-child(6) {
     background-color: #FFF;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
     margin-bottom: 80px;
 }
 .container-fluid:nth-child(7) {
     background-color: #FFF;
-    transform: skewY(-7deg);
+    transform: skewY(0deg);
     margin-bottom: 80px;
 }
 .txt_cntr {
@@ -202,17 +204,17 @@ button, input, optgroup, select, textarea {
 .commute_content {
     margin-top: 80px;
     height: 80%;
-    transform: skewY(7deg);
+    transform: skewY(0deg);
 }
 .ahead_content {
     margin-top: 80px;
     height: 80%;
-    transform: skewY(7deg);
+    transform: skewY(0deg);
 }
 .comfort_content {
     margin-top: 80px;
     height: 100%;
-    transform: skewY(7deg);
+    transform: skewY(0deg);
 }
 .how_it_works_content {
     height: auto;
@@ -617,3 +619,11 @@ Small (sm) devices (landscape phones, 576px and up)*/
 /*Extra (xl) large devices (large desktops, 1200px and up)*/
 
 @media (min-width: 1200px) {}
+
+.st_img {
+    margin-top: -100px;
+}
+
+.lnk {
+    cursor: pointer;
+}

@@ -1,6 +1,8 @@
 <article ng-controller="ContactPageController" >
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="navbar-brand" ui-sref="home">CT</a>
+        <a class="img_logo" ui-sref="home">
+            <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
@@ -14,20 +16,23 @@
                     <a class="nav-link" ui-sref="routes">Routes</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" ui-sref="booking">Book a trip</a>
+                    <a class="nav-link" ng-click="login">Book a trip</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" ui-sref="payment">Payment</a>
+                    <a class="nav-link" ng-click="login">Payment</a>
                 </li>
                 <li class="nav-item active border">
-                    <a class="nav-link" ui-sref="login">Sign Up</a>
+                    <a class="nav-link" ui-sref="login">Login</a>
+                </li>
+                <li class="nav-item active border">
+                    <a class="nav-link" ui-sref="signup">Sign Up</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="otherpages">
-        <section>
+    <div class="otherpages" style="background: white;">
+        <section id="contact_sect">
             <div class="container" style="padding-top: 100px;padding-bottom: 100px;">
                 <div class="row">
                     <div class="col-md-6 pull-left">
@@ -41,19 +46,19 @@
                                         <label for="name" class="control-label">Name</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                            <input type="text" ng-model="name" class="form-control" id="name" name='name' data-parsley-required>
+                                            <input placeholder="Enter your full name." type="text" ng-model="name" class="form-control" id="name" name='name' data-parsley-required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="control-label">Email</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-                                            <input type="text" ng-model="email" class="form-control" id="email" name='email' data-parsley-required>
+                                            <input placeholder="Enter your email address." type="text" ng-model="email" class="form-control" id="email" name='email' data-parsley-required>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="message">Message</label>
-                                        <textarea class="form-control" ng-model="message" name="message" rows="5" id="message" data-parsley-required></textarea>
+                                        <textarea placeholder="Enter your message." class="form-control" ng-model="message" name="message" rows="5" id="message" data-parsley-required></textarea>
                                     </div>
                                     <button id="contact-btn" type="submit" class="btn btn-primary pull-right" ng-click="sendComplaint()" style="padding: 10px;">SEND IT</button>
                                     <div class="contact_us_loader"></div>

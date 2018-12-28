@@ -1,10 +1,12 @@
 
 <div class="ui middle aligned center aligned grid forms otherpages" ng-controller="PaymentPageController">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="navbar-brand" ui-sref="home">CT</a>
+        <a class="img_logo" ui-sref="home">
+            <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        </a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon">&#9776;</span>
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
@@ -17,22 +19,16 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="booking">Book a trip</a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="payment_history">View payment history</a>
+                </li>
             </ul>
         </div>
     </nav>
 
-    <div>
+    <div class="otherpages_pay" style="background: white; color: black">
         <div class="row"><div class="column">&nbsp;</div></div>
         <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="paymentsuccess" style="display: none">
-            <div>
-                Your transaction was successful. Your balance is:
-            </div>
-            <div>
-                Thanks for choosing us. If your have any inquiries or complaints, please click <a ui-sref="contact_us">here.</a>
-            </div>
-        </div>
 
         <div class="paytitle">
             <h2 class="">
@@ -60,112 +56,113 @@
 
         <div class="row"><div class="column">&nbsp;</div></div>
         <div class="row"><div class="column">&nbsp;</div></div>
-    </div>
-    <div class="oninst">
-        <div class="ui fluid large teal submit button payonline">
-            Pay via Online Instant
-        </div>
-    </div>
 
-    <div class="usd">
-        <div class="ui fluid large teal submit button payussd">
-            Pay via Ussd
-        </div>
-    </div>
-
-    <div class="bktrans">
-        <div class="ui fluid large teal submit button paybanktransfer">
-            Pay via Bank Transfer
-        </div>
-    </div>
-
-    <div class="ui tiny modal onlineinstant">
-        <i class="close icon">&times;</i>
-        <div class="header">
-            Pay via online instant
-        </div>
-        <div class="ui stacked secondary  segment removestyle">
-            <div class="field modalfield">
-                <div class="ui left icon input modalinput">
-                    <!--<i class="user icon">&times;</i>-->
-                    <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
-                </div>
+        <div class="oninst">
+            <div class="ui fluid large teal submit button payonline">
+                Pay via Online Instant
             </div>
+        </div>
 
-            <div class="field modalfield">
-                <div class="ui left icon input modalinput">
-                    <!--<i class="lock icon"></i>-->
-                    <input type="number" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
-                </div>
+        <div class="usd">
+            <div class="ui fluid large teal submit button payussd">
+                Pay via Ussd
             </div>
-
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="ui fluid large teal submit button" ng-click="pay()">Pay</div>
-            <div class="paymentloader"></div>
         </div>
-    </div>
 
-    <div class="ui tiny modal ussd">
-        <i class="close icon"></i>
-        <div class="header">
-            Pay via ussd
-        </div>
-        <div class="ui stacked secondary  segment removestyle">
-            <div class="field modalfield">
-                <div class="ui left icon input modalinput">
-                    <i class="user icon"></i>
-                    <input type="text" ng-model="ussdemail"  id="ussdemail" name="ussdemail" placeholder="E-mail address">
-                </div>
+        <div class="bktrans">
+            <div class="ui fluid large teal submit button paybanktransfer">
+                Pay via Bank Transfer
             </div>
+        </div>
 
-            <div class="field modalfield">
-                <div class="ui left icon input modalinput">
-                    <i class="lock icon"></i>
-                    <input type="number" ng-model="ussdamount" id="ussdamount" name="ussdamount" placeholder="Amount">
-                </div>
+        <div class="ui tiny modal onlineinstant">
+            <i class="close">X</i>
+            <div class="header">
+                Pay via online instant
             </div>
+            <div class="ui stacked secondary  segment removestyle_mod">
+                <div class="field modalfield">
+                    <div class="ui left icon input modalinput">
+                        <!--<i class="user icon">&times;</i>-->
+                        <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
+                    </div>
+                </div>
 
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="ui fluid large teal submit button" ng-click="payWithPaystackUssd()">Pay</div>
-            <div class="paymentloader"></div>
-        </div>
-    </div>
+                <div class="field modalfield">
+                    <div class="ui left icon input modalinput">
+                        <!--<i class="lock icon"></i>-->
+                        <input type="number" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
+                    </div>
+                </div>
 
-    <div class="ui small modal banktransfer">
-        <i class="close icon"></i>
-        <div class="header">
-            Make payments into any of the below listed bank accounts
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="ui fluid large teal submit button" ng-click="pay()">Pay</div>
+                <div class="paymentloader"></div>
+            </div>
         </div>
-        <table class="ui unstackable celled table">
-            <thead>
+
+        <div class="ui tiny modal ussd">
+            <i class="close">X</i>
+            <div class="header">
+                Pay via ussd
+            </div>
+            <div class="ui stacked secondary  segment removestyle_mod">
+                <div class="field modalfield">
+                    <div class="ui left icon input modalinput">
+                        <i class="user icon"></i>
+                        <input type="text" ng-model="ussdemail"  id="ussdemail" name="ussdemail" placeholder="E-mail address">
+                    </div>
+                </div>
+
+                <div class="field modalfield">
+                    <div class="ui left icon input modalinput">
+                        <i class="lock icon"></i>
+                        <input type="number" ng-model="ussdamount" id="ussdamount" name="ussdamount" placeholder="Amount">
+                    </div>
+                </div>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="ui fluid large teal submit button" ng-click="payWithPaystackUssd()">Pay</div>
+                <div class="paymentloader"></div>
+            </div>
+        </div>
+
+        <div class="ui small modal banktransfer">
+            <i class="close">X</i>
+            <div class="mod_h header">
+                Make payments into any of the below listed bank accounts
+            </div>
+            <table class="ui unstackable celled table">
+                <thead>
                 <tr>
                     <th>Bank Name</th>
                     <th>Account Number</th>
                 </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td data-label="Name">GT Bank</td>
-                <td data-label="Age">""</td>
-            </tr>
-            <tr>
-                <td data-label="Name">Zenith Bank</td>
-                <td data-label="Age">""</td>
-            </tr>
-            <tr>
-                <td data-label="Name">UBA</td>
-                <td data-label="Age">""</td>
-            </tr>
-            <tr>
-                <td data-label="Name">Access Bank</td>
-                <td data-label="Age">""</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                <tr>
+                    <td data-label="Name">GT Bank</td>
+                    <td data-label="Age">""</td>
+                </tr>
+                <tr>
+                    <td data-label="Name">Zenith Bank</td>
+                    <td data-label="Age">""</td>
+                </tr>
+                <tr>
+                    <td data-label="Name">UBA</td>
+                    <td data-label="Age">""</td>
+                </tr>
+                <tr>
+                    <td data-label="Name">Access Bank</td>
+                    <td data-label="Age">""</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="row"><div class="column">&nbsp;</div></div>
-    <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+    </div>
 
     <div class="somebar">
         <div class="bottombar">
