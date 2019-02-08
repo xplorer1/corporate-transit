@@ -1,5 +1,5 @@
 
-<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="SignUpPageController">
+<div class="ui middle aligned center aligned grid forms signuppage" ng-controller="SignUpPageController" id="ph_page">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <div class="ct_logo">
             <a class="img_logo" ui-sref="home">
@@ -10,7 +10,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- <div class="collapse navbar-collapse" id="navbarResponsive">
+         <div class="collapse navbar-collapse nav_o" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="how_it_works">How It Works</a>
@@ -24,11 +24,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="login">Payment</a>
                 </li>
-                <li class="nav-item active border">
-                    <a class="nav-link" ui-sref="login">Sign Up</a>
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="login">Sign In</a>
                 </li>
             </ul>
-        </div> -->
+        </div>
     </nav>
     <div class="column formcolumn" id="signup">
         <h2 class="ui image header">
@@ -42,7 +42,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
-                        <input class="inpt" type="text" name="fullname" id="fullname" placeholder="Full Name" ng-model="fullname">
+                        <input class="inpt" type="text" name="fullname" id="fullname" placeholder="Full Name" ng-model="fullname" style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
-                        <input class="inpt" type="text" name="org" id="org" placeholder="Organization" ng-model="org">
+                        <input class="inpt" type="text" name="org" id="org" placeholder="Organization" ng-model="org" style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
-                        <input class="inpt" type="text" name="email" id="email" placeholder="E-mail address" ng-model="email">
+                        <input class="inpt" type="text" name="email" id="email" placeholder="E-mail address" ng-model="email" style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
-                        <input class="inpt" type="tel" name="phone" id="phone" placeholder="Phone" ng-model="phone">
+                        <input class="inpt" type="tel" name="phone" id="phone" placeholder="Phone" ng-model="phone" style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
-                        <input class="inpt" type="text" name="username" id="username" placeholder="Username" ng-model="username">
+                        <input class="inpt" type="text" name="username" id="username" placeholder="Username" ng-model="username" style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="lock icon"></i> -->
-                        <input class="inpt" type="password" name="password" id="password" placeholder="Password" ng-model='password'>
+                        <input class="inpt" type="password" name="password" id="password" placeholder="Password" ng-model='password' style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
                 </div>

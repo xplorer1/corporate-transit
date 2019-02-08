@@ -1,93 +1,282 @@
+<div class="ui visible sidebar inverted vertical menu staticsidebar">
+    <div class="ui accordion">
+        <div class="item a_cc_title">
+            Dashboard
+        </div>
 
-<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="LandingController">
+        <div class="item title sid_ba">
+            <i class="dropdown icon"></i>
+            Bookings
+        </div>
+        <div class="content">
+            <a class="nav-link a_link" ng-click="closeMenu('booking')" style="padding: 15px;">Booking A Trip</a>
+            <a class="nav-link a_link a_l" ng-click="closeMenu('booking_history')" style="padding: 15px;">Booking History</a>
+        </div>
+
+        <div class="item title sid_ba">
+            <i class="dropdown icon"></i>
+            Payments
+        </div>
+        <div class="content">
+            <a class="nav-link a_link" ng-click="closeMenu('payment')" style="padding: 15px;">Payment Options</a>
+            <a class="nav-link a_link" ng-click="closeMenu('payment_history')" style="padding: 15px;">Payment History</a>
+            <a class="nav-link a_link a_l" ng-click="closeMenu('pricing')" style="padding: 15px;">Pricing</a>
+        </div>
+
+        <div class="item title sid_ba">
+            <i class="dropdown icon"></i>
+            Settings
+        </div>
+        <div class="content">
+            <a class="nav-link a_link" style="padding: 15px;">Edit Profile</a>
+            <a class="nav-link a_link a_l" ng-click="closeMenu('change_password')" style="padding: 15px;">Change Password</a>
+        </div>
+
+        <div class="item title sid_ba">
+            <i class="dropdown icon"></i>
+            Contact Us
+        </div>
+        <div class="content">
+            <a class="nav-link a_link" style="padding: 15px;">Report Lost Card</a>
+            <a class="nav-link a_link a_l" ng-click="closeMenu('contact_us')" style="padding: 15px;">Feedback</a>
+        </div>
+
+        <a class="item sid_ba" ng-click="logOut()" style="padding: 15px;">
+            Log Out
+        </a>
+    </div>
+</div>
+
+<div class="">
+
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <div class="ct_logo">
-            <a class="img_logo" ui-sref="home">
-                <img src="../../assets/img/logos/ctlogowhite.png" class="">
+        <div class="">
+            <a class="" ui-sref="home">
+                <img src="../../assets/img/logos/ctlogowhite.png" style="height: 32px;">
             </a>
         </div>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
-         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="routes">Routes</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="booking">Book a trip</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="payment">Payment</a>
-                </li>
-                <li class="nav-item active border">
-                    <a class="nav-link" ui-sref="signup">Sign Up</a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+
+            <ul class="navbar-nav ml-auto nav_o">
+                <!-- <li>
+                    <button class="massive ui button" ng-click="openMenu()">
+                        Menu
+                    </button>
+                </li> -->
+
+                <li>
+                    <button class="massive ui button" ng-click="logOut()">
+                        Log Out
+                    </button>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div class="ui active dimmer">
-        <div class="ui loader"></div>
-    </div>
+    <ui-view>
+        <div ng-controller="LandingController">
+            <div class="ui active dimmer">
+                <div class="ui loader"></div>
+            </div>
 
-    <section class=" w-100 formcolumn_l">
-        <div class="ahead_content_l w-100">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col desk_top">
-                <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered text_div">
-                    <div class="h-25 big-txt white fname_d" ng-bind="fullname"></div>
-                    <div class="h-25 light-grey">Card Number: <span class="l_val_cn" ng-bind="ct_cardnumber"></span></div>
-                    <div class="h-25 light-grey">Available Balance: <span class="l_val_a" ng-bind="balance"></span></div>
-                    <div class="h-25 light-grey">Home Location: <span class="l_val" ng-bind="home"></span></div>
-                    <div class="h-25 light-grey">Work Location: <span class="l_val" ng-bind="work"></span></div>
-                    <div class="h-25 w-100">
-                        <button class="l_btn" ui-sref="booking">Book a trip</button>
-                        <button class="l_btn" ui-sref="payment">Top Up Card</button>
+            <section class="formcolumn_l">
+                <div class="part_one">
+
+                    <div class="half_one">
+                        <div class="lndg_fullname" style="padding-top: 5px;">WELCOME, <span class="" ng-bind="fullname"></span></div>
+                        <div class="lndg_ct_number" >CARD NUMBER: <span class="l_val_cn" ng-bind="ct_cardnumber" style="font-weight: bolder;"></span></div>
+
+                        <div class="blances">
+                            <div class="t_bal">
+                                <span class="" >N30000</span>
+                                <div>
+                                    Total Deposit/Month
+                                </div>
+                            </div>
+
+                            <div class="c_bal">
+                                <span class="" >N30000</span>
+
+                                <div>
+                                    Available Balance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="half_two">
+                        <div>
+                            <div style="font-size: 25pt;">
+                                Get
+                            </div>
+
+                            <div class="bg_brk">
+                                <div class="bg%">
+                                    50%
+                                </div>
+
+                                <div class="brk_cont">
+                                    <div style="font-size: 25pt;">
+                                        off your
+                                    </div>
+                                    <div style="font-size: 25pt;">
+                                        first ride.
+                                    </div>
+
+                                    <div class="bg_icons">
+                                        <div class="bg_icon">
+                                            <img src="../../assets/img/icons/safe.png"/>
+                                        </div>
+
+                                        <div class="bg_icon">
+                                            <img src="../../assets/img/icons/branches.png"/>
+                                        </div>
+
+                                        <div class="bg_icon">
+                                            <img src="../../assets/img/icons/smiley_white.png"/>
+                                        </div>
+
+                                        <div class="bg_icon">
+                                            <img src="../../assets/img/icons/book.png"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="l_img col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
-                    <img src="../../assets/img/icons/METR.png" class="">
-                </div>
-            </div>
+                <div class="part_two">
+                    <div class="half_one_2">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
 
-            <div class="commute_txt_cont c_l">
-                <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered">
-                    <div class="h-25 big-txt white f_name" ng-bind="fullname" ></div>
-                    <div class="h-25 light-grey">Card Number: <span class="l_val_cn" ng-bind="ct_cardnumber"></span></div>
-                    <div class="h-25 light-grey">Available Balance: <span class="l_val_a" ng-bind="balance"></span></div>
-                    <div class="h-25 light-grey">Home Location: <span class="l_val" ng-bind="home"></span></div>
-                    <div class="h-25 light-grey">Work Location: <span class="l_val" ng-bind="work"></span></div>
-                    <div class="h-25 w-100" id="btn_grp">
-                        <button class="l_btn" ui-sref="booking">Book a trip</button>
-                        <button class="l_btn" ui-sref="payment">Top Up Card</button>
+                        <div class="half_one_2_header">
+                            Your Route
+                        </div>
+
+                        <div class="map_route">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d63419.64172825001!2d3.33487297462882!3d6.5560308509457395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x103b9228fa2a3999%3A0xd7a8324bddbba1f0!2sIkeja%2C+Lagos!3m2!1d6.601838!2d3.3514863!4m5!1s0x103b8c8c358b3f4b%3A0x5552cfbd43df8434!2sYaba%2C+Oworonshoki!3m2!1d6.5095442!2d3.3710936!5e0!3m2!1sen!2sng!4v1548427017471" width="600" height="450" frameborder="0" style="border:0" allowfullscreen class="i_frame"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="half_two_2">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="half_two_2_header">
+                            <div>
+                                Route Summary
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="morning">
+                                <!-- <div class="morn">
+                                    <div class="mr_morn">
+                                        Morning
+                                    </div>
+                                </div> -->
+
+                                <div class="morn_route">
+                                    <div class="mr route_one">
+                                        <img src="../../assets/img/icons/location.png"/>
+                                        <div>
+                                            Conoil Petrol Station
+                                        </div>
+                                    </div>
+
+                                    <div class="mr time_one">
+                                        <img src="../../assets/img/icons/man.png"/>
+                                        <div>
+                                            5:45 AM
+                                        </div>
+                                    </div>
+
+                                    <div class="mr time_two">
+                                        <img src="../../assets/img/icons/tick.png"/>
+                                        <div>
+                                            5:45 AM
+                                        </div>
+                                    </div>
+
+                                    <div class="mr route_two">
+                                        <img src="../../assets/img/icons/arm.png" height="480" width="480"/>
+                                        <div class="rout_two">
+                                            Akin Adesola
+                                        </div>
+
+                                        <div class="rout_two">
+                                            Adeola Odeku
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="evening">
+                                <!-- <div class="morn">
+                                    <div class="mr_morn">
+                                        Evening
+                                    </div>
+                                </div> -->
+                                <div class="even_route">
+                                    <div class="mr route_one">
+                                        <img src="../../assets/img/icons/location.png"/>
+                                        <div>
+                                            Conoil Petrol Station
+                                        </div>
+                                    </div>
+
+                                    <div class="mr time_one">
+                                        <img src="../../assets/img/icons/man.png"/>
+                                        <div>
+                                            5:30 PM
+                                        </div>
+                                    </div>
+
+                                    <div class="mr time_two">
+                                        <img src="../../assets/img/icons/tick.png"/>
+                                        <div>
+                                            6: 00 PM
+                                        </div>
+                                    </div>
+
+                                    <div class="mr route_two">
+                                        <img src="../../assets/img/icons/arm.png" height="480" width="480"/>
+                                        <div class="rout_two">
+                                            Ikeja
+                                        </div>
+
+                                        <div class="rout_two">
+                                            Iyana Oworo
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="l_img col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
-                    <img src="../../assets/img/icons/METR.png" class="">
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
+    </ui-view>
 
     <div class="somebar">
-        <div class="bottombar">
-            <div class="bar">
-                <div class="privacy link">Terms And Conditions</div>
-                <div class="privacy link">Privacy Policy</div>
-                <div class="privacy link">Faqs</div>
-                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+            <div class="bottombar">
+                <div class="bar">
+                    <div class="privacy link">Terms And Conditions</div>
+                    <div class="privacy link">Privacy Policy</div>
+                    <div class="privacy link">Faqs</div>
+                    <div class="contact link" ui-sref="contact_us">Contact Us</div>
 
-                <div class="facebook link">Facebook</div>
-                <div class="twitter link">Twitter</div>
-                <div class="instagram link">Instagram</div>
+                    <div class="facebook link">Facebook</div>
+                    <div class="twitter link">Twitter</div>
+                    <div class="instagram link">Instagram</div>
+                </div>
+                <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
             </div>
-            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
         </div>
-    </div>
 </div>

@@ -158,7 +158,9 @@ button, input, optgroup, select, textarea {
     background-color: #FFF;
     transform: skewY(0deg);
     margin-bottom: 80px;
+    margin-top: 80px;
 }
+
 .container-fluid:nth-child(6) {
     background-color: #FFF;
     transform: skewY(0deg);
@@ -177,6 +179,7 @@ button, input, optgroup, select, textarea {
     height: 110%;
     min-height: 600px;
     float: left;
+    margin-bottom: 80px;
 }
 .how_it_works_block {
     text-align: center;
@@ -490,7 +493,7 @@ button {
     .commute_content {
         margin-top: 10%;
         height: 70%;
-        transform: skewY(7deg);
+        transform: skewY(0deg);
     }
     .about_content {
         height: 80%;
@@ -498,7 +501,7 @@ button {
     .ahead_content {
         margin-top: 10%;
         height: 70%;
-        transform: skewY(7deg);
+        transform: skewY(0deg);
     }
     .about_button_container {
         font-size: 12px;

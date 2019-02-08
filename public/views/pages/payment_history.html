@@ -1,68 +1,87 @@
-<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="PaymentHistoryController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="img_logo" ui-sref="home">
-            <img src="../../assets/img/logos/ctlogowhite.png" class="">
-        </a>
+<article ng-controller="PaymentHistoryController" class="formpage paymenthistorypage">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
-
-    <div class="ui active dimmer">
+    <!-- <div class="ui active dimmer">
         <div class="ui loader"></div>
+    </div> -->
+
+    <div class="owner">
+        <div class="lndg_fullname" >WELCOME, <span class="" ng-bind="fullname"></span></div>
+        <div class="lndg_ct_number" >CARD NUMBER: <span class="l_val_cn" ng-bind="ct_cardnumber" style="font-weight: bolder;"></span></div>
     </div>
 
-    <section class="container-fluid bk_history routes_bg h-100">
+    <div class="sort_select">
+        <div class="sortselect">
+            <select id="sort" name="sort" class="pretty">
+                <option value="" title="Sort by" selected disabled >Filter</option>
+                <option value="last7days" title="Payment history from last 7 days.">Last 7 Days</option>
+                <option value="last30days" title="Payment history from last 30 days.">Last 30 Days</option>
+                <option value="last3months" title="Payment history from 3 months ago.">Last 3 Months</option>
+                <option value="last6months" title="Payment history from 6 months ago.">Last 6 Months</option>
+                <option value="last1year" title="Payment history from the past 1 year.">Last 1 Year</option>
+                <option value="fromdayone" title="Payment history from day one.">From Inception</option>
+            </select>
+        </div>
+    </div>
 
-        <div class="routes-jumb">
+    <div class="ui middle aligned aligned grid forms">
 
-            <h3 class="display-5">Payment history for <span ng-bind="fullname"></span></h3>
+        <div class="booking_one">
+            <div class="table_cont table_cont_b row bk_hst_row">
+                <span class="hist_title">
+                    Payment History
+                </span>
 
-            <h3 class="display-5">Available Balance: <span ng-bind="balance"></span></h3>
-
-            <div class="table_cont row">
-                <table class="ui unstackable celled table">
+                <table class="ui unstackable celled table bk_hst_tbl">
                     <thead>
-                        <tr>
-                            <th>Amount</th>
-                            <th>Paid On</th>
-                            <th>Payment Status</th>
-                        </tr>
+                    <tr>
+                        <th class="bk_th">Amount</th>
+                        <th class="bk_th">Payment Type</th>
+                        <th class="bk_th">Paid On</th>
+                    </tr>
                     </thead>
 
                     <tbody>
                         <tr ng-repeat="entry in payments_history">
-                            <td data-label="id" ng-bind="entry.booking.bookingid"></td>
-                            <td data-label="b_date" ng-bind="entry.booking.bookedon"></td>
-                            <td data-label="b_type" ng-bind="entry.booking.frequency"></td>
+                            <td data-label="id" ng-bind="entry.amount"></td>
+                            <td data-label="b_type" ng-bind="entry.paymenttype"></td>
+                            <td data-label="b_date" ng-bind="entry.created.split('Z')[0].split('T')[0]"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="no_bk">
+                <div class="ui success message" style="display: none;">
+                    <div class="header" style="color: #fff !important;">
+                        No payment history was found.
+                    </div>
+                </div>
+            </div>
 
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
         </div>
 
-    </section>
+        <div class="booking_two">
+            <div class="enj">
+                <div class="enj_big">
+                    ENJOY
+                </div>
 
-    <div class="somebar">
-        <div class="bottombar">
-            <div class="bar">
-                <div class="privacy link">Terms And Conditions</div>
-                <div class="privacy link">Privacy Policy</div>
-                <div class="privacy link">Faqs</div>
-                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+                <div class="enj_mid">
+                    1 FREE
+                </div>
 
-                <div class="facebook link">Facebook</div>
-                <div class="twitter link">Twitter</div>
-                <div class="instagram link">Instagram</div>
+                <div class="enj_lst">
+                    RIDE
+                </div>
+
+                <div class="enj_aft">
+                    AFTER EVERY 10 RIDE.
+                </div>
+
+                <div class="enj_val">
+                    VALID TILL MAY.
+                </div>
             </div>
-            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
         </div>
     </div>
-</div>
+</article>

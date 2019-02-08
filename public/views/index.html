@@ -29,10 +29,19 @@
     <script src="../assets/lib/bootstrap/datetimepicker_css.js"></script>
     <script src="../assets/lib/bootstrap/store.legacy.min.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    
+    <link rel="stylesheet" href="../assets/lib/bootstrap/prettydropdowns.css">
+    <script type="text/javascript" src="../assets/lib/bootstrap/jquery.prettydropdowns.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <base href="/">
+    <script type="text/javascript">
+        $('.ui.accordion.item')
+            .accordion()
+        ;
+    </script>
 </head>
 
 <body ng-controller="MainPageController">
@@ -49,8 +58,26 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item active">
+                    <div class="nav-link sort_select">
+                        <div class="sortselect">
+                            <select id="sort" name="sort" class="pretty">
+                                <option value="" title="Sort by" selected disabled >Filter</option>
+                                <option value="last7days" title="Payment history from last 7 days.">Last 7 Days</option>
+                                <option value="last30days" title="Payment history from last 30 days.">Last 30 Days</option>
+                                <option value="last3months" title="Payment history from 3 months ago.">Last 3 Months</option>
+                                <option value="last6months" title="Payment history from 6 months ago.">Last 6 Months</option>
+                                <option value="last1year" title="Payment history from the past 1 year.">Last 1 Year</option>
+                                <option value="fromdayone" title="Payment history from day one.">From Inception</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+
                 <li class="nav-item active">
                     <a class="nav-link" href="#about_sec">About</a>
                 </li>
@@ -62,9 +89,6 @@
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="routes">Routes</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="contact_us">Contact Us</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="login">Book a trip</a>
@@ -80,7 +104,6 @@
                 </li>
             </ul>
         </div>
-
     </nav>
 
     <section class="container-fluid top-section">
@@ -103,6 +126,23 @@
             </div>
             <div class="centerbutton">
                 <a class="bigbutton button" ui-sref="signup">Sign Up</a>
+            </div>
+
+            <div class="bottomright">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div style="background: rgb(32, 102, 155); padding: 15px;">
+                    <div>
+                        Getting you ahead.
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -299,8 +339,6 @@
         </div>
     </div>
 </ui-view>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>

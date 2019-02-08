@@ -4,7 +4,7 @@ angular.module('MainModule', [
     'Transporter',
     'ui.bootstrap'
 ])
-    .config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
+    .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider) {
 
         $stateProvider
             .state('home', {
@@ -13,11 +13,13 @@ angular.module('MainModule', [
                 controller: 'MainPageController'
             })
             .state('booking', {
+                parent: 'landing',
                 url: '/booking',
                 templateUrl: '../views/pages/booking.html',
                 controller: 'BookingPageController'
             })
             .state('booking_history', {
+                parent: 'landing',
                 url: '/booking_history',
                 templateUrl: '../views/pages/booking_history.html',
                 controller: 'BookingHistoryController'
@@ -34,10 +36,12 @@ angular.module('MainModule', [
             })
             .state('payment', {
                 url: '/payment',
+                parent: 'landing',
                 templateUrl: '../views/pages/payment.html',
                 controller: 'PaymentPageController'
             })
             .state('pricing', {
+                parent: 'landing',
                 url: '/pricing',
                 templateUrl: '../views/pages/pricing.html',
                 controller: 'PricingPageController'
@@ -76,6 +80,7 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/notfound.html',
             })
             .state('payment_history', {
+                parent: 'landing',
                 url: '/payment_history',
                 templateUrl: '../views/pages/payment_history.html',
                 controller: "PaymentHistoryController"
@@ -85,6 +90,8 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/landing.html',
                 controller: "LandingController"
             });
+
+        $urlRouterProvider.otherwise('/notfound');
 
         $locationProvider.html5Mode({
             enabled: true,

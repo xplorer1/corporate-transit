@@ -9,7 +9,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto nav_o">
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="routes">Routes</a>
                 </li>
@@ -30,7 +30,7 @@
     </nav>
 
     <div class="">
-        <section class="container-fluid how_it_works_bg h-100">
+        <section class="container-fluid how_it_works_bg h-100" style="height: 1000px !important;">
             <div class="jumbotron tran-jumb">
                 <div class="display-4 heading_text">
                     <span>
@@ -65,20 +65,20 @@
         </section>
 
         <!-- commute sec -->
-        <section class="container-fluid commute_sec w-100" id="howitcommute">
+        <section class="container-fluid commute_sec w-100 min_h" id="howitcommute">
             <div class="commute_content w-100">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col" style="margin-bottom: 80px;">
                     <img src="../../assets/img/icons/join.png" class="col-10 col-centered">
                 </div>
 
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col" style="margin-top: 100px;">
                     <div class="col-sm-12 col-lg-9 h-50 commute-text-container">
                         <div class="h-25 big-txt blue">JOIN CT</div>
 
                         <div class="h-25 smallest-txt grey">Click below to sign up to start your perfect journey!</div>
 
                         <div class="h-25 w-100">
-                            <button class="w-100 h-100 light-bg-button b30px" ng-click="determineDestination('booking')">Book Now</button>
+                            <button class="w-100 h-100 light-bg-button b30px" ui-sref="login">Book Now</button>
                         </div>
                     </div>
                 </div>
@@ -87,33 +87,33 @@
         </section>
 
         <!-- get you ahead -->
-        <section class="container-fluid commute_sec w-100">
+        <section class="container-fluid commute_sec w-100 min_h">
             <div class="ahead_content w-100">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col" style="margin-top: 100px;">
                     <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered">
                         <div class="h-25 big-txt">BOOK A RIDE</div>
                         <br>
                         <div class="h-25 smallest-txt">Only booked trips are guaranteed. CT offers flexible and bulk booking options; Morning ONLY, Evening ONLY, Return and more. Sign In <a href="">here</a> to browse and book your trip now.</div>
                         <div class="h-25 w-100">
-                            <button class="w-100 h-100 dark-bg-button b30px" ng-click="determineDestination('booking')">Book Now</button>
+                            <button class="w-100 h-100 dark-bg-button b30px" ui-sref="login">Book Now</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
-                    <img src="../../assets/img/icons/book.png" class="st_img col-10 col-centered">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col" style="margin-bottom: 80px;">
+                    <img src="../../assets/img/icons/book.png" class=" col-10 col-centered">
                 </div>
             </div>
         </section>
 
         <!-- ride in comfort -->
-        <section class="container-fluid comfort_sec w-100">
+        <section class="container-fluid comfort_sec w-100 min_h">
             <div class="commute_content w-100">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col" style="margin-bottom: 80px;">
                     <img src="../../assets/img/icons/man.png" class="col-10 col-centered">
                 </div>
 
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
-                    <div class="col-sm-12 col-lg-9 h-50 commute-text-container">
+                    <div class="col-sm-12 col-lg-9 h-50 commute-text-container" style="margin-top: 100px;">
                         <div class="h-25 big-txt blue">BOARD</div>
 
                         <div class="h-25 smallest-txt grey">Board and alight at our designated pick up points. Boarding time is 30 minutes before scheduled trip time ( T- 30 minutes)!</div>
@@ -126,7 +126,7 @@
             </div>
         </section>
 
-        <section class="container-fluid comfort_sec w-100">
+        <section class="container-fluid comfort_sec w-100 min_h">
             <div class="comfort_content w-100">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
                     <img src="../../assets/img/icons/pay.png" class="col-10 col-centered">
@@ -143,7 +143,7 @@
                         <br><br>
 
                         <div class="h-25 w-100">
-                            <button class="w-100 h-100 light-bg-button b30px">Card Top Up</button>
+                            <button class="w-100 h-100 light-bg-button b30px" ui-sref="login">Card Top Up</button>
                         </div>
                     </div>
                 </div>

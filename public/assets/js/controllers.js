@@ -6,11 +6,13 @@ angular.module('ControllersModule', [])
     .controller('PaymentHistoryController', ['$scope', '$log', 'Transporter', '$state', PaymentHistoryController])
     .controller('SignUpPageController', ['$scope',  '$log', 'Transporter', '$stateParams', '$state', SignUpPageController])
     .controller('LoginPageController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', LoginPageController])
-    .controller('LandingController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', LandingController])
+    .controller('LandingController', ['$scope', '$log', '$state', LandingController])
     .controller('HowItWorksController', ['$scope', '$log', '$state', '$stateParams', HowItWorksController])
     .controller('BookingHistoryController', ['$scope', '$log', '$state', 'Transporter', BookingHistoryController]);
 
     function MainPageController($scope, $state, $log, $window) {
+        $('.pretty').prettyDropdown();
+
         $scope.determineDest = (destination) => {
             store.set("user", {destination: destination});
 
@@ -98,8 +100,6 @@ angular.module('ControllersModule', [])
 
         let token = $stateParams.vcode;
 
-        $log.log("Token: ", token);
-
         if(token) {
             Transporter.confirm({
                 token: token
@@ -112,7 +112,7 @@ angular.module('ControllersModule', [])
                     $("#notverified").css("display", "none");
                     $("#verified").css("display", "block");
                 }else {
-                    if(response.data === "expired") {
+                    if(response.data === "acct_verified") {
                         $("#verified").css("display", "none");
                         $("#notverified").css("display", "block");
                     }else if(response.data === "token_notfound") {
@@ -172,8 +172,8 @@ angular.module('ControllersModule', [])
                         store.set("user", {email: $scope.email});
                         rootShared.user["email"] = $scope.email;
 
-                        $("#signup").hide(slow);
-                        $("#email_confirmation").show(slow);
+                        $("#signup").hide();
+                        $("#email_confirmation").show();
                         break;
                     default:
                         $("#signupform").notify("There has been a problem. Please try again later.", { position: "bottom-center" });
@@ -445,11 +445,9 @@ angular.module('ControllersModule', [])
 
         let diff = (time_now - user.expires_in)/3600;
 
-        console.log("diff: ", diff);
-
-        if (diff > 3600) {
+        /*if (diff > 3600) {
             $state.go("login");
-        }
+        }*/
 
         function showLoader() {
             $(".bookingloader").css("display", "block");
@@ -460,11 +458,32 @@ angular.module('ControllersModule', [])
         }
 
         let email = rootShared.user["email"] || user.email;
+        let showOneDay = () => {
+            $(".mod").css("display", "block");
+            $(".mod_one").text("Date");
+            $(".date1").css("display", "block");
+
+            $(".date2").css("display", "none");
+            $(".date1").css("width", "100%");
+            $(".date_img1").css("right", "1%");
+        };
+
+        let showMoreDays = () => {
+            $(".mod_one").text("From");
+            $(".mod").css("display", "block");
+            $(".date1").css("display", "block");
+            $(".date2").css("display", "block");
+
+            $(".date1").css("width", "50%");
+            $(".date_img1").css("right", "53%");
+        };
+
         $scope.booking_validity = () => {
-            console.log("trip hertz: ", $scope.trip_frequency  === "1 Day");
             if($scope.trip_frequency === "1 Day") {
-                $(".date1").css("display", "none");
-                $(".mod_one").text("Trip Date")
+                showOneDay();
+            }
+            else {
+                showMoreDays();
             }
         };
 
@@ -473,17 +492,11 @@ angular.module('ControllersModule', [])
                 if(!$scope.trip_route) {
                     $("#trip_route").notify("Please select your route.", { position: "bottom-center" });
                 }
-                else if(!$scope.trip_frequency) {
-                    $("#trip_frequency").notify("Please select your booking validity.", { position: "bottom-center" });
-                }
                 else if(!$scope.booking_type) {
                     $("#booking_type").notify("Please select your booking type.", { position: "bottom-center" });
                 }
-                else if(!$("#demo1").val()) {
-                    $("#demo1").notify("Please select trip date range.", { position: "bottom-center" });
-                }
-                else if(!$("#demo2").val()) {
-                    $("#demo2").notify("Please select trip date range.", { position: "bottom-center" });
+                else if(!$scope.trip_frequency) {
+                    $("#trip_frequency").notify("Please select your booking validity.", { position: "bottom-center" });
                 }
                 else if(!$scope.ct_cardnumber) {
                     $("#ct_cardnumber").notify("Please enter your card number. Find this in your signup confirmation email.", { position: "bottom-center" });
@@ -501,34 +514,47 @@ angular.module('ControllersModule', [])
                         ct_cardnumber: $scope.ct_cardnumber,
                         token: user.token
                     }).then(response => {
-                        //hideLoader();
+                        hideLoader();
+                        console.log("response: ", response);
 
                         if(response.status) {
                             $(".booktrip").notify("Your booking was successful.", "success", { position: "bottom-center" });
                         }
                         else if(response.data === "slot_email") {
                             $(".booktrip").notify("You have already booked this trip.", "error", { position: "bottom-center" });
+                        }else if(response.data === "booking_from_required") {
+                            $("#demo1").notify("Please select trip date range.", "error", { position: "bottom-center" });
+                        }else if(response.data === "booking_to_required") {
+                            $("#demo2").notify("Please select trip date range.", "error", { position: "bottom-center" });
+                        }else if(response.data === "token_expired") {
+                            $state.go("login");
+                        }else {
+                            $(".booktrip").notify("Sorry there has been a problem.", { position: "bottom-center" });
                         }
                     })
                 }
             }
         }else {
-            $state.go("login");
+            //$state.go("login");
         }
     }
 
     function BookingHistoryController($scope, $log, $state, Transporter) {
-        let user = store.get("user");
+        $('.pretty').prettyDropdown();
 
-        console.log("user: ", user);
+        $('.ui.accordion')
+            .accordion()
+        ;
+
+        let user = store.get("user");
 
         let time_now = new Date().getTime();
 
         let diff = (time_now - user.expires_in)/3600;
 
-        if (diff > 3600) {
+        /*if (diff > 3600) {
             $state.go("login");
-        }
+        }*/
 
         if(user.email) {
             Transporter.getbookinghistory({
@@ -542,6 +568,7 @@ angular.module('ControllersModule', [])
                         $scope.booking_history = response.data;
                         $scope.fullname = response.fullname;
                     }else{
+                        $(".ui.success.message").css("display", "block");
                         console.log("no booking history found.");
                     }
                 }else {
@@ -549,7 +576,7 @@ angular.module('ControllersModule', [])
                 }
             })
         }else {
-            $state.go("login");
+            //$state.go("login");
         }
 
         $(".close").click(() => {
@@ -571,19 +598,25 @@ angular.module('ControllersModule', [])
             }
         };
 
+        $scope.sortHistory = () => {
+            $log.log("sort calue: ", $scope.sort_value);
+        };
+
         $scope.modifyChoice = (choice) => {
-            console.log("choice: ", choice);
 
             if(choice === "no") {
                 $('.c_trip')
                     .modal('hide')
                 ;
             }else if(choice === "yes") {
+                $(".choice_loader").css("display", "block");
+
                 Transporter.cancelbooking({
                     bookingid: rootShared.booking_id,
                     token: user.token
                 }).then(response => {
-                    $log.log("Response: ", response);
+                    $(".choice_loader").css("display", "none");
+
                     if(response.status) {
                         $(".header").notify("Booking Successfully cancelled.", "success", { position: "bottom-center" });
 
@@ -604,14 +637,26 @@ angular.module('ControllersModule', [])
                     }
                 })
             }
-        }
+        };
+
+        $("#sort").on('change', function() {
+            var filter = $('#sort').find(":selected").val();
+            $(".ui.active.dimmer").css("display", "block");
+
+            Transporter.sortbookinghistory({
+                email: user.email,
+                filter: filter
+            }).then(response => {
+                $(".ui.active.dimmer").css("display", "none");
+
+                $log.log("Response: ", response);
+            })
+        });
     }
 
     function PaymentPageController($scope, $log, Transporter, $state) {
 
         let user = store.get("user");
-
-        console.log("user: ", user);
 
         let time_now = new Date().getTime();
 
@@ -619,9 +664,9 @@ angular.module('ControllersModule', [])
 
         console.log("diff: ", diff);
 
-        if (diff > 7200) {
+        /*if (diff > 7200) {
             $state.go("login");
-        }
+        }*/
 
         function validateEmail(email) {
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -729,28 +774,31 @@ angular.module('ControllersModule', [])
     }
 
     function PaymentHistoryController($scope, $log, Transporter, $state) {
+        $('.pretty').prettyDropdown();
         let user = store.get("user");
-
-        console.log("user: ", user);
 
         let time_now = new Date().getTime();
 
         let diff = (time_now - user.expires_in)/3600;
 
-        if (diff > 3600) {
+        /*if (diff > 3600) {
             $state.go("login");
-        }
+        }*/
 
         if(user.email) {
             Transporter.getpaymenthistory({
                 email: user.email
             }).then(response => {
+                $log.log("response: ", response);
 
                 $(".ui.active.dimmer").css("display", "none");
 
                 if(response.status) {
                     if(response.data.length > 0) {
-                        $scope.payments_history = response.data
+                        $scope.payments_history = response.data;
+                        $scope.fullname = response.user_details.fullname;
+                        $scope.balance = response.user_details.balance;
+
                     }else{
                         console.log("no booking history found.");
                     }
@@ -759,11 +807,25 @@ angular.module('ControllersModule', [])
                 }
             })
         }else {
-            $state.go("login");
+            //$state.go("login");
         }
+
+        $("#sort").on('change', function() {
+            var filter = $('#sort').find(":selected").val();
+            $(".ui.active.dimmer").css("display", "block");
+
+            Transporter.sortpaymenthistory({
+                email: user.email,
+                filter: filter
+            }).then(response => {
+                $(".choice_loader").css("display", "none");
+
+                $log.log("Response: ", response);
+            })
+        });
     }
 
-    function LandingController($scope, $log) {
+    function LandingController($scope, $log, $state) {
         let user = store.get("user_data");
 
         let user_time = store.get("user");
@@ -772,27 +834,43 @@ angular.module('ControllersModule', [])
 
         let diff = (time_now - user_time.expires_in)/3600;
 
-        console.log("diff: ", diff);
+        $log.log("diff: ", diff);
 
-        if (diff > 3600) {
+        /*if (diff > 3600) {
             $state.go("login");
         }
-        else {
-            $scope.fullname = "WELCOME "+user.fullname;
+        else {*/
+            $scope.fullname = user.fullname;
             $scope.balance = user.balance;
             $scope.work = user.work;
             $scope.home = user.home;
-            $scope.ct_cardnumber = user.ct_cardnumber;
+            $scope.ct_cardnumber = user.ct_cardnumber + "HGWE2323S";
 
             $(".ui.active.dimmer").css("display", "none");
-        }
+        //}
+
+        $('.ui.accordion')
+            .accordion()
+        ;
+
+        /*$scope.openMenu = () => {
+            $('.ui.sidebar')
+                .sidebar('toggle')
+            ;
+        };*/
+
+        $scope.closeMenu = (destination) => {
+            /*$('.ui.sidebar')
+                .sidebar('hide')
+            ;*/
+
+            $state.go(destination);
+        };
     }
 
     function HowItWorksController($scope, $log, $state) {
         $scope.determineDest = (destination) => {
             store.set("user", {destination: destination});
-
-            $log.log("destination; ", destination);
 
             rootShared.user["destination"] = destination;
             $state.go("login");

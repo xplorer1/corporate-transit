@@ -1,182 +1,144 @@
+<article ng-controller="PaymentPageController" class="formpage">
 
-<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="PaymentPageController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="img_logo" ui-sref="home">
-            <img src="../../assets/img/logos/ctlogowhite.png" class="">
-        </a>
+    <div class="ui middle aligned aligned grid forms bookingpage" style="margin-top: 40px;">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="routes">Routes</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="booking">Book a trip</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="payment_history">View payment history</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="otherpages_pay" style="background: white; color: black">
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="paytitle">
-            <h2 class="">
-                Fund your payment card here.
-            </h2>
-        </div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="block">
-            Corporate Transit operates a cashless model. All fares are paid using our payment cards, which allows you make seamless payments by simply tapping the card on a hardware while onboard. Planning, tracking and managing your transportation expenses has never been more convenient.
-        </div>
-
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="block">
-            Payment cards may be funded online via bank transfer or offline via USSD. Please note that cards would also serve as ID and only card-carrying members are allowed to ride.
-        </div>
-
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="block">
-            P.S; Registered members may pick up their cards on-board or request for delivery.
-        </div>
-
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="oninst">
-            <div class="ui fluid large teal submit button payonline">
-                Pay via Online Instant
-            </div>
-        </div>
-
-        <div class="usd">
-            <div class="ui fluid large teal submit button payussd">
-                Pay via Ussd
-            </div>
-        </div>
-
-        <div class="bktrans">
-            <div class="ui fluid large teal submit button paybanktransfer">
-                Pay via Bank Transfer
-            </div>
-        </div>
-
-        <div class="ui tiny modal onlineinstant">
-            <i class="close">X</i>
-            <div class="header">
-                Pay via online instant
-            </div>
-            <div class="ui stacked secondary  segment removestyle_mod">
-                <div class="field modalfield">
-                    <div class="ui left icon input modalinput">
-                        <!--<i class="user icon">&times;</i>-->
-                        <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
-                    </div>
+        <div class="booking_one">
+            <div class="column formcolumn_p">
+                <div class="owner_p">
+                    <div class="lndg_fullname" >WELCOME, <span class="" ng-bind="fullname">Chijioke Ugwuanyi</span></div>
+                    <div class="lndg_ct_number" >CARD NUMBER: <span class="l_val_cn" ng-bind="ct_cardnumber" style="font-weight: bolder;"></span></div>
                 </div>
-
-                <div class="field modalfield">
-                    <div class="ui left icon input modalinput">
-                        <!--<i class="lock icon"></i>-->
-                        <input type="number" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
-                    </div>
-                </div>
-
                 <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="ui fluid large teal submit button" ng-click="pay()">Pay</div>
-                <div class="paymentloader"></div>
-            </div>
-        </div>
-
-        <div class="ui tiny modal ussd">
-            <i class="close">X</i>
-            <div class="header">
-                Pay via ussd
-            </div>
-            <div class="ui stacked secondary  segment removestyle_mod">
-                <div class="field modalfield">
-                    <div class="ui left icon input modalinput">
-                        <i class="user icon"></i>
-                        <input type="text" ng-model="ussdemail"  id="ussdemail" name="ussdemail" placeholder="E-mail address">
-                    </div>
-                </div>
-
-                <div class="field modalfield">
-                    <div class="ui left icon input modalinput">
-                        <i class="lock icon"></i>
-                        <input type="number" ng-model="ussdamount" id="ussdamount" name="ussdamount" placeholder="Amount">
-                    </div>
-                </div>
-
                 <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="ui fluid large teal submit button" ng-click="payWithPaystackUssd()">Pay</div>
-                <div class="paymentloader"></div>
+
+                <div class="bal">
+                    <div class="a_bal">Available Card Balance: 25000</div>
+                    <div class="tot_dep">Total Deposited: 50000</div>
+                </div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <div class="bal" style="margin: 4px 0; text-align: center;">
+                    <div class="a_bal">CARD TOP-UP OPTIONS</div>
+                </div>
+
+                <div class="col_form">
+
+                    <div class="inst_val">
+                        <div class="in_val">
+                            <div class="in cent">Debit</div>
+
+                            <span class="cent">-</span>
+
+                            <div class="in cent">Corporate Transit</div>
+
+                            <div class="in bx">
+                                <div class="ui stacked secondary  segment removestyle_mod" style="width: 338px;">
+                                    <div class="field modalfield">
+                                        <div class="ui left icon input modalinput">
+                                            <i class="user icon"></i>
+                                            <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
+                                        </div>
+                                    </div>
+
+                                    <div class="field modalfield">
+                                        <div class="ui left icon input modalinput">
+                                            <i class="lock icon"></i>
+                                            <input type="number" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
+                                        </div>
+                                    </div>
+
+                                    <div class="ui fluid large teal submit button" ng-click="pay()">Pay</div>
+                                    <div class="paymentloader"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="ussd_val">
+                        <div class="us_val">
+                            <div class="in cent_u">Phone</div>
+
+                            <span class="cent_u">-</span>
+
+                            <div class="in cent_u">Corporate Transit</div>
+
+                            <div class="in cent_u">
+                                <div>
+                                    Dial *cardnumber*amount#
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bank_val">
+                        <div class="bk_val">
+                            <div class="in cent">Bank</div>
+
+                            <span class="cent">-</span>
+
+                            <div class="in cent" style="width: 40%;">Corporate Transit</div>
+
+                            <div class="in bx" style="margin-left: -60px;">
+                                <div class="mod_h header">
+                                    Make payments into any of the following bank accounts.
+                                </div>
+                                <table class="ui unstackable celled table" style="margin: 0 auto;">
+                                    <thead>
+                                    <tr>
+                                        <th>Bank Name</th>
+                                        <th>Account Number</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td data-label="Name">GT Bank</td>
+                                        <td data-label="Age">""</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Name">Zenith Bank</td>
+                                        <td data-label="Age">""</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Name">UBA</td>
+                                        <td data-label="Age">""</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Name">Access Bank</td>
+                                        <td data-label="Age">""</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
         </div>
 
-        <div class="ui small modal banktransfer">
-            <i class="close">X</i>
-            <div class="mod_h header">
-                Make payments into any of the below listed bank accounts
+        <div class="booking_two">
+            <div class="enj">
+                <div class="enj_big">
+                    ENJOY
+                </div>
+
+                <div class="enj_mid">
+                    1 FREE
+                </div>
+
+                <div class="enj_lst">
+                    RIDE
+                </div>
+
+                <div class="enj_aft">
+                    AFTER EVERY 10 RIDE.
+                </div>
+
+                <div class="enj_val">
+                    VALID TILL MAY.
+                </div>
             </div>
-            <table class="ui unstackable celled table">
-                <thead>
-                <tr>
-                    <th>Bank Name</th>
-                    <th>Account Number</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td data-label="Name">GT Bank</td>
-                    <td data-label="Age">""</td>
-                </tr>
-                <tr>
-                    <td data-label="Name">Zenith Bank</td>
-                    <td data-label="Age">""</td>
-                </tr>
-                <tr>
-                    <td data-label="Name">UBA</td>
-                    <td data-label="Age">""</td>
-                </tr>
-                <tr>
-                    <td data-label="Name">Access Bank</td>
-                    <td data-label="Age">""</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-    </div>
-
-    <div class="somebar">
-        <div class="bottombar">
-            <div class="bar">
-                <div class="privacy link">Terms And Conditions</div>
-                <div class="privacy link">Privacy Policy</div>
-                <div class="privacy link">Faqs</div>
-                <div class="contact link" ui-sref="contact_us">Contact Us</div>
-
-                <div class="facebook link">Facebook</div>
-                <div class="twitter link">Twitter</div>
-                <div class="instagram link">Instagram</div>
-            </div>
-            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
         </div>
     </div>
-</div>
+</article>

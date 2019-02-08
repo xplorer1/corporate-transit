@@ -1,114 +1,62 @@
-<div class="ui middle aligned center aligned grid forms otherpages" ng-controller="BookingHistoryController">
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
-        <a class="img_logo" ui-sref="home">
-            <img src="../../assets/img/logos/ctlogowhite.png" class="">
-        </a>
+<article ng-controller="BookingHistoryController" class="formpage bookinghistorypage">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="routes">Routes</a>
-                </li>
-                <!-- <li class="nav-item active">
-                    <a class="nav-link" ui-sref="booking_history">View Booking History</a>
-                </li>-->
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="payment">Payment</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="ui active dimmer">
+     <!-- <div class="ui active dimmer">
         <div class="ui loader"></div>
+    </div> -->
+
+    <div class="owner">
+        <div class="lndg_fullname" >WELCOME, <span class="" ng-bind="fullname"></span></div>
+        <div class="lndg_ct_number" >CARD NUMBER: <span class="l_val_cn" ng-bind="ct_cardnumber" style="font-weight: bolder;"></span></div>
     </div>
 
-    <section class="container-fluid bk_history routes_bg h-100">
-        <div class="routes-jumb">
-            <h3 class="display-5">Booking history for <span ng-bind="fullname"></span></h3>
+    <div class="sort_select">
+        <div class="sortselect">
+            <select id="sort" name="sort" class="pretty">
+                <option value="" title="Sort by" selected disabled >Filter</option>
+                <option value="last7days" title="Booking history from last 7 days.">Last 7 Days</option>
+                <option value="last30days" title="Booking history from last 30 days.">Last 30 Days</option>
+                <option value="last3months" title="Booking history from 3 months ago.">Last 3 Months</option>
+                <option value="last6months" title="Booking history from 6 months ago.">Last 6 Months</option>
+                <option value="last1year" title="Booking history from the past 1 year.">Last 1 Year</option>
+                <option value="fromdayone" title="Booking history from day one.">From Inception</option>
+            </select>
+        </div>
+    </div>
 
-            <div class="table_cont row">
-                <table class="ui unstackable celled table" data-tooltip="Click on the id of a pending trip to modify it." data-position="top center">
+    <div class="ui middle aligned aligned grid forms">
+
+        <div class="booking_one">
+            <div class="table_cont table_cont_b row bk_hst_row">
+                <span class="hist_title">
+                    Booking History
+                </span>
+                <table class="ui unstackable celled table bk_hst_tbl" data-tooltip="Click on a pending trip to modify it." data-position="top center">
                     <thead>
-                        <tr>
-                            <th>Reference Id</th>
-                            <th>Booking Date</th>
-                            <th>Booking Type</th>
-                            <th>Booking Status</th>
-                            <th>Charge</th>
-                        </tr>
+                    <tr>
+                        <th class="bk_th">Booking Date</th>
+                        <th class="bk_th">Booking Type</th>
+                        <th class="bk_th">Booking Status</th>
+                        <th class="bk_th">Cost</th>
+                    </tr>
                     </thead>
 
                     <tbody>
-                        <tr ng-repeat="entry in booking_history">
-                            <td class="b_id" data-label="id" ng-bind="entry.booking.bookingid" ng-click="modifyTrip(entry.booking.bookingid, entry.booking.bookingstatus)"></td>
-                            <td data-label="b_date" ng-bind="entry.booking.bookedon"></td>
-                            <td data-label="b_type" ng-bind="entry.booking.frequency"></td>
-                            <td data-label="b_status" ng-bind="entry.booking.bookingstatus"></td>
-                            <td data-label="charge" ng-bind="entry.booking.bookingcost">""</td>
-                        </tr>
+                    <tr ng-repeat="entry in booking_history" ng-click="modifyTrip(entry.booking.bookingid, entry.booking.bookingstatus)">
+                        <td data-label="b_date" ng-bind="entry.booking.bookedon.split('Z')[0].split('T')[0]"></td>
+                        <td data-label="b_type" ng-bind="entry.booking.frequency"></td>
+                        <td data-label="b_status" ng-bind="entry.booking.bookingstatus"></td>
+                        <td data-label="charge" ng-bind="entry.booking.bookingcost">""</td>
+                    </tr>
                     </tbody>
                 </table>
+            </div>
 
-            <!--<div class="col-3 h-50">
-
-                <div class="col-3 h-50">
-                    <div class="row route-block header">
-                        Booking Id
-                    </div>
-
-                    <div class="row route-block">
-                        ""
+            <div class="no_bk">
+                <div class="ui success message" style="display: none;">
+                    <div class="header" style="color: #fff !important;">
+                        No booking history was found.
                     </div>
                 </div>
-
-                <div class="col-3 h-50">
-                    <div class="row route-block header">
-                        Booking Date
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-                </div>
-
-                <div class="col-3 h-50">
-                    <div class="row route-block header">
-                        Booking Type
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-                </div>
-
-                <div class="col-3 h-50">
-                    <div class="row route-block header">
-                        Booking Status
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-                </div>
-
-                <div class="col-3 h-50">
-                    <div class="row route-block header">
-                        Charge
-                    </div>
-
-                    <div class="row route-block">
-                        ""
-                    </div>
-                </div>
-            </div>-->
-
             </div>
 
             <div class="ui tiny modal c_trip">
@@ -123,30 +71,34 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div class="ui fluid large teal submit button b_id" ng-click="modifyChoice('no')">No</div>
+                        <div class="choice_loader"></div>
                     </div>
                 </div>
             </div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
         </div>
 
-    </section>
+        <div class="booking_two">
+            <div class="enj">
+                <div class="enj_big">
+                    ENJOY
+                </div>
 
-    <div class="somebar">
-        <div class="bottombar">
-            <div class="bar">
-                <div class="privacy link">Terms And Conditions</div>
-                <div class="privacy link">Privacy Policy</div>
-                <div class="privacy link">Faqs</div>
-                <div class="contact link" ui-sref="contact_us">Contact Us</div>
+                <div class="enj_mid">
+                    1 FREE
+                </div>
 
-                <div class="facebook link">Facebook</div>
-                <div class="twitter link">Twitter</div>
-                <div class="instagram link">Instagram</div>
+                <div class="enj_lst">
+                    RIDE
+                </div>
+
+                <div class="enj_aft">
+                    AFTER EVERY 10 RIDE.
+                </div>
+
+                <div class="enj_val">
+                    VALID TILL MAY.
+                </div>
             </div>
-            <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
         </div>
     </div>
-</div>
+</article>

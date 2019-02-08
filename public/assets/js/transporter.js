@@ -6,7 +6,7 @@ function TransporterFnc($http, $q) {
 
     // create a new object
     let transporter = {};
-    let baseurl = function(){ return rootShared.seed.baseurl; };
+    let baseurl = () => { return rootShared.seed.baseurl; };
 
     transporter.signup = function(userData) {
         return $http.post(baseurl()+"/api/signup", userData).then(
@@ -140,6 +140,36 @@ function TransporterFnc($http, $q) {
 
     transporter.cancelbooking = function(userData) {
         return $http.post(baseurl()+"/api/cancelbooking", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.banktransfer = function(userData) {
+        return $http.post(baseurl()+"/api/banktransfer", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.sortbookinghistory = function(userData) {
+        return $http.post(baseurl()+"/api/sortbookinghistory", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.sortpaymenthistory = function(userData) {
+        return $http.post(baseurl()+"/api/sortpaymenthistory", userData).then(
             function(response){
                 return $q.when(response.data);
             },
