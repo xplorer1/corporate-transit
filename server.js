@@ -7,7 +7,6 @@ let mongoose = require('mongoose'); // for working w/ our database
 let compression = require('compression');
 let config = require('./config');
 let path = require('path');
-let init = require('./app/utils/init');
 
 /*
 let fs = require('fs');
@@ -56,13 +55,11 @@ app.use(function(req, res, next) {
 
 // log all requests to the console
 app.use(morgan('dev'));
-let appstorage = require('./app/utils/appstorage')(app);
 
 // ROUTES FOR OUR API
 // =============================
-let apiRoutes = require('./app/routes/api')(app, express, appstorage);
+let apiRoutes = require('./app/routes/api')(app, express);
 //let general = require('./app/routes/general')(app, express);
-
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', apiRoutes);                 // all of our routes will be prefixed with /api
@@ -72,8 +69,6 @@ app.get('*', function(req, res) {
 });
 
 app.use(express.static(__dirname + '/public'));
-
-init(app, appstorage);
 
 /*const httpServer = http.createServer(app, function(req, res) {
     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });

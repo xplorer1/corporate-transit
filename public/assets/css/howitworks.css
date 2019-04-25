@@ -126,10 +126,6 @@ button, input, optgroup, select, textarea {
 .hw_it_works_body {
     background-color: #fff;
 }
-.nav-item {
-    padding-left: 20px;
-    padding-right: 20px;
-}
 
 .container-fluid:nth-child(1) {
     background-color: #fff;
@@ -433,7 +429,7 @@ button {
     position: fixed;
     overflow: hidden;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: #1da6e0;
 }
 
 /* Navbar links */

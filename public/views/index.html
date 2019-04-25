@@ -4,54 +4,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
+
     <title>Corporate Transit</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <link href="../assets/css/style.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135301192-1"></script>
     <link rel="stylesheet" href="../assets/css/dashboard.css">
 
     <link rel="stylesheet" href="../assets/lib/bootstrap/semantic.css">
+    <link rel="stylesheet" href="../assets/lib/bootstrap/icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.20/angular-ui-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.22/angular-ui-router.min.js"></script>
 
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/controllers.js"></script>
+    <script src="../assets/js/utilities.js"></script>
     <script src="../assets/js/transporter.js"></script>
-    <script src="../assets/js/init.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
-    <script src="../assets/lib/bootstrap/datetimepicker_css.js"></script>
-    <script src="../assets/lib/bootstrap/store.legacy.min.js"></script>
-    <script src="https://js.paystack.co/v1/inline.js"></script>
-    
-    <link rel="stylesheet" href="../assets/lib/bootstrap/prettydropdowns.css">
-    <script type="text/javascript" src="../assets/lib/bootstrap/jquery.prettydropdowns.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <base href="/">
-    <script type="text/javascript">
-        $('.ui.accordion.item')
-            .accordion()
-        ;
-    </script>
 </head>
 
 <body ng-controller="MainPageController">
-<!--<div class="ui active dimmer">
-    <div class="ui loader"></div>
-</div>-->
+    <!-- <div class="ui active dimmer">
+        <div class="ui loader"></div>
+    </div> -->
 
 <ui-view>
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
-        <a class="img_logo" href="index.html">
+        <a class="img_logo" ui-sref="home">
             <img src="../assets/img/logos/ctlogowhite.png" class="i_img">
         </a>
 
@@ -59,43 +46,26 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <ul class="navbar-nav ml-auto" style="width: 42%;
+    justify-content: center;">
+            <li class="nav-item active">
+                <a class="nav-link" ng-click="showSubMenu()">About <i class="inverted angle down icon"></i></a>
+            </li>
+            <!-- <li class="nav-item active">
+                <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+            </li> -->
+            <li class="nav-item active">
+                <a class="nav-link" ui-sref="login">Book a trip</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" ui-sref="login">Payment</a>
+            </li>
+        </ul>
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
 
-                <li class="nav-item active">
-                    <div class="nav-link sort_select">
-                        <div class="sortselect">
-                            <select id="sort" name="sort" class="pretty">
-                                <option value="" title="Sort by" selected disabled >Filter</option>
-                                <option value="last7days" title="Payment history from last 7 days.">Last 7 Days</option>
-                                <option value="last30days" title="Payment history from last 30 days.">Last 30 Days</option>
-                                <option value="last3months" title="Payment history from 3 months ago.">Last 3 Months</option>
-                                <option value="last6months" title="Payment history from 6 months ago.">Last 6 Months</option>
-                                <option value="last1year" title="Payment history from the past 1 year.">Last 1 Year</option>
-                                <option value="fromdayone" title="Payment history from day one.">From Inception</option>
-                            </select>
-                        </div>
-                    </div>
-                </li>
-
-                <li class="nav-item active">
-                    <a class="nav-link" href="#about_sec">About</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#why_sec">Why CT</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="how_it_works">How It Works</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="routes">Routes</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="login">Book a trip</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="login">Payment</a>
-                </li>
+                
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="login">Log In</a>
                 </li>
@@ -138,7 +108,7 @@
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>
-                <div style="background: rgb(32, 102, 155); padding: 15px;">
+                <div style="padding: 15px;">
                     <div>
                         Getting you ahead.
                     </div>
@@ -171,30 +141,6 @@
                 </div>
             </div>
         </div>
-
-    </section>
-
-    <!-- get you ahead -->
-    <section class="container-fluid commute_sec w-100">
-
-        <div class="ahead_content w-100">
-
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
-                <div class="col-sm-12 col-lg-9 h-50 ahead-text-container col-centered">
-                    <div class="h-25 big-txt white">Getting You Ahead</div>
-                    <br>
-                    <div class="h-25 small-txt light-grey">Your Journey To Personal And Financial Success Starts Here!</div>
-                    <br>
-                    <div class="h-25 w-100">
-                        <button class="w-100 h-100 dark-bg-button" ui-sref="signup">Register</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
-                <img src="../assets/img/icons/spaceship.png" class="col-10 col-centered">
-            </div>
-        </div>
     </section>
 
     <!-- ride in comfort -->
@@ -217,11 +163,66 @@
                         <button class="w-100 h-100 dark-no-bg-button" ui-sref="signup">Register</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- How it works section -->
+    <section id="how_it_works" class="container-fluid commute_sec w-100">
+
+        <div class="commute_content w-100">
+
+            <div class="commute_img_cont half_col" style="box-sizing: content-box; width: 40%;">
+                <img src="../assets/img/icons/METR.png" class="col-10 col-centered">
             </div>
 
-        </div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
 
+            <div class="how_title">
+                How To Ride
+            </div>
+
+            <div class="commute_txt_cont half_col" style="margin-top: -180px;">
+                <div class="commute-text-container" style="display: flex; text-align: left;">
+                    <div class="how_tabs_one">
+                        <div class="how_tabs_title">
+                            1. Register
+                        </div>
+
+                        <div class="how_tabs_text">
+                            First create an account.
+                        </div>
+                    </div>
+
+                    <div class="how_tabs" style="margin: 0 65px;">
+                        <div class="how_tabs_title">
+                            2. Book
+                        </div>
+
+                        <div class="how_tabs_text">
+                            First create an account.
+                        </div>
+                        
+                    </div>
+
+                    <div class="how_tabs" style="margin: 0 65px;">
+                        <div class="how_tabs_title">
+                            3. Ride
+                        </div>
+
+                        <div class="how_tabs_text">
+                            First create an account.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="how_btn_div" style="margin-top: -180px;">
+                <button class="how_btn" ui-sref="signup">Get Started</button>
+            </div>
+        </div>
     </section>
 
     <!-- about ct -->
@@ -318,27 +319,86 @@
         </div>
     </section>
 
+    <div id="categories" class="">
+        <a class="closecategories" ng-click="closeCat()">x</a>
+
+        <div class="cat_body">
+
+            <div class="dynamic_cat_body">
+                <div>
+                    <a class="nav-link a_l" href="#about_sec">About</a>
+                </div>
+
+                <div>
+                    <a class="nav-link a_l" href="#why_sec">Why CT</a>
+                </div>
+
+                <div>
+                     <a class="nav-link a_l" href="#how_it_works">How It Works</a>
+                </div>                
+            </div>
+        </div>
+    </div>
+
+    <div id="contactus" class="">
+        <a href="#" class="closecontactus" ng-click="closecontactus()">x</a>
+
+        <div class="user_register modalregister">
+            <!-- <div class="supporttitle">Send Us A Message.</div> -->
+            <div>
+                <form>
+
+                    <input type="text" name="supportemail" id="supportemail" ng-model="supportemail" placeholder="Email" style="padding-left: 15px !important;">
+                    <br/>
+
+                    <input type="text" name="supportsubject" id="supportsubject" ng-model="supportsubject" placeholder="Subject" style="padding-left: 15px !important;">
+                    <br/>
+
+                    <textarea placeholder="Message" rows="7" name="supporttext" id="supporttext" ng-model="supporttext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="ui fluid large teal submit button log_in_btn" ng-click="sendComplaint()" style="width: 80%;">Send Message</div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="applysomebar">
         <div class="row"><div class="column">&nbsp;</div></div>
         <div class="row"><div class="column">&nbsp;</div></div>
 
         <div class="somebar">
             <div class="bottombar">
+                <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
                 <div class="bar">
                     <div class="privacy link">Terms And Conditions</div>
                     <div class="privacy link">Privacy Policy</div>
                     <div class="privacy link">Faqs</div>
-                    <div class="contact link" ui-sref="contact_us">Contact Us</div>
+                    <div class="contact link" ng-click="showContactUs()">Contact Us</div>
 
-                    <div class="facebook link">Facebook</div>
-                    <div class="twitter link">Twitter</div>
-                    <div class="instagram link">Instagram</div>
+                    <div class="facebook link"><i class="inverted facebook f icon"></i>Facebook</div>
+                    <div class="twitter link"><i class="inverted twitter icon"></i>Twitter</div>
+                    <div class="instagram link"><i class="inverted instagram icon"></i>Instagram</div>
                 </div>
-                <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
             </div>
         </div>
     </div>
 </ui-view>
+
+    <!-- this rave script is for test-->
+    <script type="text/javascript" src="https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="../assets/lib/bootstrap/datetimepicker_css.js"></script>
+    <script src="../assets/lib/bootstrap/store.legacy.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -13,10 +13,9 @@ let ComplaintsSchema = new Schema({
             message: '{VALUE} is not a valid email!'
     },
     },
-    name: {type: String},
+    subject: {type: String},
+    createdon: {type: Date, default: Date.now },
     complaint: {type: String}
 });
-
-ComplaintsSchema.index({'$**': 'text'});
 
 module.exports = mongoose.model('Complaints', ComplaintsSchema);

@@ -4,75 +4,56 @@ let User = require("../models/user");
 let Complaint = require("../models/contactus");
 let PaymentJournal = require("../models/payment");
 let BookingJournal = require("../models/bookingjournal");
-let Slot = require("../models/slot");
+let TransactionJournal = require("../models/transactions");
 let CardNumbers = require("../models/cardnumbers");
+let Routes = require("../models/routes");
 let jwt = require('jsonwebtoken');
 let config = require('../../config');
 let supersecret = config.secret;
 let crypto = require("crypto");
 let fs = require('fs');
+let axios = require('axios');
+let moment = require('moment');
+moment().format();
 
 let corporatemail = "customerservice@corporatetransit.com.ng";
 
 module.exports =(app, express, appstorage) => {
     let apiRouter = express.Router();
+    let ravepublic = "FLWPUBK-6195e6a12e7c7472d88a24f73a30b586-X";
+    let ravesecret = "FLWSECK-a41b96804d32e685bf8c88833abd1439-X";
+    let raveenckey = "a41b96804d32cc68726db659";
 
-    //appstorage.set("Buses", ["B1, B2, B3, B4, B5, B6, B7, B8, B9, B10"]);
-    //app.set("Buses", ["B1, B2, B3, B4, B5, B6, B7, B8, B9, B10"]);
+    let saveRoutes = () => {
+        let route = new Routes();
 
-    let saveBooking = (req, res, email, frequency, bookingid) => {
-        Slot.findOneAndUpdate({slotcount: {$lt: 30}, 'users.email': {$ne: email}},
-            {$push: {"users": {email: email}, "validity": {email: email}}, $inc: {slotcount : 1}},
-            {new: true, upsert: true}, function (err, new_slotcount) {
+        route.route = "KYI - VI";
 
-                if(err) console.log("err: ", err);
+        route.pickup_morning.time = "5:45 AM";
+        route.pickup_morning.point = "Conoil Petrol Station";
 
-                if(new_slotcount) {
-                    let bookingjournal = new BookingJournal();
-                    let bookingdate = new Date().toLocaleDateString();
+        route.drop_morning.time = "7:25 AM";
+        route.drop_morning.point ="Akin Adesola / Adeola Odeku";
 
-                    bookingjournal.email = email;
-                    bookingjournal.booking.route = req.body.route;
-                    bookingjournal.booking.frequency = req.body.frequency;
-                    bookingjournal.booking.bookingid = bookingid;
-                    bookingjournal.booking.bookedon = bookingdate;
-                    bookingjournal.booking.from = req.body.from;
-                    bookingjournal.booking.bookingstatus = "Pending";
-                    bookingjournal.booking.to = req.body.to;
-                    bookingjournal.booking.ct_cardnumber = req.body.ct_cardnumber;
+        route.pickup_evening.time = "17:45 PM";
+        route.pickup_evening.point = "Zenith Bank, Adeola Odeku";
 
-                    let booking_info = {status: "Pending", id: bookingid, from: req.body.from, to: req.body.to, route: req.body.route, bookedon: new Date().toLocaleString()};
-                    bookingjournal.save((err, success) => {
-                        if(err) {
-                            console.log("err: ", err);
-                            return res.json({
-                                status: false,
-                                data: "db_error",
-                                reason: "Database error. Advice user to try again later."
-                            });
-                        }
+        route.drop_evening.time = "19:45 PM";
+        route.drop_evening.point = "Oworo/MaryLand/Ikeja";
 
-                        if(success) {
-                            //mailer.sendSuccessfulBookingMail(user.fullname, req.body.email, booking_info);
+        route.save();
+    }
 
-                            return res.json({status: true, data: "booking_successful.", reason: "Booking is successful."})
-                        }
-                    });
-                }
-                else {
-                    console.log("No new slot count.")
-                }
-            });
-    };
+    //saveRoutes();
 
     apiRouter.post("/confirm", (req, res) => {
         let vcode = req.body.token;
+
         if(vcode) {
             User.findOne({vcode: vcode}, {"verified" : 1, "email" : 1, "fullname" : 1}, (err, user) => {
                 if(err) return res.json({status: false, data: "Email verification error." + err.message});
 
                 if(user) {
-                    console.log("username: ", user.username);
 
                     CardNumbers.find({}, {"ct_numbers" : 1}, (err, numbers) => {
                         if(err) console.log("Err: ", err.message);
@@ -80,7 +61,28 @@ module.exports =(app, express, appstorage) => {
                         if(numbers) {
                             numbers = numbers[0];
 
-                            CardNumbers.updateOne({}, {$pull: {ct_numbers: numbers.ct_numbers[0]}}, (err, firstone) => {
+                            User.updateOne({email: user.email}, {
+                                $set: {
+                                    verified: true,
+                                    verifiedon: new Date(),
+                                    ct_cardnumber: "ewew23232",
+                                    ct_cardstatus: "assigned"
+                                }
+                            }, (err, verified) => {
+                                if (err) return res.json({status: false, data: err});
+
+                                if (verified.nModified === 1) {
+
+                                    mailer.sendCardNumberMail(user.fullname, user.email, "ewew23232");
+
+                                    return res.json({status: true, data: "Verified", user: user.email});
+                                }
+                                else {
+                                    return res.json({status: false, data: "There has been a problem."})
+                                }
+                            });
+
+                            /*CardNumbers.updateOne({}, {$pull: {ct_numbers: numbers.ct_numbers[0]}}, (err, firstone) => {
                                 if(err) console.log("Err.message: ", err.message);
 
                                 if(firstone.nModified === 1) {
@@ -98,7 +100,7 @@ module.exports =(app, express, appstorage) => {
 
                                         if (verified.nModified === 1) {
 
-                                            //mailer.sendCardNumberMail(user.fullname, user.email, cardnumber);
+                                            mailer.sendCardNumberMail(user.fullname, user.email, cardnumber);
 
                                             return res.json({status: true, data: "Verified", user: user.email});
                                         }
@@ -107,12 +109,12 @@ module.exports =(app, express, appstorage) => {
                                         }
                                     });
                                 }
-                            })
+                            })*/
                         }
                     });
                 }
                 else if(!user) {
-                    return res.json({status: false, data: "acct_verified"})
+                    return res.json({status: false, data: "token_expired"})
                 }
             })
         }
@@ -225,28 +227,106 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found. Verify your parameters"});
         if(!req.body.password) return res.json({status: false, data: "password_required", reason: "Password not found. Verify your parameters"});
 
-        User.findOne({email: req.body.email, password: req.body.password}, {"verified" : 1, "fullname" : 1, "username" : 1, "balance" : 1, "ct_cardnumber" : 1, "home" : 1, "work" : 1}, (err, user) => {
+        User.findOne({email: req.body.email, password: req.body.password}, {"verified" : 1, "work": 1, "home": 1, "balance" : 1, "email": 1, "phone" : 1, "fullname": 1, "username": 1, "ct_cardnumber": 1}, (err, user) => {
             if(err) return res.json({status: false, data: "Error"+err});
 
             if(user) {
                 if(!user.verified) {
                     let vcode = uuid.v4();
 
-                    user.vcode = vcode;
+                    User.update({email: req.body.email}, {$set: {vcode: vcode, verified: false}}, (err, user) => {
 
-                    mailer.sendEmailVerificationMail(vcode, req.body.email);
+                        if (err) {
+                            console.log("Error saving user.");
 
-                    return res.json({status: false, data: "not_activated", reason: "Email not verified. Then open to the account/email activation page"});
+                            return res.json({status: false, data: err})
+                        }
+                        if(user) {
+                            mailer.sendEmailVerificationMail(user.fullname, "https://ae91e863.ngrok.io/verify/"+vcode, req.body.email);
+
+                            return res.json({status: false, data: "not_activated", reason: "Email not verified. Then open to the account/email activation page"});
+                        }
+                    });
                 }else {
                     let token = jwt.sign({
                         name: user.fullname,
                         email: req.body.email,
                         username: user.username,
                     }, supersecret, {
-                        expiresIn: 7200 // expires in 2 hour.
+                        expiresIn: 86400 // expires in 24 hours.
                     });
 
-                    return res.json({status: true, data: "login_successful", reason: "Login is successful.", token: token, user: user});
+                    let totaldeposited = 0;
+                    let numtaken = 0;
+                    let pendingtrip;
+                    let num_cardpayments = 0;
+                    let num_bankpayments = 0;
+
+                    PaymentJournal.find({email: req.body.email}, (err, paid) => {
+                        if(err) console.log("Err: ", err.message);
+
+                        if(paid) {
+                            
+                            paid.forEach(item => {
+                                totaldeposited += item.amount;
+
+                                if(item.paymenttype === "Online Instant") {
+                                    num_cardpayments += item.amount;
+                                }
+                                else if(item.paymenttype === "Bank Payment") {
+                                    num_bankpayments += item.amount;
+                                }
+                            });
+
+                            console.log("Card Payments: ", num_cardpayments, "Bank Transfer: ", num_bankpayments);
+
+                            BookingJournal.find({email: req.body.email}, (err, bookings) => {
+                                if(err) {
+                                    console.log("Err: ", err.message);
+                                    return res.json({status: false, data: err.message});
+                                }
+
+                                if(bookings) {
+                                    bookings.forEach(booking => {
+                                        if(booking.booking.bookingstatus === "Concluded") {
+                                            numtaken++;
+                                        }
+
+                                        if(booking.booking.bookingstatus === "Pending") {
+                                            pendingtrip = booking.booking.from + " " + booking.booking.bookingtime;
+                                        }
+                                    });
+
+                                    let sortedbooking = bookings.sort(function (obj1, obj2) {
+                                        return obj2.bookedon - obj1.bookedon;
+                                    });
+
+                                    let latestbooking = sortedbooking[0];
+
+                                    let userobj = {};
+                                    userobj["paymentinfo"] = {};
+
+                                    userobj.balance = user.balance;
+                                    userobj.email = user.email;
+                                    userobj.fullname = user.fullname;
+                                    userobj.username = user.username;
+                                    userobj.cardnumber = user.ct_cardnumber;
+                                    userobj.work = user.work;
+                                    userobj.home = user.home;
+                                    userobj.token = token;
+                                    userobj.totaldeposited = totaldeposited;
+                                    userobj.numtrips = bookings.length;
+                                    userobj.numtaken = numtaken;
+                                    userobj.latestbooking = pendingtrip;
+                                    userobj.num_bankpayments = num_bankpayments;
+                                    userobj.num_cardpayments = num_cardpayments;
+
+                                    return res.json({status: true, data: "login_successful", reason: "Login is successful.", user: userobj});
+                                }
+                            })
+                        }
+                    })
+                    
                 }
             }
             if(!user) {
@@ -309,6 +389,24 @@ module.exports =(app, express, appstorage) => {
         }
     });
 
+    apiRouter.post("/getbalance", (req, res) => {
+        if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email Address Required."});
+
+        User.findOne({email: req.body.email}, (err, user) => {
+            if(err) return res.json({status: false, data: "db_error", reason: err});
+
+            if(!user) {
+                return res.json({status: false, data: "user_notfound", reason: "User with email not found."});
+            }
+            if(user) {
+                return res.json({status: true, data: user.balance});
+            }
+            else {
+                return res.json({status: false, data: "unknown_error"});
+            }
+        })
+    });
+
     apiRouter.post("/resetpassword", (req, res) => {
 
         if(!req.body.token) return res.json({status: false, data: "token_required", reason: "Token required."});
@@ -332,64 +430,118 @@ module.exports =(app, express, appstorage) => {
         })
     });
 
+    let bookTrip = (req, res, email, bookingtype, routefrom, routeto, from, to, ct_cardnumber, tripmode, fullname) => {
+        let bookingjournal = new BookingJournal();
+        let bookingdate = new Date().toDateString();
+        let bookingtime = new Date().toLocaleTimeString();
+
+        let id = uuid.v4();
+        let bookingid = ct_cardnumber+"_"+id;
+
+        bookingjournal.email = email;
+        bookingjournal.booking.bookingid = bookingid;
+        bookingjournal.booking.bookingtype = bookingtype;
+        bookingjournal.booking.bookedon = new Date().toDateString();
+        bookingjournal.booking.bookedonformatted = bookingdate;
+        bookingjournal.booking.bookingtime = bookingtime;
+        bookingjournal.booking.bookingstatus = "Pending";
+        bookingjournal.booking.routefrom = routefrom;
+        bookingjournal.booking.routeto = routeto;
+        bookingjournal.booking.from = from;
+        bookingjournal.booking.to = to;
+        bookingjournal.booking.mode = "Card Tap";
+        bookingjournal.booking.ct_cardnumber = ct_cardnumber;
+        bookingjournal.booking.tripmode = tripmode;
+
+        let booking_info = {status: "Pending", id: bookingid, from: from, to: to, bookedon: new Date().toLocaleString()};
+        bookingjournal.save((err, success) => {
+            if(err) {
+                console.log("err: ", err.message);
+                return res.json({
+                    status: false,
+                    data: "db_error",
+                    reason: "Database error. Advice user to try again later."
+                });
+            }
+
+            if(success) {
+                mailer.sendSuccessfulBookingMail(fullname, email, booking_info);
+
+                return res.json({status: true, data: "booking_successful.", reason: "Booking is successful."})
+            }
+        });
+    }
+
     apiRouter.post("/booking",(req, res) => {
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
-        if(!req.body.ct_cardnumber) return res.json({status: false, data: "ct_cardnumber_required", reason: "Corporate Transit card number required."});
-        if(!req.body.route) return res.json({status: false, data: "booking_route_required", reason: "Booking route not supplied."});
-        if(!req.body.bookingtype) return res.json({status: false, data: "booking_type_required", reason: "Booking type not supplied."});
-        if(!req.body.frequency) return res.json({status: false, data: "booking_frequency_required", reason: "Booking frequency not supplied."});
+        if(!token) return res.json({status: false, data: "token_required"});
+        if(!req.body.email) return res.json({status: false, data: "email_required"});
+        if(!req.body.ct_cardnumber) return res.json({status: false, data: "ct_cardnumber_required"});
+        if(!req.body.bookingtype) return res.json({status: false, data: "booking_type_required"});
+        if(!req.body.routefrom) return res.json({status: false, data: "booking_departure_required"});
+        if(!req.body.routeto) return res.json({status: false, data: "booking_destination_required"});
+        if(!req.body.from) return res.json({status: false, data: "booking_from_required"});
 
-        if(req.body.frequency === "1 Day") {
-            if(!req.body.from) return res.json({status: false, data: "booking_from_required", reason: "Booking from not supplied."});
-        }else{
-            if(!req.body.from) return res.json({status: false, data: "booking_from_required", reason: "Booking from not supplied."});
-            if(!req.body.to) return res.json({status: false, data: "booking_to_required", reason: "Booking to not supplied."});
+        if((req.body.from && req.body.to) && (new Date(req.body.from).toString() === new Date(req.body.to).toString())) {
+            return res.json({status: false, data: "same_date"});
         }
 
-        let id = uuid.v4();
+        if(new Date(req.body.from).getTime() < new Date().getTime()) {
+            return res.json({status: false, data: "dateone_in_the_past"});
+        }
+        else if(new Date(req.body.to).getTime() < new Date().getTime()) {
+            return res.json({status: false, data: "datetwo_in_the_past"});
+        }
+        else if(new Date(req.body.to).getTime() < new Date(req.body.from).getTime()) {
+            return res.json({status: false, data: "dateone_greater"});
+        }
 
-        let bookingid = req.body.ct_cardnumber+"_"+id;
+        if(req.body.bookingtype === "One Way Trip") {
+            if(!req.body.tripmode) return res.json({status: false, data: "no_mode"});
+        }
 
         jwt.verify(token, supersecret, function (err, decoded) {
 
             if (err) {
-                console.log("err: ", err);
-                return res.json({status: false, data: "token_expired."})
+                console.log("err: ", err.message);
+                return res.json({status: false, data: "token_expired"})
             }
             else if(decoded) {
-                User.findOne({email: decoded.email}, function(err, user) {
+                User.findOne({email: decoded.email}, (err, user) => {
                     if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
 
                     if(!user) return res.json({status: false, data: "user_not_found", reason: "User with email address not registered."});
 
                     if(user) {
+                        BookingJournal.findOne({email: req.body.email, "booking.bookingstatus" : "Pending"}, (err, trip) => {
+                            if(err) return res.json({status: false, data: err.message});
 
-                        Slot.findOne({"users.email": decoded.email}, (err, email) => {
-                            if(err) console.log("err: ", err);
-
-                            if(email) {
-                                return res.json({status: false, data: "slot_email"})
-                            }
-                            else if(!email) {
-
-                                if(req.body.frequency === "1 Day") {
-                                    saveBooking(req, res, req.body.email, 1, bookingid);
-                                }else if(req.body.frequency === "5 Days") {
-                                    saveBooking(req, res, req.body.email, 5, bookingid);
-                                }else if(req.body.frequency === "10 Days") {
-                                    saveBooking(req, res, req.body.email, 10, bookingid);
-                                }else if(req.body.frequency === "1 Month") {
-                                    saveBooking(req, res, req.body.email, 30, bookingid);
-                                }else {
-                                    console.log("Unknown input.");
+                            if(trip) {
+                                console.log("Trip: ", trip);
+                                if(moment(req.body.from).isBetween(trip.booking.from, trip.booking.to)) {
+                                    return res.json({status: false, data: "dateone_one_less_than_pending", pendingbooking: trip});
+                                }
+                                if(moment(req.body.to).isBetween(trip.booking.from, trip.booking.to)) {
+                                    return res.json({status: false, data: "dateone_one_less_than_pending", pendingbooking: trip});
+                                }
+                                else if(moment(req.body.from).isSame(trip.booking.from)) {
+                                    return res.json({status: false, data: "dateone_one_less_than_pending", pendingbooking: trip});
+                                }
+                                else if(moment(req.body.to).isSame(trip.booking.to)) {
+                                    return res.json({status: false, data: "dateone_one_less_than_pending", pendingbooking: trip});
+                                }
+                                else {
+                                    return bookTrip(req, res, req.body.email, req.body.bookingtype, req.body.routefrom, req.body.routeto, req.body.from, req.body.to, req.body.ct_cardnumber, req.body.tripmode, user.fullname);
                                 }
                             }
-                        });
-                    }else {
-                        console.log("no user");
+                            else {
+                                return bookTrip(req, res, req.body.email, req.body.bookingtype, req.body.routefrom, req.body.routeto, req.body.from, req.body.to, req.body.ct_cardnumber, req.body.tripmode, user.fullname);
+                            }
+                        })
+                    }
+                    else {
                         return res.json({status: false, data: "not_found"})
-                        //return res.sendFile("notfound.html");
                     }
                 });
             }else {
@@ -416,6 +568,7 @@ module.exports =(app, express, appstorage) => {
                         BookingJournal.findOne({email: decoded.email}, (err, user) => {
                             if(err) return res.json({status: false, data: "database error: " + err});
                             if(!user) return res.json({status: false, data: "User has no existing bookings."});
+
                             if(user) {
 
                                 BookingJournal.findOneAndUpdate({"booking.bookingid": req.body.bookingid}, {
@@ -426,18 +579,8 @@ module.exports =(app, express, appstorage) => {
                                     if(!booking) return res.json({status: false, data: "Problem cancelling booking. Client email not found."});
 
                                     if(booking) {
-                                        Slot.findOneAndUpdate({"users.email": decoded.email}, {
-                                            $inc: {slotcount: -1},
-                                            $pull: {users: {email: decoded.email}}}, {new: true}, (err, status) => {
-                                            if (err) return res.json({status: false, data: "updating slotcount err: " + err});
-
-                                            if(status) {
-                                                mailer.sendBookingCancelledMail(decoded.fullname, decoded.email);
-                                                return res.json({status: true, data: "Booking Cancellation Successful."});
-                                            }else {
-                                                return res.json({status: false, data: "Unable to update slot count."})
-                                            }
-                                        });
+                                        mailer.sendBookingCancelledMail(decoded.fullname, decoded.email);
+                                        return res.json({status: true, data: "Booking Cancellation Successful."});
                                     }
                                     else {
                                         return res.json({status: false, data: "Unable to cancel booking."})
@@ -458,222 +601,347 @@ module.exports =(app, express, appstorage) => {
     });
 
     apiRouter.post("/paymenthistory", (req, res) => {
+        let token = req.body.token || req.params.token || req.headers['x-access-token'];
+
+        if(!token) return res.json({status: false, data: "token_required"});
         if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
 
-        User.findOne({email: req.body.email}, {"fullname" : 1, "balance" : 1}, (err, client) => {
-            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-            if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
-
-            if(client) {
-                PaymentJournal.find({email: req.body.email}, {"paymenttype" : 1, "amount" : 1, "created" : 1}, (err, history) => {
+        jwt.verify(token, supersecret, function (err, decoded) {
+            if (err) {
+                return res.json({status: false, data: "token_expired"});
+            }
+            else if(decoded && decoded.email) {
+                User.findOne({email: req.body.email}, {"fullname" : 1, "balance" : 1}, (err, client) => {
                     if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-                    if(history) {
-                        return res.json({status: true, data: history, user_details: client})
+                    if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+
+                    if(client) {
+                        PaymentJournal.find({email: req.body.email}, {"paymenttype" : 1, "amount" : 1, "created" : 1}, (err, history) => {
+                            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                            if(history) {
+                                return res.json({status: true, data: history, user_details: client})
+                            }
+                        });
                     }
                 });
             }
-        });
+        })
+    });
+
+    apiRouter.post("/transactionhistory", (req, res) => {
+        let token = req.body.token || req.params.token || req.headers['x-access-token'];
+
+        if(!req.body.email) res.json({status: false, data: "email_required"});
+        if(!token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(token, supersecret, function (err, decoded) {
+            if (err) {
+                return res.json({status: false, data: "token_expired"});
+            }
+            else if(decoded && decoded.email) {
+                User.findOne({email: req.body.email}, {"fullname" : 1, "balance" : 1}, (err, client) => {
+                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+
+                    if(client) {
+                        TransactionJournal.find({email: req.body.email}, {"transaction" : 1, "amount" : 1, "success" : 1, "created" : 1}, (err, history) => {
+                            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                            if(history) {
+                                return res.json({status: true, data: history, user_details: client})
+                            }
+                        });
+                    }
+                });
+            }
+        })
     });
 
     apiRouter.post("/bookinghistory", (req, res) => {
+        let token = req.body.token || req.params.token || req.headers['x-access-token'];
         if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
+        if(!token) return res.json({status: false, data: "token_required"});
 
-        User.findOne({email: req.body.email}, {"fullname" : 1}, (err, client) => {
-            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-            if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
-
-            if(client) {
-                BookingJournal.find({email: req.body.email}, {"booking" : 1, "email" : 1}, (err, history) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-                    if(history) {
-                        return res.json({status: true, data: history, fullname: client.fullname})
-                    }
-                });
+        jwt.verify(token, supersecret, function (err, decoded) {
+            if (err) {
+                return res.json({status: false, data: "token_expired"});
             }
-        });
-    });
+            else if(decoded && decoded.email) {
+                User.findOne({email: req.body.email}, {"fullname" : 1}, (err, client) => {
+                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(!client) {
+                        console.log("Client: ", client)
+                        return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                    }
 
-    apiRouter.post("/sortbookinghistory", (req, res) => {
-        if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
-        if(!req.body.filter) res.json({status: false, data: "filter_required", reason: "Filter params not found."});
-
-        var sorthistory = (numdays, fullname) => {
-            let date = new Date();
-
-            date.setDate(date.getDate() - numdays);
-            let datethen = new Date(date);
-
-            BookingJournal.find({email: req.body.email, "booking.bookedon" : {$gt: datethen}}, {"booking" : 1, "email" : 1}, (err, history) => {
-                if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-                if(history) {
-                    return res.json({status: true, data: history, fullname: fullname})
-                }
-            });
-        };
-
-        User.findOne({email: req.body.email}, {"fullname" : 1}, (err, client) => {
-            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-            if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
-
-            if(client) {
-                switch (req.body.filter) {
-                    case "last7days":
-                        sorthistory(7, client.fullname);
-                        break;
-                    case "last30days":
-                        sorthistory(30, client.fullname);
-                        break;
-                    case "last3months":
-                        sorthistory(60, client.fullname);
-                        break;
-                    case "last6months":
-                        sorthistory(180, client.fullname);
-                        break;
-                    case "last1year":
-                        sorthistory(365, client.fullname);
-                        break;
-                    default:
+                    if(client) {
                         BookingJournal.find({email: req.body.email}, {"booking" : 1, "email" : 1}, (err, history) => {
                             if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
                             if(history) {
                                 return res.json({status: true, data: history, fullname: client.fullname})
                             }
                         });
-                        break;
-                }
+                    }
+                });
             }
-        });
+        })
     });
 
-    apiRouter.post("/sortpaymenthistory", (req, res) => {
-        if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
-        if(!req.body.filter) res.json({status: false, data: "filter_required", reason: "Filter params not found."});
+    apiRouter.post("/searchhistory", (req, res) => {
+        let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
-        var sorthistory = (numdays, fullname) => {
+        if(!req.body.email) return res.json({status: false, data: "email_required"});
+        if(!req.body.type) return res.json({status: false, data: "type_required"});
+        if(!req.body.startdate) return res.json({status: false, data: "Date one required"});
+        if(!req.body.enddate) return res.json({status: false, data: "Date two required"});
+        if(!token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(token, supersecret, function (err, decoded) {
+            if (err) {
+                return res.json({status: false, data: "token_expired"});
+            }
+            else if(decoded && decoded.email) {
+                User.findOne({email: req.body.email}, (err, client) => {
+                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    
+                    if(!client) {
+                        return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                    }
+
+                    if(client) {
+                        switch (req.body.type) {
+                            case "payment":
+                                sortPaymentHistory(req.body.startdate, req.body.enddate, req.body.email);
+                                break;
+                            case "transaction":
+                                sortTransactionHistory(req.body.startdate, req.body.enddate, req.body.email);
+                                break;
+                            case "booking":
+                                sortBookingHistory(req.body.startdate, req.body.enddate, req.body.email);
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+
+        let sortPaymentHistory = (dateone, datetwo, email) => {
+
+            dateone = new Date(dateone);
+            datetwo = new Date(datetwo);
+
+            PaymentJournal.find({email: req.body.email, created : {$gt: dateone, $lt: datetwo}}, {"paymenttype" : 1, "amount" : 1, "created" : 1}, (err, history) => {
+                if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                if(history) {
+                    return res.json({status: true, data: history})
+                }
+            });
+        }
+
+        let sortBookingHistory = (dateone, datetwo, email) => {
+            dateone = new Date(dateone);
+            datetwo = new Date(datetwo);
+
+            BookingJournal.find({email: req.body.email, "booking.bookedon" : {$gt: dateone, $lt: datetwo}}, {"booking" : 1, "email" : 1}, (err, history) => {
+                if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                if(history) {
+                    return res.json({status: true, data: history})
+                }
+            });
+        }
+
+        let sortTransactionHistory = (dateone, datetwo, email) => {
+            dateone = new Date(dateone);
+            datetwo = new Date(datetwo);
+
+            TransactionJournal.find({email: req.body.email, created : {$gt: dateone, $lt: datetwo}}, {"transaction" : 1, "amount" : 1, "success" : 1, "created" : 1}, (err, history) => {
+                if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                if(history) {
+                    return res.json({status: true, data: history})
+                }
+            });
+        }
+    });
+
+    apiRouter.post("/gethistory", (req, res) => {
+        let token = req.body.token || req.params.token || req.headers['x-access-token'];
+
+        if(!req.body.email) return res.json({status: false, data: "email_required"});
+        if(!req.body.numofdays) return res.json({status: false, data: "numofdays_required"});
+        if(!req.body.type) return res.json({status: false, data: "type_required"});
+        if(!token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(token, supersecret, function (err, decoded) {
+            if (err) {
+                return res.json({status: false, data: "token_expired"});
+            }
+            else if(decoded && decoded.email) {
+                User.findOne({email: req.body.email}, (err, client) => {
+                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(!client) {
+                        return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                    }
+
+                    if(client) {
+                        switch (req.body.type) {
+                            case "payment":
+                                sortPaymentHistory(req.body.numofdays, req.body.email);
+                                break;
+                            case "transaction":
+                                sortTransactionHistory(req.body.numofdays, req.body.email);
+                                break;
+                            case "booking":
+                                sortBookingHistory(req.body.numofdays, req.body.email);
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+
+        let sortPaymentHistory = (numofdays, email) => {
             let date = new Date();
 
-            date.setDate(date.getDate() - numdays);
+            date.setDate(date.getDate() - numofdays);
             let datethen = new Date(date);
 
             PaymentJournal.find({email: req.body.email, created : {$gt: datethen}}, {"paymenttype" : 1, "amount" : 1, "created" : 1}, (err, history) => {
                 if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
                 if(history) {
-                    return res.json({status: true, data: history, fullname: fullname})
+                    return res.json({status: true, data: history})
                 }
             });
-        };
+        }
 
-        User.findOne({email: req.body.email}, {"fullname" : 1}, (err, client) => {
-            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-            if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+        let sortBookingHistory = (numofdays, email) => {
+            let date = new Date();
 
-            if(client) {
-                switch (req.body.filter) {
-                    case "last7days":
-                        sorthistory(7, client.fullname);
-                        break;
-                    case "last30days":
-                        sorthistory(30, client.fullname);
-                        break;
-                    case "last3months":
-                        sorthistory(60, client.fullname);
-                        break;
-                    case "last6months":
-                        sorthistory(180, client.fullname);
-                        break;
-                    case "last1year":
-                        sorthistory(365, client.fullname);
-                        break;
-                    default:
-                        BookingJournal.find({email: req.body.email}, {"booking" : 1, "email" : 1}, (err, history) => {
-                            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-                            if(history) {
-                                return res.json({status: true, data: history, fullname: client.fullname})
-                            }
-                        });
-                        break;
+            date.setDate(date.getDate() - numofdays);
+            let datethen = new Date(date);
+
+            BookingJournal.find({email: req.body.email, "booking.bookedon" : {$gt: datethen}}, {"booking" : 1, "email" : 1}, (err, history) => {
+                if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                if(history) {
+                    return res.json({status: true, data: history})
                 }
+            });
+        }
+
+        let sortTransactionHistory = (numofdays, email) => {
+            let date = new Date();
+
+            date.setDate(date.getDate() - numofdays);
+            let datethen = new Date(date);
+
+            TransactionJournal.find({email: req.body.email, created : {$gt: datethen}}, {"transaction" : 1, "amount" : 1, "success" : 1, "created" : 1}, (err, history) => {
+                if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                if(history) {
+                    return res.json({status: true, data: history})
+                }
+            });
+        }
+    })
+
+    apiRouter.post('/fund_ct', (req, res) => {
+        let token = req.body.token || req.params.token || req.headers['x-access-token'];
+
+        if (!req.body.email) return res.json({status: false, message: 'Email not found.'});
+        if (!req.body.amount) return res.json({status: false, message: 'Payment amount is required.'});
+        if (!req.body.paymenttype) return res.json({status: false, message: 'Payment Type is required.'});
+        if(!token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(token, supersecret, function (err, decoded) {
+            if (err) {
+                return res.json({status: false, data: "token_expired"});
+            }
+            else if(decoded && decoded.email) {
+                User.findOne({email: req.body.email}, (err, ctime) => {
+                    if (err) return res.send(err);
+
+                    if (ctime) {
+                        let payment = new PaymentJournal();
+
+                        let id = uuid.v4();
+
+                        payment.paymentid = id;
+                        payment.email = req.body.email;
+                        payment.paymenttype = req.body.paymenttype;
+                        payment.amount = req.body.amount;
+                        payment.createdon = new Date().toDateString();
+
+                        payment.save(function (err) {
+                            if (err) return res.send(err);
+
+                            User.update({email: req.body.email}, {$push: {"payments": id}}, function (err, payment) {
+                                if (err) return res.send(err);
+
+                                if (payment.nModified > 0) {
+                                    
+                                    return res.json({status: true, ref: id, email: ctime.email, phone: ctime.phone});
+                                    
+                                } else {
+                                    return res.json({status: false, message: "There was a problem initiating payment."});
+                                }
+                            });
+                        });
+                        
+                    } else {
+                        return res.json({status: false, message: "User not found."});
+                    }
+                });
             }
         });
     });
 
-    apiRouter.post('/fund_ct', (req, res) => {
-        if (!req.body.email) return res.json({status: false, message: 'Email not found.'});
-        if (!req.body.amount) return res.json({status: false, message: 'Payment amount is required. Pick a bundle.'});
-
-        let payment = new PaymentJournal();
-
-        let id = uuid.v4();
-
-        payment.paymentid = id;
-        payment.email = req.body.email;
-        payment.paymenttype = "Online Instant";
-        payment.amount = req.body.amount;
-        payment.createdon = new Date().toDateString();
-
-        payment.save(function (err) {
-            if (err) return res.send(err);
-
-            User.update({email: req.body.email}, {$push: {"payments": id}},
-                {safe: true, upsert: true, new: true}, function (err, payment) {
-                    if (err) return res.send(err);
-
-                    if (payment.nModified > 0) {
-                        User.findOne({email: req.body.email}, function (err, ctime) {
-                            if (err) return res.send(err);
-
-                            if (ctime) {
-                                return res.json({status: true, ref: id, email: ctime.email});
-                            } else {
-                                return res.json({status: false, message: "There was a problem initiating your payment."});
-                            }
-                        });
-                    } else {
-                        return res.json({status: false, message: "There was a problem initiating payment."});
-                    }
-                });
-        });
-    });
-
     apiRouter.post("/contactus", (req, res) => {
-        if(!req.body.name) return res.json({status: false, data: "name_required", reason: "Name not supplied."});
+        if(!req.body.subject) return res.json({status: false, data: "subject_required", reason: "Name not supplied."});
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email not supplied."});
         if(!req.body.complaint) return res.json({status: false, data: "complaint_required", reason: "Complaint body not supplied."});
 
         let complaint = new Complaint();
 
         complaint.email = req.body.email;
-        complaint.name = req.body.name;
+        complaint.subject = req.body.subject;
         complaint.complaint = req.body.complaint;
+        complaint.createdon = new Date().toDateString();
 
-        complaint.save(err => {
-            console.log("Error saving complaint. ", err);
+        complaint.save((err, success) => {
 
-            mailer.sendComplaintRecieptMail(req.body.name, req.body.email);
+            if(err) {
+                console.log("Error saving complaint. ", err.message);
+                return res.json({status: false, data: err.message});
+            }
+            else if(success) {
+                mailer.sendComplaintRecieptMail(req.body.name, req.body.email);
 
-            mailer.sendComplaintMail(req.body.name, req.body.email, req.body.complaint, corporatemail);
+                //mailer.sendComplaintMail(req.body.name, req.body.email, req.body.complaint, corporatemail);
 
-            return res.json({status: true, data: "complaint_received.", reason: "Complaint has been received. Advice user support will get in touch shortly."})
+                return res.json({status: true, data: "complaint_received.", reason: "Complaint has been received."});
+            }
         });
     });
 
     apiRouter.post("/payevents", (req, res) => {
-        if(!req.body.data.customer.email) return res.json({status: false, data: "Email not found."});
-        if(!req.body.data.reference) return res.json({status: false, data: "Reference missing."});
+        console.log();
+        console.log("Req.body: ", req.body);
+        console.log();
+        
+        /*if(!req.body.customer.email) return res.json({status: false, data: "Email not found."});
+        if(!req.body.txRef) return res.json({status: false, data: "Reference missing."});*/
 
-        let secret = "sk_test_625a6940222e312c4529a248db6aeefaeea7d2f1";
+        let secret = "173a9d15-c11b-4c4d-a1d4-48b488665fbb5c5716d9ece0a9a2ecc7a0ca";
+
+        //let hash = req.headers["verif-hash"];
         let hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
 
-        if (hash === req.headers['x-paystack-signature']) {
+        if (hash === req.headers["verif-hash"]) {
 
-            PaymentJournal.find({ paymentid: req.body.data.reference}, function(err, payments) {
-                console.log("Payments: ", payments);
+            PaymentJournal.find({ paymentid: req.body.txRef}, function(err, payments) {
 
                 if (err) console.log(err);
 
                 if(payments) {
-                    if(req.body.data.status === "success"){
-                        User.updateOne({email: req.body.data.customer.email}, {$inc: {balance: req.body.data.amount}}, (err, updated) => {
+                    if(req.body.status === "successful") {
+                        User.updateOne({email: req.body.customer.email}, {$inc: {balance: req.body.amount}}, (err, updated) => {
                             if(err) console.log("error updating balance: ", err);
                             if(updated) {
                                 console.log("Updated!");
@@ -685,6 +953,11 @@ module.exports =(app, express, appstorage) => {
                 }
             });
         }
+        else {
+            console.log("Hashe and secret don't match.", secret, hash);
+        }
+
+        res.sendStatus(200);
     });
 
     apiRouter.post("/cardpayment", (req, res) => {
@@ -703,26 +976,27 @@ module.exports =(app, express, appstorage) => {
                     if(err) {
                         console.log("error deducting from user's balance: ", err);
                     }
-                    if(update){
-                        Slot.findOneAndUpdate({"users.email": req.body.email}, {
-                            $inc: {slotcount: -1},
-                            $pull: {users: {email: req.body.email}}}, {new: true}, (err, status) => {
-                            if (err) return res.json({status: false, data: "updating slotcount err: " + err});
+                    if(update.nModified > 0){
+                        BookingJournal.findOneAndUpdate({"booking.bookingstatus": "Pending"}, 
+                            {$set: {"booking.bookingstatus": "Concluded"}
+                        }, {new: true},  (err, concluded) => {
+                            if(err) return res.json({status: false, data: "finding booking error: " + err});
 
-                            if(status) {
+                            if(concluded) {
                                 mailer.sendBookingCancelledMail(user.fullname, req.body.email);
                                 return res.json({status: true, data: "Updated"});
-                            }else {
-                                return res.json({status: false, data: "Unable to update slot count."})
                             }
-                        });
+                            else {
+                                return res.json({status: false, data: "Unable to cancel booking."})
+                            }
+                        })
                     }
                 })
             }
         })
     });
 
-    apiRouter.post("/banktransfer", (req, res) => {
+    /*apiRouter.post("/banktransfer", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found."});
         if(!req.body.amount) return res.json({status: false, data: "amount_required", reason: "Amount user paid is required."});
 
@@ -757,7 +1031,7 @@ module.exports =(app, express, appstorage) => {
                 });
             }
         })
-    });
+    });*/
 
     return apiRouter;
 };

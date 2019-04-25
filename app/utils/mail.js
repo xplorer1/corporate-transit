@@ -22,8 +22,6 @@ module.exports = {
             html: 'Hello ' + firstname +'!<br><br>Thank you for choosing Corporate Transit. We are pleased to have you on board. <br><br>To activate your account and verify your email, click or copy the link below to your browser.<br><br><strong>' + confirmlink + '</strong><br><br> All future notifications will be sent to this email address.<br><br>We look forward to enhancing your daily commute experience.<br><br>Best regards!<br><br> For inquires and information; contact:<br>  E: information@corporatetransit.com.ng<br> T: 080011122222 <br>W: www.corporatetransit.com.ng' // html body
         };
 
-        console.log("mail options: ", mailOptions);
-
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
                 return console.log('Mail Error: ', error, ' : ', new Date());
@@ -209,7 +207,7 @@ module.exports = {
             to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Your card number! ✔', // Subject line
             text: 'Hello ' + fullname + 'Hello. This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>Hello. This is your card number. ' + cardnumber + ' Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
+            html: 'Hello ' + fullname + '!<br><br>Hello. This is your card number. <br><br>' + cardnumber + '<br><br> Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
         };
 
         // send mail with defined transport object

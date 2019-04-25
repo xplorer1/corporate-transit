@@ -1,49 +1,51 @@
 <div class="ui visible sidebar inverted vertical menu staticsidebar">
+    <div class="row"><div class="column">&nbsp;</div></div>
+    <div class="row"><div class="column">&nbsp;</div></div>
+    <div class="row"><div class="column">&nbsp;</div></div>
+    <div class="row"><div class="column">&nbsp;</div></div>
+
+    <!-- <div class="generalloader"></div> -->
+
     <div class="ui accordion">
-        <div class="item a_cc_title">
-            Dashboard
+
+        <div class="item a_cc_title" ng-bind="user_fullname">
+            
         </div>
 
-        <div class="item title sid_ba">
-            <i class="dropdown icon"></i>
+        <div class="item a_cc_title" ng-bind="user_username">
+            
+        </div>
+
+        <div class="item a_cc_title amt_plus">
+            NGN <div class="amt" ng-bind="user_balance">
+                 
+            </div>
+
+            <div class="plus_amt" ui-sref="payment">
+                +
+            </div>
+        </div>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="item a_cc_title" ui-sref="booking_history">
             Bookings
         </div>
-        <div class="content">
-            <a class="nav-link a_link" ng-click="closeMenu('booking')" style="padding: 15px;">Booking A Trip</a>
-            <a class="nav-link a_link a_l" ng-click="closeMenu('booking_history')" style="padding: 15px;">Booking History</a>
+
+        <div class="item a_cc_title" ui-sref="transaction_history">
+            Transactions
         </div>
 
-        <div class="item title sid_ba">
-            <i class="dropdown icon"></i>
+        <div class="item a_cc_title" ui-sref="payment_history">
             Payments
         </div>
-        <div class="content">
-            <a class="nav-link a_link" ng-click="closeMenu('payment')" style="padding: 15px;">Payment Options</a>
-            <a class="nav-link a_link" ng-click="closeMenu('payment_history')" style="padding: 15px;">Payment History</a>
-            <a class="nav-link a_link a_l" ng-click="closeMenu('pricing')" style="padding: 15px;">Pricing</a>
-        </div>
 
-        <div class="item title sid_ba">
-            <i class="dropdown icon"></i>
-            Settings
+        <div class="sidebar_logo">
+            <a class="" ui-sref="home">
+                <img src="../../assets/img/logos/ctlogowhite.png" class=""  style="height: 25px;">
+            </a>
         </div>
-        <div class="content">
-            <a class="nav-link a_link" style="padding: 15px;">Edit Profile</a>
-            <a class="nav-link a_link a_l" ng-click="closeMenu('change_password')" style="padding: 15px;">Change Password</a>
-        </div>
-
-        <div class="item title sid_ba">
-            <i class="dropdown icon"></i>
-            Contact Us
-        </div>
-        <div class="content">
-            <a class="nav-link a_link" style="padding: 15px;">Report Lost Card</a>
-            <a class="nav-link a_link a_l" ng-click="closeMenu('contact_us')" style="padding: 15px;">Feedback</a>
-        </div>
-
-        <a class="item sid_ba" ng-click="logOut()" style="padding: 15px;">
-            Log Out
-        </a>
     </div>
 </div>
 
@@ -52,22 +54,16 @@
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <div class="">
             <a class="" ui-sref="home">
-                <img src="../../assets/img/logos/ctlogowhite.png" style="height: 32px;">
+                <img src="../../assets/img/logos/ct_logo.png" style="height: 32px;">
             </a>
         </div>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarResponsive">
-
             <ul class="navbar-nav ml-auto nav_o">
-                <!-- <li>
-                    <button class="massive ui button" ng-click="openMenu()">
-                        Menu
-                    </button>
-                </li> -->
-
                 <li>
                     <button class="massive ui button" ng-click="logOut()">
                         Log Out
@@ -78,205 +74,590 @@
     </nav>
 
     <ui-view>
-        <div ng-controller="LandingController">
+        <div ng-controller="LandingController" class="landingpage">
             <div class="ui active dimmer">
                 <div class="ui loader"></div>
             </div>
 
-            <section class="formcolumn_l">
-                <div class="part_one">
-
-                    <div class="half_one">
-                        <div class="lndg_fullname" style="padding-top: 5px;">WELCOME, <span class="" ng-bind="fullname"></span></div>
-                        <div class="lndg_ct_number" >CARD NUMBER: <span class="l_val_cn" ng-bind="ct_cardnumber" style="font-weight: bolder;"></span></div>
-
-                        <div class="blances">
-                            <div class="t_bal">
-                                <span class="" >N30000</span>
-                                <div>
-                                    Total Deposit/Month
-                                </div>
-                            </div>
-
-                            <div class="c_bal">
-                                <span class="" >N30000</span>
-
-                                <div>
-                                    Available Balance
-                                </div>
-                            </div>
-                        </div>
+            <div class="l_layers">
+                <div class="layerone">
+                    <div class="layerone_btn pymt_btn">
+                        <a class="">Welcome, <span ng-bind="user_fullname.split(' ')[0]"></span></a>.
                     </div>
 
-                    <div class="half_two">
-                        <div>
-                            <div style="font-size: 25pt;">
-                                Get
-                            </div>
+                    <div class="layerone_btn cnts_btn">
+                        <a class="new_a" ng-click="logOut()">Log Out</a>
+                        <a class="" ng-click="showContactUs()">Contact Us</a>
+                    </div>
+                </div>
 
-                            <div class="bg_brk">
-                                <div class="bg%">
-                                    50%
+                <div class="cardnumber_l">
+                    Card No: <span ng-bind="user_cardnumber"></span>
+                </div>
+                <div class="cardnumber_l">
+                    Card Bal: N<span ng-bind="user_balance"></span>
+                </div>
+            </div>
+
+            <div class="demarcator">
+            </div>
+
+            <div class="l_parttwo">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <div class="l_parttwo_body">
+                    <div class="l_parttwo_one">
+                        <div class="l_parttwo_title"> 
+                            Your Route:  <span ng-bind="user_home.split('-')[1]" style="padding: 0 5px;"></span>
+                            <div class="bk_arrow_two l_arr_l">
+                                <span>&#x2190;</span>
+                            </div>
+                            <div class="bk_arrow_two l_arr_r">
+                                <span>&#x2192;</span>
+                            </div>
+                            <span ng-bind="user_work.split('-')[1].trim()"></span>
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="b_rt"> 
+                            5:45 am: Conoil Petrol Station
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="b_rt"> 
+                            7:25 am: Conoil Petrol Station
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="b_rt"> 
+                            6:30 pm: Akin Adesola / Adeola Odeku
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="b_rt"> 
+                            8:15 pm: Conoil Petrol Station
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                    </div>
+
+                    <div class="demarcator_l_parttwo">
+                    </div>
+
+                    <div class="l_parttwo_two">
+
+                        <div class="booked_top">
+                            <div class="booked">
+                                <div class="trips_booked">
+                                    Trips Booked
                                 </div>
 
-                                <div class="brk_cont">
-                                    <div style="font-size: 25pt;">
-                                        off your
-                                    </div>
-                                    <div style="font-size: 25pt;">
-                                        first ride.
-                                    </div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
 
-                                    <div class="bg_icons">
-                                        <div class="bg_icon">
-                                            <img src="../../assets/img/icons/safe.png"/>
-                                        </div>
+                                <div class="num_booked">
+                                    <span ng-bind="user_trips_booked"></span>
+                                </div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                            </div>
 
-                                        <div class="bg_icon">
-                                            <img src="../../assets/img/icons/branches.png"/>
-                                        </div>
+                            <div class="taken tps_taken">
+                                <div class="trips_taken">
+                                    Trips Taken
+                                </div>
 
-                                        <div class="bg_icon">
-                                            <img src="../../assets/img/icons/smiley_white.png"/>
-                                        </div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
 
-                                        <div class="bg_icon">
-                                            <img src="../../assets/img/icons/book.png"/>
-                                        </div>
-                                    </div>
+                                <div class="num_taken">
+                                    <span ng-bind="user_trips_taken"></span>
+                                </div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                            </div>
+                        </div>
+                        <div class="demarcator_booked">
+                        </div>
+
+                        <div class="booked_below">
+                            <div class="deposit">
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="trips_booked">
+                                    Total Deposit
+                                </div>
+
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+
+                                <div class="num_booked">
+                                    <span ng-bind="user_total_dep"></span>
+                                </div>
+                            </div>
+
+                            <div class="taken">
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="trips_taken">
+                                    Next Trip
+                                </div>
+
+                                <div class="row"><div class="column">&nbsp;</div></div>
+                                <div class="row"><div class="column">&nbsp;</div></div>
+
+                                <div class="num_taken">
+                                    <span ng-bind="user_next_trip_time"></span>
+                                </div>
+
+                                <div class="num_taken none_pending" style="display: none;">
+                                    <span >No Pending Trip</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="part_two">
-                    <div class="half_one_2">
-                        <div class="row"><div class="column">&nbsp;</div></div>
-                        <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="l_btns">
+                <div class="bk_trip_btn">
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showBookTrip()" ng-disabled="booktripclicked">Book A Trip</button>
+                </div>
 
-                        <div class="half_one_2_header">
-                            Your Route
+                <div class="fd_card_btn">
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="test()" ng-disabled="fundcardclicked">Fund Your Card</button>
+                </div>
+            </div>
+
+            <div class="trip_sch_info">
+                <div class="trip_sch">
+                    <div class="trip-sch_title">
+                        Daily Time Schedule
+                    </div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="trip_days">
+                        <div class="day">
+                            Mon
                         </div>
 
-                        <div class="map_route">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d63419.64172825001!2d3.33487297462882!3d6.5560308509457395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e6!4m5!1s0x103b9228fa2a3999%3A0xd7a8324bddbba1f0!2sIkeja%2C+Lagos!3m2!1d6.601838!2d3.3514863!4m5!1s0x103b8c8c358b3f4b%3A0x5552cfbd43df8434!2sYaba%2C+Oworonshoki!3m2!1d6.5095442!2d3.3710936!5e0!3m2!1sen!2sng!4v1548427017471" width="600" height="450" frameborder="0" style="border:0" allowfullscreen class="i_frame"></iframe>
+                        <div class="day">
+                            Tue
+                        </div>
+
+                        <div class="day">
+                            Wed
+                        </div>
+
+                        <div class="day">
+                            Thur
+                        </div>
+
+                        <div class="day">
+                            Fri
                         </div>
                     </div>
 
-                    <div class="half_two_2">
-                        <div class="row"><div class="column">&nbsp;</div></div>
-                        <div class="row"><div class="column">&nbsp;</div></div>
-
-                        <div class="half_two_2_header">
-                            <div>
-                                Route Summary
-                            </div>
+                    <div class="boarding">
+                        <div class="boarding_title">
+                            Boarding
                         </div>
 
-                        <div>
-                            <div class="morning">
-                                <!-- <div class="morn">
-                                    <div class="mr_morn">
-                                        Morning
-                                    </div>
-                                </div> -->
-
-                                <div class="morn_route">
-                                    <div class="mr route_one">
-                                        <img src="../../assets/img/icons/location.png"/>
-                                        <div>
-                                            Conoil Petrol Station
-                                        </div>
-                                    </div>
-
-                                    <div class="mr time_one">
-                                        <img src="../../assets/img/icons/man.png"/>
-                                        <div>
-                                            5:45 AM
-                                        </div>
-                                    </div>
-
-                                    <div class="mr time_two">
-                                        <img src="../../assets/img/icons/tick.png"/>
-                                        <div>
-                                            5:45 AM
-                                        </div>
-                                    </div>
-
-                                    <div class="mr route_two">
-                                        <img src="../../assets/img/icons/arm.png" height="480" width="480"/>
-                                        <div class="rout_two">
-                                            Akin Adesola
-                                        </div>
-
-                                        <div class="rout_two">
-                                            Adeola Odeku
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="boarding_time">
+                            <div class="bd_time day">
+                                5:10
                             </div>
 
-                            <div class="evening">
-                                <!-- <div class="morn">
-                                    <div class="mr_morn">
-                                        Evening
-                                    </div>
-                                </div> -->
-                                <div class="even_route">
-                                    <div class="mr route_one">
-                                        <img src="../../assets/img/icons/location.png"/>
-                                        <div>
-                                            Conoil Petrol Station
-                                        </div>
-                                    </div>
+                            <div class="bd_time day">
+                                5:20
+                            </div>
 
-                                    <div class="mr time_one">
-                                        <img src="../../assets/img/icons/man.png"/>
-                                        <div>
-                                            5:30 PM
-                                        </div>
-                                    </div>
+                            <div class="bd_time day">
+                                5:30
+                            </div>
 
-                                    <div class="mr time_two">
-                                        <img src="../../assets/img/icons/tick.png"/>
-                                        <div>
-                                            6: 00 PM
-                                        </div>
-                                    </div>
+                            <div class="bd_time day">
+                                5:30
+                            </div>
 
-                                    <div class="mr route_two">
-                                        <img src="../../assets/img/icons/arm.png" height="480" width="480"/>
-                                        <div class="rout_two">
-                                            Ikeja
-                                        </div>
+                            <div class="bd_time day">
+                                5:30
+                            </div>
+                        </div>
+                    </div>
 
-                                        <div class="rout_two">
-                                            Iyana Oworo
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="starts">
+                        <div class="starts_title">
+                            Trip Starts
+                        </div>
+
+                        <div class="trip_starts">
+                            <div class="bd_time day">
+                                5:40
+                            </div>
+
+                            <div class="bd_time day">
+                                5:50
+                            </div>
+
+                            <div class="bd_time day">
+                                5:50
+                            </div>
+
+                            <div class="bd_time day">
+                                6:00
+                            </div>
+
+                            <div class="bd_time day">
+                                6:00
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="demarcator_starts">
+                    </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="boarding">
+                        <div class="boarding_title">
+                            Boarding
+                        </div>
+
+                        <div class="boarding_time">
+                            <div class="bd_time day">
+                                17:15
+                            </div>
+
+                            <div class="bd_time day">
+                                17:00
+                            </div>
+
+                            <div class="bd_time day">
+                                17:00
+                            </div>
+
+                            <div class="bd_time day">
+                                17:00
+                            </div>
+
+                            <div class="bd_time day">
+                                17:00
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="starts">
+                        <div class="starts_title">
+                            Trip Starts
+                        </div>
+
+                        <div class="trip_starts">
+                            <div class="bd_time day">
+                                17:45
+                            </div>
+
+                            <div class="bd_time day">
+                                17:30
+                            </div>
+
+                            <div class="bd_time day">
+                                17:30
+                            </div>
+
+                            <div class="bd_time day">
+                                17:30
+                            </div>
+
+                            <div class="bd_time day">
+                                17:30
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+
+                <div class="demarcator_sch_info">
+                </div>
+
+                <div class="trip_info">
+                    <div class="trip-sch_title">
+                        Rider Information
+                    </div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="info_body">
+                        <div class="info">
+                            1. Only booked trips are guaranteed.
+                        </div>
+
+                        <div class="info">
+                            2. Bus will be at designated pick up.
+                        </div>
+
+                        <div class="info">
+                            3. Boarding starts 30 minutes before trip time.
+                        </div>
+
+                        <div class="info">
+                            4. Payment card must be funded.
+                        </div>
+
+                        <div class="info">
+                            5. Tap to pay when you board.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="caveat">
+                Corporate Transit operates on a strict time adherence policy. Kindly be on time to avoid missing the bus.
+            </div>
+
+            <div id="contactus">
+                <a href="#" class="closecontactus" ng-click="closecontactus()">x</a>
+
+                <div class="user_register modalregister">
+                    <!-- <div class="supporttitle">Send Us A Message.</div> -->
+                    <div>
+                        <form>
+
+                            <input type="text" name="supportemail" id="supportemail" ng-model="supportemail" placeholder="Email" style="padding-left: 15px !important;">
+                            <br/>
+
+                            <input type="text" name="supportsubject" id="supportsubject" ng-model="supportsubject" placeholder="Subject" style="padding-left: 15px !important;">
+                            <br/>
+
+                            <textarea placeholder="Message" rows="7" name="supporttext" id="supporttext" ng-model="supporttext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
+
+                            <div class="row"><div class="column">&nbsp;</div></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <button class="ui fluid large teal submit button log_in_btn" ng-click="sendComplaint()" style="width: 80%;" ng-disabled="contactusclicked">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="booktrip">
+                <a href="#" class="closebooktrip" ng-click="closeBookTrip()">x</a>
+
+                <div class="user_register modalregister">
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="popup_title">
+                            New Ride
+                        </div>
+
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div>
+                        <form>
+                            <div class="radio_choice">
+                                <div class="ui form">
+                                  <div class="inline fields choicefields">
+
+                                    <div class="field choicefield">
+                                        <div class="ui radio checkbox">
+                                            <input type="radio" name="frequency" id="roundtrip" value="roundtrip" ng-model="roundtrip" ng-click="determineMode('roundtrip')" ng-checked="true"/>
+                                            <label>Round Trip</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="field choicefield-right">
+                                        <div class="ui radio checkbox">
+                                            <input type="radio" name="frequency" id="oneride" value="oneride" ng-model="oneride" ng-click="determineMode('oneride')"/>
+                                            <label>One Ride</label>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="range">
+                                <div class="ui form">
+                                    <div class="two fields">
+                                        <div class="field sel_field">
+                                            <label></label>
+                                            <select class="ui search dropdown" id="dep" name="dep" ng-model="dep">
+                                                <option disabled value="" selected>Route From</option>
+                                                <!-- <option value="AJAH - AJH">AJAH - AJH</option>
+                                                <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                                <option value="APAPA - APA">APAPA - APA</option>
+                                                <option value="EPE -EPE">EPE - EPE</option>
+                                                <option value="FESTAC - FTC">FESTAC - FTC</option> -->
+                                                <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                                <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                                <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                                <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                                <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                                <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                                <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                                <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                                <option value="OGBA - GBA">OGBA - GBA</option>
+                                                <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                                <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                                <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                                <option value="YABA - YBA">YABA - YBA</option> -->
+                                            </select>
+                                        </div>
+
+                                        <div class="field sel_field">
+                                            <label></label>
+                                            <select class="ui search dropdown" id="dest" name="dest" ng-model="dest">
+                                                <option disabled value="" selected>Route To</option>
+                                                <!-- <option value="AJAH - AJH">AJAH - AJH</option>
+                                                <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                                <option value="APAPA - APA">APAPA - APA</option>
+                                                <option value="EPE -EPE">EPE - EPE</option>
+                                                <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                                <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                                <option value="IKORODU - KRD">IKORODU - KRD</option> -->
+                                                <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                                <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                                <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                                <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                                <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                                <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                                <option value="OGBA - GBA">OGBA - GBA</option>
+                                                <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                                <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                                <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                                <option value="YABA - YBA">YABA - YBA</option> -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="c_number">
+                                <input type="text" name="cardnumber" id="cardnumber" ng-model="cardnumber" placeholder="Card Number" style="padding-left: 15px !important;">
+                            </div>
+
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="range">
+                                <div class="ui form">
+                                    <div class="two fields">
+
+                                        <div class="field date1">
+                                            <div>
+                                                <label class="mod mod_one">From</label>
+                                                <input type="Text" id="demo1" name="date_from" ng-model="date_from" onclick="javascript:NewCssCal('demo1', 'ddMMyyyy')" style="cursor:pointer"/>
+                                                <!-- <img class="date_img1" src="../../assets/img/date/cal.gif" /> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="field date2">
+                                            <div>
+                                                <label class="mod mod_two">To</label>
+                                                <input type="Text" id="demo2" name="date_to" ng-model="date_to" onclick="javascript:NewCssCal('demo2', 'ddMMyyyy')" style="cursor:pointer"/>
+                                                <!-- <img class="date_img2" src="../../assets/img/date/cal.gif" /> -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>                            
+
+                            <div class="row"><div class="column">&nbsp;</div></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <button class="ui fluid large teal submit button log_in_btn" ng-click="bookTrip()" style="width: 80%;" id="bookaride-button">Book A Ride
+                            </button>
+
+                            <div class="warning">
+                                Please Note: All cancellations and modifications must be done 2 hours before scheduled trip time. Modifications are not guaranteed and are based on availability. Cancellations done after 2 hours would be charged cancellation fees.
+                            </div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pendingtrip" class="">
+                <a href="#" class="closependingtrip" ng-click="closePendingTrip()">x</a>
+
+                <div class="user_register modalregister">
+                    <input type="hidden" ng-model="id" id="id" name="id">
+                    <input type="hidden" ng-model="tripmode" id="tripmode" name="tripmode">
+
+                    <div>
+                        <div class="trip_note">
+                            Your new trip date(s) falls within the time frame of a pending trip which has not been concluded or cancelled. Cancel it or book another trip outsite the time frame of this one. Find details below.
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="trp_det">
+                            <div class="trp trp_dep">From: <span ng-bind="pendingtrip.booking.routefrom"></span></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="trp trp_dest">To: <span ng-bind="pendingtrip.booking.routeto"></span></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="trp trp_date">Starting date: <span ng-bind="pendingtrip.booking.from"></span></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="trp trp_date">Ending date: <span ng-bind="pendingtrip.booking.to"></span></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <div class="trp trp_type">Type: <span ng-bind="pendingtrip.booking.bookingtype"></span></div>
+                            <div class="row"><div class="column">&nbsp;</div></div>
+                        </div>
+                        
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" ng-click="cancelTrip()" style="width: 80%;" ng-disabled="canceltripclicked">Cancel this trip</button>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div id="mode_period" class="">
+                <a class="closemodeperiod" ng-click="closeModePeriod()">x</a>
+
+                <div class="mode_p">
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="mode_period_body">
+                        <div>
+                            <button class="nav-link m_button" ng-click="modifyMode('evening')" id="yes-button">Evening</a>
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div>
+                            <button class="nav-link m_button" ng-click="modifyMode('morning')" id="no-button">Morning</a>
+                        </div>            
+                    </div>
+                </div>
+            </div>
         </div>
     </ui-view>
 
-    <div class="somebar">
-            <div class="bottombar">
-                <div class="bar">
-                    <div class="privacy link">Terms And Conditions</div>
-                    <div class="privacy link">Privacy Policy</div>
-                    <div class="privacy link">Faqs</div>
-                    <div class="contact link" ui-sref="contact_us">Contact Us</div>
+    <div class="somebar_other">
+        <div class="bottombar_other">
+            <div class="bar">
+                <div class="copyright link_other">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+                <div class="privacy link_other">Terms And Conditions</div>
+                <div class="privacy link_other">Privacy Policy</div>
+                <div class="privacy link_other">Faqs</div>
+                <div class="contact link_other" ng-click="showContactUs()">Contact Us</div>
 
-                    <div class="facebook link">Facebook</div>
-                    <div class="twitter link">Twitter</div>
-                    <div class="instagram link">Instagram</div>
-                </div>
-                <div class="copyright link">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+                <div class="facebook link_other"><i class="inverted facebook f icon"></i>Facebook</div>
+                <div class="twitter link_other"><i class="inverted twitter icon"></i>Twitter</div>
+                <div class="instagram link_other"><i class="inverted instagram icon"></i>Instagram</div>
             </div>
         </div>
+    </div>
 </div>

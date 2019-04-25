@@ -6,12 +6,13 @@
 .prettydropdown.loading {
   min-width: 0;
 }
+
 .prettydropdown > ul {
   position: absolute;
   top: 0;
   left: 0;
   background: #4d5862;
-  border: 1px solid #a9a9a9;
+  border: 2px solid #1da6e0;
   box-sizing: content-box;
   color: #fff;
   cursor: pointer;

@@ -2,6 +2,7 @@ angular.module('MainModule', [
     'ControllersModule',
     'ui.router',
     'Transporter',
+    'Utilities',
     'ui.bootstrap'
 ])
     .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -12,22 +13,11 @@ angular.module('MainModule', [
                 templateUrl: 'index.html',
                 controller: 'MainPageController'
             })
-            .state('booking', {
-                parent: 'landing',
-                url: '/booking',
-                templateUrl: '../views/pages/booking.html',
-                controller: 'BookingPageController'
-            })
             .state('booking_history', {
                 parent: 'landing',
                 url: '/booking_history',
                 templateUrl: '../views/pages/booking_history.html',
                 controller: 'BookingHistoryController'
-            })
-            .state('contact_us', {
-                url: '/contact_us',
-                templateUrl: '../views/pages/contact_us.html',
-                controller: 'ContactPageController'
             })
             .state('how_it_works', {
                 url: '/how_it_works',
@@ -40,16 +30,7 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/payment.html',
                 controller: 'PaymentPageController'
             })
-            .state('pricing', {
-                parent: 'landing',
-                url: '/pricing',
-                templateUrl: '../views/pages/pricing.html',
-                controller: 'PricingPageController'
-            })
-            .state('routes', {
-                url: '/routes',
-                templateUrl: '../views/pages/routes.html'
-            })
+            
             .state('verify', {
                 url: '/verify/:vcode',
                 templateUrl: '../views/pages/verify.html',
@@ -71,7 +52,7 @@ angular.module('MainModule', [
                 controller: "LoginPageController"
             })
             .state('reset', {
-                url: '/reset/:resetcode',
+                url: '/reset',
                 templateUrl: '../views/pages/resetpassword.html',
                 controller: "LoginPageController"
             })
@@ -83,6 +64,12 @@ angular.module('MainModule', [
                 parent: 'landing',
                 url: '/payment_history',
                 templateUrl: '../views/pages/payment_history.html',
+                controller: "PaymentHistoryController"
+            })
+            .state('transaction_history', {
+                parent: 'landing',
+                url: '/transactions',
+                templateUrl: '../views/pages/transactions.html',
                 controller: "PaymentHistoryController"
             })
             .state('landing', {

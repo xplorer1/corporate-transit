@@ -6,10 +6,11 @@ function TransporterFnc($http, $q) {
 
     // create a new object
     let transporter = {};
-    let baseurl = () => { return rootShared.seed.baseurl; };
+    let baseurl = "http://127.0.0.1:80";
+    //let baseurl = "https://corporatetransit.com.ng"
 
     transporter.signup = function(userData) {
-        return $http.post(baseurl()+"/api/signup", userData).then(
+        return $http.post(baseurl+"/api/signup", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -19,7 +20,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.login = function(userData) {
-        return $http.post(baseurl()+"/api/login", userData).then(
+        return $http.post(baseurl+"/api/login", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -29,7 +30,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.booktrip = function(userData) {
-        return $http.post(baseurl()+"/api/booking", userData).then(
+        return $http.post(baseurl+"/api/booking", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -39,7 +40,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.resendcode = function(userData) {
-        return $http.post(baseurl()+"/api/resendvcode", userData).then(
+        return $http.post(baseurl+"/api/resendvcode", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -49,7 +50,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.contactus = function(userData) {
-        return $http.post(baseurl()+"/api/contactus", userData).then(
+        return $http.post(baseurl+"/api/contactus", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -59,7 +60,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.forgotpassword = function(userData) {
-        return $http.post(baseurl()+"/api/forgotpassword", userData).then(
+        return $http.post(baseurl+"/api/forgotpassword", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -69,7 +70,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.fund_ct = function(userData) {
-        return $http.post(baseurl()+"/api/fund_ct", userData).then(
+        return $http.post(baseurl+"/api/fund_ct", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -78,8 +79,8 @@ function TransporterFnc($http, $q) {
             });
     };
 
-    transporter.payviaussd = function(userData) {
-        return $http.post(baseurl()+"/api/payviaussd", userData).then(
+    transporter.paytoravebank = function(userData) {
+        return $http.post("https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/charge", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -89,7 +90,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.confirm = function(userData) {
-        return $http.post(baseurl()+"/api/confirm", userData).then(
+        return $http.post(baseurl+"/api/confirm", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -99,7 +100,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.checkcode = function(userData) {
-        return $http.post(baseurl()+"/api/checkcode", userData).then(
+        return $http.post(baseurl+"/api/checkcode", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -109,7 +110,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.resetpassword = function(userData) {
-        return $http.post(baseurl()+"/api/resetpassword", userData).then(
+        return $http.post(baseurl+"/api/resetpassword", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -119,7 +120,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.getbookinghistory = function(userData) {
-        return $http.post(baseurl()+"/api/bookinghistory", userData).then(
+        return $http.post(baseurl+"/api/bookinghistory", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -129,7 +130,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.getpaymenthistory = function(userData) {
-        return $http.post(baseurl()+"/api/paymenthistory", userData).then(
+        return $http.post(baseurl+"/api/paymenthistory", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -139,7 +140,7 @@ function TransporterFnc($http, $q) {
     };
 
     transporter.cancelbooking = function(userData) {
-        return $http.post(baseurl()+"/api/cancelbooking", userData).then(
+        return $http.post(baseurl+"/api/cancelbooking", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -148,8 +149,8 @@ function TransporterFnc($http, $q) {
             });
     };
 
-    transporter.banktransfer = function(userData) {
-        return $http.post(baseurl()+"/api/banktransfer", userData).then(
+    transporter.gettransactionhistory = function(userData) {
+        return $http.post(baseurl+"/api/transactionhistory", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -158,8 +159,8 @@ function TransporterFnc($http, $q) {
             });
     };
 
-    transporter.sortbookinghistory = function(userData) {
-        return $http.post(baseurl()+"/api/sortbookinghistory", userData).then(
+    transporter.gethistory = function(userData) {
+        return $http.post(baseurl+"/api/gethistory", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -168,8 +169,18 @@ function TransporterFnc($http, $q) {
             });
     };
 
-    transporter.sortpaymenthistory = function(userData) {
-        return $http.post(baseurl()+"/api/sortpaymenthistory", userData).then(
+    transporter.searchhistory = function(userData) {
+        return $http.post(baseurl+"/api/searchhistory", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.getbalance = function(userData) {
+        return $http.post(baseurl+"/api/getbalance", userData).then(
             function(response){
                 return $q.when(response.data);
             },

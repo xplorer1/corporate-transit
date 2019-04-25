@@ -1,104 +1,343 @@
-<article ng-controller="BookingHistoryController" class="formpage bookinghistorypage">
 
-     <!-- <div class="ui active dimmer">
+<article ng-controller="BookingHistoryController" class="bookinghistorypage">
+
+    <div class="ui active dimmer">
         <div class="ui loader"></div>
-    </div> -->
-
-    <div class="owner">
-        <div class="lndg_fullname" >WELCOME, <span class="" ng-bind="fullname"></span></div>
-        <div class="lndg_ct_number" >CARD NUMBER: <span class="l_val_cn" ng-bind="ct_cardnumber" style="font-weight: bolder;"></span></div>
     </div>
 
-    <div class="sort_select">
-        <div class="sortselect">
-            <select id="sort" name="sort" class="pretty">
-                <option value="" title="Sort by" selected disabled >Filter</option>
-                <option value="last7days" title="Booking history from last 7 days.">Last 7 Days</option>
-                <option value="last30days" title="Booking history from last 30 days.">Last 30 Days</option>
-                <option value="last3months" title="Booking history from 3 months ago.">Last 3 Months</option>
-                <option value="last6months" title="Booking history from 6 months ago.">Last 6 Months</option>
-                <option value="last1year" title="Booking history from the past 1 year.">Last 1 Year</option>
-                <option value="fromdayone" title="Booking history from day one.">From Inception</option>
-            </select>
+    <div class="generalloader"></div>
+
+    <div class="b_layers">
+
+        <div class="layerone">
+            <div class="layerone_btn pymt_btn">
+                <a class="">Bookings</a>
+            </div>
+
+            <div class="layerone_btn cnts_btn">
+                <a class="" ng-click="showContactUs()">Contact Us</a>
+                <a class="new_a" ng-click="showBookTrip()">New</a>
+            </div>
         </div>
     </div>
 
-    <div class="ui middle aligned aligned grid forms">
-
-        <div class="booking_one">
-            <div class="table_cont table_cont_b row bk_hst_row">
-                <span class="hist_title">
-                    Booking History
-                </span>
-                <table class="ui unstackable celled table bk_hst_tbl" data-tooltip="Click on a pending trip to modify it." data-position="top center">
-                    <thead>
-                    <tr>
-                        <th class="bk_th">Booking Date</th>
-                        <th class="bk_th">Booking Type</th>
-                        <th class="bk_th">Booking Status</th>
-                        <th class="bk_th">Cost</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr ng-repeat="entry in booking_history" ng-click="modifyTrip(entry.booking.bookingid, entry.booking.bookingstatus)">
-                        <td data-label="b_date" ng-bind="entry.booking.bookedon.split('Z')[0].split('T')[0]"></td>
-                        <td data-label="b_type" ng-bind="entry.booking.frequency"></td>
-                        <td data-label="b_status" ng-bind="entry.booking.bookingstatus"></td>
-                        <td data-label="charge" ng-bind="entry.booking.bookingcost">""</td>
-                    </tr>
-                    </tbody>
-                </table>
+    <div class="history first" ng-repeat="history in booking_history">
+        <div class="booking_history_left">
+            <div class="booking_from" style="width: 7% !important;">
+                <span ng-bind="history.booking.routefrom.split('-')[1].trim()"></span>
             </div>
 
-            <div class="no_bk">
-                <div class="ui success message" style="display: none;">
-                    <div class="header" style="color: #fff !important;">
-                        No booking history was found.
-                    </div>
+            <div class="arrows">
+                <div ng-if="history.booking.bookingtype === 'Round Trip'" class="bk_arrow_one">
+                    <span>&#x2190;</span>
+                </div>
+
+                <div class="bk_arrow_two">
+                    <span>&#x2192;</span>
                 </div>
             </div>
 
-            <div class="ui tiny modal c_trip">
-                <i class="close">X</i>
-                <div class="header">
-                    Do you want to cancel the selected booking?
-                </div>
-                <div class="ui stacked secondary  segment removestyle_mod">
-                    <div class="field modalfield">
-                        <div class="ui fluid large teal submit button b_id" ng-click="modifyChoice('yes')">Yes</div>
+            <div class="booking_to">
+                <span ng-bind="history.booking.routeto.split('-')[1].trim()"></span>
+            </div>
 
-                        <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="booking_date">
+                <span ng-bind="history.booking.bookedon.split('T')[0]"></span>
+            </div>
 
-                        <div class="ui fluid large teal submit button b_id" ng-click="modifyChoice('no')">No</div>
-                        <div class="choice_loader"></div>
-                    </div>
-                </div>
+            <div class="booking_time">
+                <span ng-bind="history.booking.bookingtime"></span>
+            </div>
+
+            <div class="booking_amount">
+                NGN <span ng-bind="history.booking.bookingcost"></span>
+            </div>
+
+            <div ng-if="history.booking.bookingstatus === 'Concluded'" class="booking_circle">
+                <span>&#x2022;</span>
+            </div>
+
+            <div class="booking_circle bK_none" ng-if="history.booking.bookingstatus === 'Pending'">
+                <span>&#x2022;</span>
+            </div>
+
+            <div class="booking_circle bK_cancel" ng-if="history.booking.bookingstatus === 'Cancelled'">
+                <span>&#x2022;</span>
             </div>
         </div>
 
-        <div class="booking_two">
-            <div class="enj">
-                <div class="enj_big">
-                    ENJOY
+        <div class="booking_history_right">
+
+            <div class="booking_option" ng-if="history.booking.bookingstatus === 'Pending'">
+                <span ng-click="modifyTrip(history.booking.bookingid, history.booking.bookingstatus)"><i class="large material-icons">arrow_drop_down</i></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit_options" class="">
+        <a class="closeoptions" ng-click="closeOptions()">x</a>
+
+        <div class="b_cat_body">
+
+            <div class="dynamic_cat_body">
+                <div>
+                    <button class="nav-link a_l cancel_btn" ng-click="getChoice()" id="cancel-button">Cancel</button>
                 </div>
 
-                <div class="enj_mid">
-                    1 FREE
+                <div>
+                    <button class="nav-link a_l" ng-click="editBooking()" id="edit-button">Edit</button>
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <div id="edit_choice" class="">
+        <a class="closechoice" ng-click="closeChoice()">x</a>
+
+        <div class="b_cat_body">
+
+            <div class="dynamic_cat_body">
+                <div>
+                    <button class="nav-link a_l" ng-click="modifyChoice('yes')" id="yes-button">YES</a>
                 </div>
 
-                <div class="enj_lst">
-                    RIDE
+                <div>
+                    <button class="nav-link a_l" ng-click="modifyChoice('no')" id="no-button">NO</a>
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <div class="booking_one" style="width: 100%; display: none;">
+        <div class="no_bk">
+            <div class="ui success message">
+                <div class="header" style="color: black !important;">
+                    No booking history was found.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactus" class="">
+        <a href="#" class="closecontactus" ng-click="closecontactus()">x</a>
+
+        <div class="user_register modalregister">
+            <!-- <div class="supporttitle">Send Us A Message.</div> -->
+            <div>
+                <form>
+
+                    <input type="text" name="supportemail" id="supportemail" ng-model="supportemail" placeholder="Email" style="padding-left: 15px !important;">
+                    <br/>
+
+                    <input type="text" name="supportsubject" id="supportsubject" ng-model="supportsubject" placeholder="Subject" style="padding-left: 15px !important;">
+                    <br/>
+
+                    <textarea placeholder="Message" rows="7" name="supporttext" id="supporttext" ng-model="supporttext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <button class="ui fluid large teal submit button log_in_btn" ng-click="sendComplaint()" style="width: 80%;" id="sendmessage-button">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="booktrip" class="">
+        <a href="#" class="closebooktrip" ng-click="closeBookTrip()">x</a>
+
+        <div class="user_register modalregister">
+            <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="popup_title">
+                    New Ride
                 </div>
 
-                <div class="enj_aft">
-                    AFTER EVERY 10 RIDE.
-                </div>
+                <div class="row"><div class="column">&nbsp;</div></div>
 
-                <div class="enj_val">
-                    VALID TILL MAY.
+            <div>
+                <form>
+                    <div class="radio_choice">
+                        <div class="ui form">
+                          <div class="inline fields choicefields">
+
+                            <div class="field choicefield">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="frequency" id="roundtrip" value="roundtrip" ng-model="roundtrip" ng-click="determineMode('roundtrip')" ng-checked="true"/>
+                                    <label>Round Trip</label>
+                                </div>
+                            </div>
+
+                            <div class="field choicefield-right">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="frequency" id="oneride" value="oneride" ng-model="oneride" ng-click="determineMode('oneride')"/>
+                                    <label>One Ride</label>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="range">
+                        <div class="ui form">
+                            <div class="two fields">
+                                <div class="field sel_field">
+                                    <label></label>
+                                    <select class="ui search dropdown" id="dep" name="dep" ng-model="dep">
+                                        <option disabled value="" selected>Route From</option>
+                                        <!-- <option value="AJAH - AJH">AJAH - AJH</option>
+                                        <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                        <option value="APAPA - APA">APAPA - APA</option>
+                                        <option value="EPE -EPE">EPE - EPE</option>
+                                        <option value="FESTAC - FTC">FESTAC - FTC</option> -->
+                                        <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                        <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                        <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                        <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                        <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                        <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                        <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                        <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                        <option value="OGBA - GBA">OGBA - GBA</option>
+                                        <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                        <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                        <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                        <option value="YABA - YBA">YABA - YBA</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="field sel_field">
+                                    <label></label>
+                                    <select class="ui search dropdown" id="dest" name="dest" ng-model="dest">
+                                        <option disabled value="" selected>Route To</option>
+                                        <!-- <option value="AJAH - AJH">AJAH - AJH</option>
+                                        <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                        <option value="APAPA - APA">APAPA - APA</option>
+                                        <option value="EPE -EPE">EPE - EPE</option>
+                                        <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                        <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                        <option value="IKORODU - KRD">IKORODU - KRD</option> -->
+                                        <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                        <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                        <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                        <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                        <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                        <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                        <option value="OGBA - GBA">OGBA - GBA</option>
+                                        <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                        <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                        <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                        <option value="YABA - YBA">YABA - YBA</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="c_number">
+                        <input type="text" name="cardnumber" id="cardnumber" ng-model="cardnumber" placeholder="Card Number" style="padding-left: 15px !important;">
+                    </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="range">
+                        <div class="ui form">
+                            <div class="two fields">
+
+                                <div class="field date1">
+                                    <div>
+                                        <label class="mod mod_one">From</label>
+                                        <input type="Text" id="demo1" name="date_from" ng-model="date_from" onclick="javascript:NewCssCal('demo1', 'ddMMyyyy')" style="cursor:pointer"/>
+                                        <!-- <img class="date_img1" src="../../assets/img/date/cal.gif" /> -->
+                                    </div>
+                                </div>
+
+                                <div class="field date2">
+                                    <div>
+                                        <label class="mod mod_two">To</label>
+                                        <input type="Text" id="demo2" name="date_to" ng-model="date_to" onclick="javascript:NewCssCal('demo2', 'ddMMyyyy')" style="cursor:pointer"/>
+                                        <!-- <img class="date_img2" src="../../assets/img/date/cal.gif" /> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>                            
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <button class="ui fluid large teal submit button log_in_btn" ng-click="bookTrip()" style="width: 80%;" id="bookaride-button">Book A Ride
+                    </button>
+
+                    <div class="warning">
+                        Please Note: All cancellations and modifications must be done 2 hours before scheduled trip time. Modifications are not guaranteed and are based on availability. Cancellations done after 2 hours would be charged cancellation fees.
+                    </div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="pendingtrip" class="">
+        <a href="#" class="closependingtrip" ng-click="closePendingTrip()">x</a>
+
+        <div class="user_register modalregister">
+            <input type="hidden" ng-model="id" id="id" name="id">
+            <input type="hidden" ng-model="tripmode" id="tripmode" name="tripmode">
+
+            <div>
+                <div class="trip_note">
+                    Your new trip date(s) falls within the time frame of a pending trip which has not been concluded or cancelled. Cancel it or book another trip outsite the time frame of this one. Find details below.
                 </div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <div class="trp_det">
+                    <div class="trp trp_dep">From: <span ng-bind="pendingtrip.booking.routefrom"></span></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="trp trp_dest">To: <span ng-bind="pendingtrip.booking.routeto"></span></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="trp trp_date">Starting date: <span ng-bind="pendingtrip.booking.from"></span></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="trp trp_date">Ending date: <span ng-bind="pendingtrip.booking.to"></span></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="trp trp_type">Type: <span ng-bind="pendingtrip.booking.bookingtype"></span></div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                </div>
+                
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <button class="ui fluid large teal submit button log_in_btn" ng-click="cancelTrip()" style="width: 80%;" ng-disabled="canceltripclicked">Cancel this trip</button>
+                
+            </div>
+        </div>
+    </div>
+
+    <div id="mode_period" class="">
+        <a class="closemodeperiod" ng-click="closeModePeriod()">x</a>
+
+        <div class="mode_p">
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="mode_period_body">
+                <div>
+                    <button class="nav-link m_button" ng-click="modifyMode('evening')" id="yes-button">Evening</a>
+                </div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <div>
+                    <button class="nav-link m_button" ng-click="modifyMode('morning')" id="no-button">Morning</a>
+                </div>            
             </div>
         </div>
     </div>
 </article>
+

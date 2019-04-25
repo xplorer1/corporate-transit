@@ -16,7 +16,8 @@ let PaymentJournalSchema = new Schema({
     paymentid: { type: String, required: true},
     paymenttype: { type: String, required: true},
     amount: { type: Number, required: true, default: 0 },
-    created: { type: Date, default: Date.now }
+    created: { type: Date, default: Date.now },
+    createdformatted: { type: String }
 });
 
 module.exports = mongoose.model('PaymentJournal', PaymentJournalSchema);

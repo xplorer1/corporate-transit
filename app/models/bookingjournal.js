@@ -15,14 +15,18 @@ let BookingJournalSchema = new Schema({
     },
     booking: {
         bookingid: {type: String, required: true},
-        route: {type: String},
         bookingtype: {type: String},
-        frequency: {type: String},
         bookingcost: { type: Number, required: true, default: 0 },
-        bookedon: { type: Date},
+        bookedon: { type: Date, default: Date.now},
+        bookedonformatted: { type: String},
+        bookingtime: {type: String },
         bookingstatus: { type: String},
+        routefrom: { type: String },
+        routeto: { type: String },
         from: { type: String },
         to: { type: String },
+        mode: { type: String },
+        tripmode: { type: String },
         ct_cardnumber: {type: String}
     }
 });
