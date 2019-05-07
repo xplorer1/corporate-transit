@@ -1,43 +1,25 @@
-<div class="ui visible sidebar inverted vertical menu staticsidebar">
-    <div class="row"><div class="column">&nbsp;</div></div>
-    <div class="row"><div class="column">&nbsp;</div></div>
-    <div class="row"><div class="column">&nbsp;</div></div>
-    <div class="row"><div class="column">&nbsp;</div></div>
+<div class="ui visible sidebar inverted vertical menu staticsidebar for_desk">
 
-    <!-- <div class="generalloader"></div> -->
-
+    <div class="row"><div class="column">&nbsp;</div></div>
+    
     <div class="ui accordion">
 
-        <div class="item a_cc_title" ng-bind="user_fullname">
-            
+        <div class="item a_cc_title f_namee" ng-bind="user_fullname">
         </div>
 
-        <div class="item a_cc_title" ng-bind="user_username">
-            
+        <div class="item a_cc_title" ui-sref="landing" ng-click="hide_bar()">
+            Dashboard
         </div>
 
-        <div class="item a_cc_title amt_plus">
-            NGN <div class="amt" ng-bind="user_balance">
-                 
-            </div>
-
-            <div class="plus_amt" ui-sref="payment">
-                +
-            </div>
-        </div>
-
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="item a_cc_title" ui-sref="booking_history">
+        <div class="item a_cc_title" ui-sref="booking_history" ng-click="hide_bar()">
             Bookings
         </div>
 
-        <div class="item a_cc_title" ui-sref="transaction_history">
+        <div class="item a_cc_title" ui-sref="transaction_history" ng-click="hide_bar()">
             Transactions
         </div>
 
-        <div class="item a_cc_title" ui-sref="payment_history">
+        <div class="item a_cc_title" ui-sref="payment_history" ng-click="hide_bar()">
             Payments
         </div>
 
@@ -51,15 +33,15 @@
 
 <div class="">
 
-    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother" style="height: 75px !important;">
         <div class="">
             <a class="" ui-sref="home">
-                <img src="../../assets/img/logos/ct_logo.png" style="height: 32px;">
+                <img src="../../assets/img/logos/ct_logo.png" style="margin-top: 5px; height: 32px; margin-left: -35px;">
             </a>
         </div>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse">
+            <span class="navbar-toggler-icon" ng-click="showSideBar()"></span>
         </button>
         
         <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -79,6 +61,8 @@
                 <div class="ui loader"></div>
             </div>
 
+            <div class="landingloader"></div>
+
             <div class="l_layers">
                 <div class="layerone">
                     <div class="layerone_btn pymt_btn">
@@ -94,8 +78,29 @@
                 <div class="cardnumber_l">
                     Card No: <span ng-bind="user_cardnumber"></span>
                 </div>
+                <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="cardnumber_l">
                     Card Bal: N<span ng-bind="user_balance"></span>
+                </div>
+            </div>
+
+            <div class="payment_end" style="width: 100%; display: none;">
+                <div class="no_bk">
+                    <div class="ui success message">
+                        <div class="header" style="color: black !important;">
+                            Payment Completed. Pulling up updated balance...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment_error" style="width: 100%; display: none;">
+                <div class="no_bk">
+                    <div class="ui success message">
+                        <div class="header" style="color: black !important;">
+                            Sorry, there was a problem. Please try again later, or contact support.
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -123,26 +128,28 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div class="b_rt"> 
-                            5:45 am: Conoil Petrol Station
+                            <i class="boarding_img bus icon"></i> 5:45 am: Conoil Petrol Station
                         </div>
+
+                        <div class="b_rt"> 
+                            <img class="boarding_img" src="../../assets/img/dropoff.png"> 7:25 am: Akin Adesola / Adeola Odeku
+                        </div>
+
                         <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="demarcator_points">
+                        </div>
+
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div class="b_rt"> 
-                            7:25 am: Conoil Petrol Station
+                            <i class="boarding_img bus icon"></i> 6:30 pm: Zenith Bank, Adeola Odeku
                         </div>
-                        <div class="row"><div class="column">&nbsp;</div></div>
-                        <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div class="b_rt"> 
-                            6:30 pm: Akin Adesola / Adeola Odeku
+                            <img class="boarding_img" src="../../assets/img/dropoff.png"> 8:15 pm: Oworo / Maryland / Ikeja
                         </div>
-                        <div class="row"><div class="column">&nbsp;</div></div>
-                        <div class="row"><div class="column">&nbsp;</div></div>
 
-                        <div class="b_rt"> 
-                            8:15 pm: Conoil Petrol Station
-                        </div>
                         <div class="row"><div class="column">&nbsp;</div></div>
                         <div class="row"><div class="column">&nbsp;</div></div>
                     </div>
@@ -231,7 +238,7 @@
                 </div>
 
                 <div class="fd_card_btn">
-                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="test()" ng-disabled="fundcardclicked">Fund Your Card</button>
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showFundCard()" ng-disabled="fundcardclicked">Fund Your Card</button>
                 </div>
             </div>
 
@@ -435,7 +442,7 @@
                             <input type="text" name="supportsubject" id="supportsubject" ng-model="supportsubject" placeholder="Subject" style="padding-left: 15px !important;">
                             <br/>
 
-                            <textarea placeholder="Message" rows="7" name="supporttext" id="supporttext" ng-model="supporttext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
+                            <textarea placeholder="Message" rows="7" name="supporttext" id="supporttext" ng-model="supporttext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" maxlength="450" style="padding-left: 15px !important;"></textarea>
 
                             <div class="row"><div class="column">&nbsp;</div></div>
                             <div class="row"><div class="column">&nbsp;</div></div>
@@ -473,7 +480,7 @@
                                     <div class="field choicefield-right">
                                         <div class="ui radio checkbox">
                                             <input type="radio" name="frequency" id="oneride" value="oneride" ng-model="oneride" ng-click="determineMode('oneride')"/>
-                                            <label>One Ride</label>
+                                            <label>One Way</label>
                                         </div>
                                     </div>
                                   </div>
@@ -639,6 +646,26 @@
                         <div>
                             <button class="nav-link m_button" ng-click="modifyMode('morning')" id="no-button">Morning</a>
                         </div>            
+                    </div>
+                </div>
+            </div>
+
+            <div id="fundcardform">
+                <a href="#" class="closefundcard" ng-click="closeFundCard()">x</a>
+
+                <div class="user_register modalregister">
+                    <div>
+                        <form>
+                            <i class="user icon"></i>
+                            <input type="text" ng-model="onlineemail"  id="onlineemail" name="onlineemail" placeholder="E-mail address">
+
+                            <i class="money bill alternate outline icon"></i>
+                            <input type="text" ng-model="onlineamount" id="onlineamount" name="onlineamount" placeholder="Amount">
+
+                             <div class="row"><div class="column">&nbsp;</div></div>
+
+                            <button class="ui fluid large teal submit button log_in_btn" ng-click="payInstant()" style="width: 80%;" ng-disabled="contactusclicked">Pay</button>
+                        </form>
                     </div>
                 </div>
             </div>

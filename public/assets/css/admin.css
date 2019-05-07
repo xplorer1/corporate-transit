@@ -1,0 +1,205 @@
+.nav_o {
+	color: #4d5862;
+}
+
+.rol {
+	margin-right: 16px;
+}
+
+.adminpage {
+	background-image: linear-gradient(to top left, #91bacb, #ffffff);
+    width: 85%;
+    min-height: 1024px;
+    position: absolute;
+    right: 0;
+    color: #4d5862;
+}
+
+.gen_stats {
+	display: flex;
+}
+
+.gen_stat {
+    width: calc(100%/4);
+    padding: 30px 20px;
+    margin: 0 25px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    -o-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+}
+
+.stat_stats {
+	line-height: 1.9;
+	width: 100%;
+}
+
+.stat_icon {
+	padding: 0 10px;
+}
+
+.cont_users {
+    display: flex;
+}
+
+.users, .complaints {
+    width: 50%;
+    padding: 0 25px;
+}
+
+.c_tab {
+	padding: 15px 5px;
+	border: .1px solid;
+}
+
+.comp_bod, .complaint_bod {
+	display: flex;
+	padding: 15px 5px;
+	border-bottom: .1px solid;
+	cursor: pointer;
+}
+
+.cmpt:hover {
+    background: #a0bfcc;
+}
+
+.sender, .comp_status {
+    width: 50%;
+}
+
+.comp_status {
+	text-align: right;
+}
+
+.c_body {
+	border: 1px solid;
+	height: 200px;
+    overflow: auto;
+}
+
+.users_tab {
+	display: flex;
+    border: .1px solid;
+    padding: 15px 5px;
+}
+
+.users_ic, .add_user {
+    width: 50%;
+}
+
+.add_user {
+	text-align: right;
+}
+
+.users_list {
+	border: .1px solid;
+    height: 200px;
+    overflow: auto;
+}
+
+.user_det {
+	display: flex;
+	padding: 15px 5px;
+	border-bottom: .1px solid;
+}
+
+.user_username, .user_role, .user_id {
+    width: calc(100%/3);
+}
+
+.user_role {
+	text-align: center;
+}
+
+.user_id {
+	text-align: right;
+}
+
+a {
+	cursor: pointer;
+}
+
+.add_user {
+	cursor: pointer;
+}
+
+input#newadminemail, input#newadminname, input#superpassword, input#superpassword, input#superpassword, textarea#replytext {
+    width: 100%;
+    outline: none;
+    background: none !important;
+    color: #4d5862 !important;
+    border-bottom: 1px solid #4d5862 !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    padding: 20px 0 10px;
+}
+
+input#replytext {
+	height: 120px;
+}
+
+.closeadduserform, .closereplycomplaint {
+    position: absolute;
+    top: 9px;
+    right: 16px;
+    text-decoration: none;
+    color: gray;
+    font-size: 21px;
+}
+
+.stat_icon i.users.icon, .stat_icon i.list.alternate.outline.icon, .stat_icon i.money.bill.alternate.outline.icon, .stat_icon i.bus.icon {
+    font-size: 4rem;
+    line-height: 0.6; 
+    width: 100%;
+    padding: 12px;
+}
+
+.users_ic i.users.icon, .c_tab i, .add_user i  {
+	font-size: 1.5rem !important;
+    /* padding: 0 5px 0 4px; */
+    padding: 0;
+    margin: 0 5px 0 5px !important;
+}
+
+.user_username {
+	display: flex;
+}
+
+#message, #replycomplaint {
+	position: fixed;
+    top: 13%;
+    width: 40%;
+    height: 0px;
+    background: white;
+    /*right: 20px;*/
+    z-index: 1000000;
+    border-radius: 2px;
+    padding: 15px 16px 3px 20px;
+    opacity: 0;
+    left: calc(30%);
+    /*overflow-y: scroll;*/
+    overflow-x: hidden;
+    display: flex;
+}
+
+.closemessage, .closereplycomplaint {
+	position: absolute;
+    top: 9px;
+    right: 16px;
+    text-decoration: none;
+    color: gray;
+    font-size: 21px;
+}
+
+.mes_head {
+	font-size: 14pt;
+	font-weight: 900;
+}
+
+.mes_body {
+	font-size: 14px;
+	font-weight: 100;
+}

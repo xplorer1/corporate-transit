@@ -2,6 +2,7 @@ angular.module('MainModule', [
     'ControllersModule',
     'ui.router',
     'Transporter',
+    'AdminService',
     'Utilities',
     'ui.bootstrap'
 ])
@@ -19,18 +20,6 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/booking_history.html',
                 controller: 'BookingHistoryController'
             })
-            .state('how_it_works', {
-                url: '/how_it_works',
-                templateUrl: '../views/pages/how_it_works.html',
-                controller: 'HowItWorksController'
-            })
-            .state('payment', {
-                url: '/payment',
-                parent: 'landing',
-                templateUrl: '../views/pages/payment.html',
-                controller: 'PaymentPageController'
-            })
-            
             .state('verify', {
                 url: '/verify/:vcode',
                 templateUrl: '../views/pages/verify.html',
@@ -59,6 +48,7 @@ angular.module('MainModule', [
             .state('notfound', {
                 url: '/notfound',
                 templateUrl: '../views/pages/notfound.html',
+                controller: "GeneralController"
             })
             .state('payment_history', {
                 parent: 'landing',
@@ -76,6 +66,16 @@ angular.module('MainModule', [
                 url: '/landing',
                 templateUrl: '../views/pages/landing.html',
                 controller: "LandingController"
+            })
+            .state('admin', {
+                url: '/admin',
+                templateUrl: '../views/admin/admin.html',
+                controller: "AdminController"
+            })
+            .state('adminlogin', {
+                url: '/adminlogin',
+                templateUrl: '../views/admin/adminlogin.html',
+                controller: "AdminController"
             });
 
         $urlRouterProvider.otherwise('/notfound');

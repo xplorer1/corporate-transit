@@ -1,0 +1,323 @@
+<div class="ui visible sidebar inverted vertical menu staticsidebar for_desk">
+
+    <div class="row"><div class="column">&nbsp;</div></div>
+
+    <div class="ui accordion">
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div style="text-align: center;">
+            <img src="../../assets/img/placeholder.png" style="height: 50px; border-radius: 50%;">
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="item a_cc_title" ng-bind="fullname.split(' ')[0]">  
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div >
+                <span class="rol" ng-bind="role"></span>
+            </div>
+            
+        </div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="item a_cc_title" ng-click="deleteAccount()" style="text-align: center;">
+            Delete Account
+        </div>
+
+        <div class="sidebar_logo">
+            <a class="" ui-sref="home">
+                <img src="../../assets/img/logos/ctlogowhite.png" class=""  style="height: 25px;">
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="">
+
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother" style="height: 75px !important;">
+        <div class="">
+            <a class="" ui-sref="home">
+                Admin Dashboard
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" >
+            <span class="navbar-toggler-icon" ng-click="showSideBar()"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto nav_o">
+                <li>
+                    Role: <span class="rol" ng-bind="role"></span><img src="../../assets/img/placeholder.png" style="height: 50px; border-radius: 50%;">
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <ui-view>
+        <div ng-controller="AdminController" class="adminpage">
+            <div class="ui active dimmer">
+                <div class="ui loader"></div>
+            </div>
+
+            <div class="landingloader"></div>
+
+            <div class="l_layers">
+                <div class="layerone">
+                    <div class="layerone_btn pymt_btn">
+                        <a class="">Welcome, <span ng-bind="fullname.split(' ')[0]"></span></a>.
+                    </div>
+
+                    <div class="layerone_btn cnts_btn">
+                        <a class="new_a" ng-click="adminLogOut()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gen_stats">
+                <div class="gen_stat">
+                    <div class="stat_icon">
+                        <i class="users icon"></i>
+                    </div>
+                    <div class="stat_stats">
+                        <div class="stat_num">
+                            <span ng-bind="numusers"></span>
+                        </div>
+                        <div class="stat_stat">
+                            Users
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gen_stat">
+                    <div class="stat_icon">
+                        <i class="list alternate outline icon"></i>
+                    </div>
+                    <div class="stat_stats">
+                        <div class="stat_num">
+                            <span ng-bind="numbookings"></span>
+                        </div>
+                        <div class="stat_stat">
+                            Bookings
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gen_stat">
+                    <div class="stat_icon">
+                        <i class="money bill alternate outline icon"></i>
+                    </div>
+                    <div class="stat_stats">
+                        <div class="stat_num">
+                            N<span ng-bind="numearned"></span>
+                        </div>
+                        <div class="stat_stat">
+                            Earned
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gen_stat">
+                    <div class="stat_icon">
+                        <i class="bus icon"></i>
+                    </div>
+                    <div class="stat_stats">
+                        <div class="stat_num">
+                            <span ng-bind="numtrips"></span>
+                        </div>
+                        <div class="stat_stat">
+                            Trips
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="cont_users">
+                <div class="complaints">
+                    <div class="c_tab">
+                        <i class="comments outline icon" data-content="Click on the email addresses to reply."></i> Complaints
+                    </div>
+
+                    <div class="c_body">
+                        <div class="complaint cmpt" ng-repeat="message in messages">
+                            <div class="comp_bod"  ng-click="replyMessage(message._id, message.status)">
+                                <div class="sender">
+                                    <i class="envelope icon"></i> <span ng-bind="message.email"></span>
+                                </div>
+                                <div class="comp_status">
+                                    <span ng-bind="message.status"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="users">
+
+                    <div class="users_tab">
+                        <div class="users_ic">
+                            <i class="users icon"></i>  Users
+                        </div>
+                        
+                        <div class="add_user" ng-click="checkSuper()">
+                            <i class="user plus icon"></i> Add User
+                        </div>
+                    </div>
+
+                    <div class="users_list">
+                        <div class="user_det" ng-repeat="admin in admins">
+                            <div class="user_username">
+                                <i class="user icon"></i>  <span ng-bind="admin.username"></span>
+                            </div>
+
+                            <div class="user_role">
+                                <span ng-bind="admin.role"></span>
+                            </div>
+
+                            <div class="user_id">
+                                <span ng-bind="admin.id"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="cont_users">
+                <div class="complaints com_regions">
+                    <div class="c_tab">
+                        <i class="fas fa-walking"></i> Commuters by region
+                    </div>
+
+                    <div class="c_body">
+                        <div class="complaint_bod" ng-repeat="region in regionscount">
+                            <div class="sender">
+                                <i class="location arrow icon"></i> <span ng-bind="region.region"></span>
+                            </div>
+                            <div class="comp_status">
+                                <span ng-bind="region.regioncount"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="verifysuper" class="">
+                <a class="closeverifysuper" ng-click="closeVerifySuper()">x</a>
+
+                <div class="mode_p">
+                    <div class="mode_period_body">
+                        <div>
+                            Are you a super user? Enter your password.
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <input type="password" ng-model="superpassword" id="superpassword" name="superpassword" placeholder="Password" style="padding-left: 15px !important;">
+                        </div>   
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="verifySuper()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div id="replycomplaint" class="">
+                <a class="closereplycomplaint" ng-click="closeReplyComplaint()">x</a>
+
+                <div class="mode_p">
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <textarea placeholder="Message" rows="7" name="replytext" id="replytext" ng-model="replytext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
+                        </div>   
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="replyComplaint()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div id="message" class="">
+                <a class="closemessage" ng-click="closeMessage()">x</a>
+
+                <div class="mode_p">
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="mes_head">
+                            Sender: <span class="mes_body" ng-bind="targetcomplaint.email"></span>
+                        </div>
+
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="mes_head">
+                            Subject: <span class="mes_body" ng-bind="targetcomplaint.subject"></span>
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="mes_head">
+                            Date: <span class="mes_body" ng-bind="targetcomplaint.createdon.split('T')[0]"></span>
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div  class="mes_head" style="height: 120px;">
+                            Message: <span class="mes_body" ng-bind="targetcomplaint.complaint"></span>
+                        </div>
+  
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="reply(targetcomplaint._id)" ng-disabled="loginclicked">Reply</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div id="adduserform" class="">
+                <a class="closeadduserform" ng-click="closeAddUserForm()">x</a>
+
+                <div class="mode_p">
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <input type="text" ng-model="newadminemail" id="newadminemail" name="newadminemail" placeholder="Email address of new user..." style="padding-left: 15px !important;">
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <input type="text" ng-model="newadminname" id="newadminname" name="newadminname" placeholder="Name of new user..." style="padding-left: 15px !important;" maxlength="8">
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="addUser()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div class="generalloader"></div>
+        </div>
+    </ui-view>
+
+    <div class="somebar_other">
+        <div class="bottombar_other">
+            <div class="bar">
+                <div class="copyright link_other">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+                <div class="privacy link_other">Terms And Conditions</div>
+                <div class="privacy link_other">Privacy Policy</div>
+                <div class="privacy link_other">Faqs</div>
+                <div class="contact link_other" ng-click="showContactUs()">Contact Us</div>
+
+                <div class="facebook link_other"><i class="inverted facebook f icon"></i>Facebook</div>
+                <div class="twitter link_other"><i class="inverted twitter icon"></i>Twitter</div>
+                <div class="instagram link_other"><i class="inverted instagram icon"></i>Instagram</div>
+            </div>
+        </div>
+    </div>
+</div>

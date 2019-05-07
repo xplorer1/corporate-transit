@@ -3,6 +3,10 @@
     src:  url('../fonts/AvertaDemoPECuttedDemo-Regular.otf') format('opentype');
 }
 
+.for_mobile {
+    display: block;
+}
+
 body {
     font-family: "Averta", sans-serif;
     background: #4d5862 !important;
@@ -135,13 +139,13 @@ a.nav-link {
 }
 
 .pagetitle {
-    font-size: 25pt;
+    font-size: 20pt;
     line-height: 1;
     color: #4d5862;
 }
 
 .pagetext {
-    font-size: 15pt;
+    font-size: 10pt;
     color: #4d5862;
 }
 
@@ -239,7 +243,7 @@ a.nav-link {
 .container-fluid:nth-child(6) {
     background-color: white;
     transform: skewY(0deg);
-    margin-bottom: 80px;
+    margin-bottom: 0;
 }
 .container-fluid:nth-child(7) {
     background-color: #FFF;
@@ -340,7 +344,7 @@ a.nav-link {
 }
 .graphiti_two {
     background-image: url('../img/covers/graphiti_two.png');
-    height: 100% !important;
+    height: 85% !important;
 }
 
 .graphiti_text {
@@ -864,9 +868,9 @@ li.nav-item.active.border {
         font-weight: 100;
     }
 
-    #ph_page {
+    /*#ph_page {
         margin: 100px 20px !important;
-    }
+    }*/
 
     .desk_top {
         display: none;
@@ -1126,7 +1130,7 @@ input#name {
     border: 1px solid rgb(77, 88, 98);
 }
 
-input#email, input#username, input#phone, input#new_password, input#confirm_password, input#org, input#fullname, input#ct_cardnumber, input#password, input#resetemail {
+input#email, input#username, input#phone, input#new_password, input#password, input#confirm_password, input#org, input#fullname, input#ct_cardnumber, input#newadminemail, input#newadminname {
     background: none !important;
     color: rgb(255, 255, 255) !important;
     border-bottom: 1px solid #fff !important;
@@ -1136,7 +1140,7 @@ input#email, input#username, input#phone, input#new_password, input#confirm_pass
     border-radius: 0 !important;
 }
 
-input#supportemail, input#supportsubject, input#demo1, input#demo2, textarea#supporttext, input#cardnumber {
+input#supportemail, input#onlineamount, input#onlineemail, input#bankamount, input#bankemail, input#supportsubject, input#demo1, input#demo2, textarea#supporttext, input#cardnumber, input#superpassword, input#superpassword, input#superpassword {
     width: 100%;
     outline: none;
     background: none !important;
@@ -1209,6 +1213,11 @@ select#dep, select#dest {
 
 .choicefield, .choicefield-right {
     width: 50%;
+    color: #4d5862;
+}
+
+.choicefield {
+    border-right: 1px solid;
 }
 
 .warning {
@@ -1217,7 +1226,7 @@ select#dep, select#dest {
 }
 
 .choicefield-right {
-    margin-left: 6% !important;
+    padding: 0 0 0 30px !important;
 }
 
 .log_in_btn {
@@ -1373,14 +1382,14 @@ button#contact-btn {
 }
 
 .act_title {
-    font-size: 30pt;
+    font-size: 25pt;
     color: #20669b;
     line-height: 1;
 }
 
 .act_text {
     color: #4d5862;
-    font-size: 15pt;
+    font-size: 10pt;
 }
 
 .info_text {
@@ -1406,6 +1415,10 @@ button#contact-btn {
     animation: generalloader 1.2s linear infinite;
 }
 
+.landingloader:after {
+    animation: landingloader 1.2s linear infinite;
+}
+
 .loginloader:after {
     animation: loginloader 1.2s linear infinite;
 }
@@ -1427,13 +1440,36 @@ button#contact-btn {
     width: 64px;
     height: 64px;
     position: absolute;
-    top: calc(20%);
+    top: calc(50%);
     z-index: 434343434334983948348394;
-    left: calc(40%);
+    left: calc(45%);
     display: none;
 }
 
 .generalloader:after {
+    content: " ";
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 1px;
+    border-radius: 50%;
+    border: 4px solid #8e8e8e;
+    border-color: #4d5862 transparent #4d5862 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.landingloader {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    position: fixed;
+    top: calc(20%);
+    z-index: 434343434334983948348394;
+    left: calc(45%);
+    display: none;
+}
+
+.landingloader:after {
     content: " ";
     display: block;
     width: 80px;
@@ -1640,14 +1676,7 @@ button#contact-btn {
 }
 
 .incr_code {
-    text-align: center;
-    /*max-width: 600px;*/
-     background: white;
-    /* width: 100% !important; */
-    -webkit-box-shadow: 0 1px 6px rgba(57,73,76,0.35);
-    box-shadow: 0 1px 6px rgba(57,73,76,0.35);
-    /* padding-top: 100px !important; */
-    margin-bottom: 30px;
+    padding: 150px 0 !important;
 }
 
 .paymentsuccess {
@@ -1689,7 +1718,7 @@ button#contact-btn {
 }
 
 .img_logo img {
-    height: 32px;
+    height: 28px;
    /* margin-top: 14px;*/
 }
 
@@ -1933,6 +1962,14 @@ div#db, div#dp, div#dc, div#ds {
     /*padding: 150px 50px;*/
 }
 
+.notfoundpage, .incr_code {
+    background-image: linear-gradient(to top left, #91bacb, #ffffff);
+    width: 100%;
+    min-height: 1024px;
+    position: absolute;
+    right: 0;
+}
+
 .booking_one, .booking_two {
     /*width: 50%;
     margin: 0 auto;
@@ -2068,16 +2105,6 @@ div#db, div#dp, div#dc, div#ds {
     box-sizing: border-box;
 }
 
-.inst_val, .bank_val {
-    /*padding: 0 15px;*/
-    width: 50%;
-    background: white;
-}
-
-.inst_val {
-    margin-right: 50px;
-}
-
 .titles {
     display: flex;
     width: 1000px;
@@ -2186,6 +2213,7 @@ li#item1548456588046-1 {
 
 .notfoundtext {
     text-align: center;
+    padding: 0 20px;
 }
 
 .bottomright {
@@ -2224,7 +2252,7 @@ li#item1548456588046-1 {
 }
 
 #categories{
-    position: fixed;
+    position: absolute;
     top: 79px;
     width: 10%;
     height: 0px;
@@ -2234,7 +2262,7 @@ li#item1548456588046-1 {
     border-radius: 2px;
     padding: 15px 0px 0px 0px;
     opacity: 0;
-    left: calc(10%);
+    left: calc(17%);
     overflow-y: scroll;
     overflow-x: hidden;
     display: flex;
@@ -2352,7 +2380,10 @@ li#item1548456588046-1 {
 }
 
 #edit-button {
-    color: rgb(77, 88, 98) !important;
+    background: rgb(77, 88, 98) !important;
+    color: #fff !important;
+    border: none;
+    width: 100%;
 }
 
 .supporttitle {
@@ -2454,7 +2485,7 @@ li#item1548456588046-1 {
 }
 
 #how_it_works {
-    background: #4d5862;
+    background-image: linear-gradient(to top left, #022f50, #8cc8f2);
 }
 
 /*.how_tabs {
@@ -2490,27 +2521,15 @@ li#item1548456588046-1 {
     border: 2px solid #1da6e0;
 }
 
-#email_confirmation {
-    margin: 0 auto;
-    max-width: 800px;
-    background: #fff;
-    width: 100% !important;
-    /* padding-top: 100px !important; */
-    margin-bottom: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
 .notfoundpage {
-    background: #4d5862;
+    /*background: #4d5862;
     width: 100% !important;
     -webkit-box-shadow: 0 1px 6px rgba(57,73,76,0.35);
     box-shadow: 0 1px 6px rgba(57,73,76,0.35);
     min-height: 800px;
     padding-top: 100px;
     position: absolute;
-    right: 0;
+    right: 0;*/
 }
 
 .successful_payment, .failed_payment {
@@ -2519,7 +2538,7 @@ li#item1548456588046-1 {
     margin: 0 auto;
 }
 
-#contactus, #booktrip, #pendingtrip {
+#contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform {
     position: fixed;
     top: 13%;
     width: 40%;
@@ -2536,6 +2555,10 @@ li#item1548456588046-1 {
     display: flex;
 }
 
+#verifysuper, #adduserform {
+    top: 30%;
+}
+
 #pendingtrip {
     color: #4d5862;
 }
@@ -2550,7 +2573,7 @@ li#item1548456588046-1 {
     font-weight: 800;
 }
 
-.closecontactus, .closebooktrip, .closependingtrip{
+.closecontactus, .closebooktrip, .closependingtrip, .closefundcard, .closeverifysuper {
     position: absolute;
     top: 9px;
     right: 16px;
@@ -2576,7 +2599,7 @@ li#item1548456588046-1 {
 }
 
 .layerone {
-    padding-bottom: 40px;
+    padding-bottom: 30px;
 }
 .layerone, .layertwo {
     display: flex;
@@ -2655,7 +2678,7 @@ li#item1548456588046-1 {
 }
 
 .demarcator {
-    border-bottom: .5px solid #999b9d;
+    border-bottom: 1.5px solid #999b9d;
     /* height: 48px; */
     /* width: 78%; */
     margin: 0 70px;
@@ -2751,7 +2774,6 @@ li#item1548456588046-1 {
 }
 
 .l_parttwo_one {
-    padding: 0 30px;
     width: 50%;
    /* border-right: 1px solid #f5f4f4;*/
 }
@@ -2869,9 +2891,18 @@ i.icon.circle:before {
     margin-top: -5px;
 }
 
+.arrows_h {
+    margin-top: 0px !important;
+    width: 14.28%;
+}
+
 .booking_circle {
     color: forestgreen;
     font-size: 20pt;
+}
+
+.booking_cirle_h {
+    font-size: 12pt;
 }
 
 .booking_option {
@@ -3043,4 +3074,135 @@ i.icon.circle:before {
 .mode_period_body {
     width: 100%;
     padding: 5px 0;
+}
+
+#email_confirmation {
+    max-width: 100% !important; 
+    display: none;
+    width: 100% !important;
+}
+
+.demarcator_points {
+    border-bottom: 1.5px solid;
+    width: 60%;
+}
+
+.boarding_img {
+    /* height: 5%; */
+    width: 10% !important;
+}
+
+i.boarding_img.bus.icon {
+    font-size: 1.5em;
+}
+
+.card_logos img {
+    width: 100%;
+}
+
+.somebar {
+    border-top: 1px solid lightgrey;
+    height: 75px;
+    position: fixed;
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+    background: rgb(77, 88, 98);
+    margin-top: 30px;
+    z-index: 44343434;
+}
+
+.somebar_other {
+    border-top: 1px solid lightgrey;
+    height: 75px;
+    position: fixed;
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+    background: white;
+    margin-top: 30px;
+    z-index: 44343434;
+}
+
+.bottombar {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    height: 75px;
+    background: rgb(77, 88, 98);
+}
+
+.bottombar_other {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    height: 75px;
+    background: white;
+}
+
+.commute_img {
+    background-image: url(../img/howitworks.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /*height: 110%;
+    min-height: 600px;
+    float: left;*/
+}
+
+.howpart {
+    display: flex;
+    /*padding: 150px 0;*/
+}
+
+.signuppart, .bookpart, .boardpart, .paypart {
+    width: calc(100%/4);
+    padding: 40px;
+}
+
+.howtitle {
+    font-size: 20pt;
+}
+
+.signuppart, .boardpart {
+    color: rgb(77, 88, 98);
+}
+
+.dem_signup {
+    height: 70%;
+    border-right: 1px solid;
+}
+
+.howbody {
+    font-size: 20px;
+}
+
+.howtitle {
+    cursor: pointer;
+}
+
+.how_ic {
+    display: flex;
+    width: 80%;
+    padding: 150px 0;
+}
+
+.h_ic {
+    width: 20%;
+    padding: 100px 0;
+}
+
+.h_ic img {
+    height: 18em;
+}
+
+.h_ic i {
+    font-size: 15em !important;
+    width: 100% !important;
+    padding: 150px 0;
+}
+
+.h_title {
+    text-align: center;
+    font-size: 20pt;
 }

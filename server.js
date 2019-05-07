@@ -59,12 +59,13 @@ app.use(morgan('dev'));
 // ROUTES FOR OUR API
 // =============================
 let apiRoutes = require('./app/routes/api')(app, express);
-//let general = require('./app/routes/general')(app, express);
+let adminRoutes = require('./app/routes/adminroutes')(app, express);
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', apiRoutes);                 // all of our routes will be prefixed with /api
+app.use('/admin', adminRoutes);             // all of our routes will be prefixed with /admin
 
-app.get('*', function(req, res) {
+app.get('*', function(req, res) { 
     res.sendFile(path.join(__dirname + '/public/views/index.html'));
 });
 

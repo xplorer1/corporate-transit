@@ -14,8 +14,10 @@
     <link href="../assets/css/style.css" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135301192-1"></script>
     <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/mobile.css">
 
-    <link rel="stylesheet" href="../assets/lib/bootstrap/semantic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css" />
     <link rel="stylesheet" href="../assets/lib/bootstrap/icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -27,14 +29,15 @@
     <script src="../assets/js/controllers.js"></script>
     <script src="../assets/js/utilities.js"></script>
     <script src="../assets/js/transporter.js"></script>
+    <script src="../assets/js/adminservice.js"></script>
 
     <base href="/">
 </head>
 
 <body ng-controller="MainPageController">
-    <!-- <div class="ui active dimmer">
+    <div class="ui active dimmer">
         <div class="ui loader"></div>
-    </div> -->
+    </div>
 
 <ui-view>
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top">
@@ -46,30 +49,30 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <ul class="navbar-nav ml-auto" style="width: 42%;
+        <ul class="navbar-nav ml-auto" style="width: 25%;
     justify-content: center;">
-            <li class="nav-item active">
-                <a class="nav-link" ng-click="showSubMenu()">About <i class="inverted angle down icon"></i></a>
-            </li>
             <!-- <li class="nav-item active">
-                <a class="nav-link" ui-sref="how_it_works">How It Works</a>
+                <a class="nav-link submen" ng-click="showSubMenu()">About <i class="inverted angle down icon"></i></a>
             </li> -->
-            <li class="nav-item active">
-                <a class="nav-link" ui-sref="login">Book a trip</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" ui-sref="login">Payment</a>
-            </li>
         </ul>
 
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#about_sec">About CT</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#why_sec">Why CT</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#how_it_works">How It Works</a>
+                </li>
 
-                
                 <li class="nav-item active">
                     <a class="nav-link" ui-sref="login">Log In</a>
                 </li>
-                <li class="nav-item active border">
+
+                <li class="nav-item active">
                     <a class="nav-link" ui-sref="signup">Sign Up</a>
                 </li>
             </ul>
@@ -108,7 +111,7 @@
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>
-                <div style="padding: 15px;">
+                <div style="padding: 15px; margin-top: -30%;">
                     <div>
                         Getting you ahead.
                     </div>
@@ -148,11 +151,6 @@
 
         <div class="comfort_content w-100">
 
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
-                <img src="../assets/img/icons/comfort.png" class="col-10 col-centered">
-
-            </div>
-
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_txt_cont half_col">
                 <div class="col-sm-12 col-lg-9 h-50 commute-text-container">
                     <div class="h-25 big-txt blue">Ride In Comfort!</div>
@@ -164,91 +162,86 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 commute_img_cont half_col">
+                <img src="../assets/img/icons/comfort.png" class="col-10 col-centered">
+            </div>
+            
         </div>
     </section>
 
-    <!-- How it works section -->
-    <section id="how_it_works" class="container-fluid commute_sec w-100">
+    <section id="how_it_works" class="section_container about-container how_it_works w-100">
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
+        <div class="row"><div class="column">&nbsp;</div></div>
 
-        <div class="commute_content w-100">
+        <div class="h_title">
+            How it works...
+        </div>
+            <div class="about_content w-100 howpart">
+                <div class="h_ic">
+                    <i class="cog icon">
+                    </i>
+                    <!-- <img src="../assets/img/cogwheel.png"> -->
+                </div>
 
-            <div class="commute_img_cont half_col" style="box-sizing: content-box; width: 40%;">
-                <img src="../assets/img/icons/METR.png" class="col-10 col-centered">
-            </div>
-
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-
-            <div class="how_title">
-                How To Ride
-            </div>
-
-            <div class="commute_txt_cont half_col" style="margin-top: -180px;">
-                <div class="commute-text-container" style="display: flex; text-align: left;">
-                    <div class="how_tabs_one">
-                        <div class="how_tabs_title">
-                            1. Register
+                <div class="how_ic">
+                    <div class="signuppart">
+                        <div class="howtitle" ui-sref="signup">
+                            Sign Up
                         </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
 
-                        <div class="how_tabs_text">
-                            First create an account.
+                        <div class="howbody">
+                            Join Corporate Transit here. Get your payment card.
                         </div>
                     </div>
 
-                    <div class="how_tabs" style="margin: 0 65px;">
-                        <div class="how_tabs_title">
-                            2. Book
-                        </div>
+                    <div class="dem_signup">
+                </div>
 
-                        <div class="how_tabs_text">
-                            First create an account.
-                        </div>
-                        
+                <div class="bookpart">
+                    <div class="howtitle" ui-sref="login">
+                        Book
                     </div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
 
-                    <div class="how_tabs" style="margin: 0 65px;">
-                        <div class="how_tabs_title">
-                            3. Ride
-                        </div>
-
-                        <div class="how_tabs_text">
-                            First create an account.
-                        </div>
+                    <div class="howbody">
+                        Secure your seat when you book ahead. Flexible booking options available.
                     </div>
                 </div>
-            </div>
 
-            <div class="how_btn_div" style="margin-top: -180px;">
-                <button class="how_btn" ui-sref="signup">Get Started</button>
-            </div>
-        </div>
-    </section>
+                <div class="dem_signup">
+                </div>
 
-    <!-- about ct -->
-    <section id="about_sec" class="section_container about-container about_sec w-100">
+                <div class="boardpart">
+                    <div class="howtitle" ui-sref="login">
+                        Board
+                    </div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
 
-        <div class="about_content w-100">
-
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 third_col white about-title">
-                About CT...
-
-            </div>
-
-            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 graphiti graphiti_one commute_txt_cont half_col">
-
-                <div class="graphiti_text">
-
-                    Corporate Transit is a transportation solution focused on servicing the Lagos workforce by providing comfortable and cost-effective transport choices with an objective to enhance the way workers commute to work and back home.
-                    <br>
-                    <br> Our value proposition is that our service will always be safe, comfotable, reliable and affordable.
-                    <br>
-                    <div class="about_button_container w-100">
-                        <button class="w-100 h-100 dark-no-bg-button" ui-sref="signup">Join CT Now!</button>
+                    <div class="howbody">
+                        Head down to our designated pick up points. You have 30 minutes.
                     </div>
                 </div>
+
+                <div class="dem_signup">
+                </div>
+
+                <div class="paypart">
+                    <div class="howtitle" ui-sref="login">
+                        Pay
+                    </div>
+                    <div class="row"><div class="column">&nbsp;</div></div>
+
+                    <div class="howbody">
+                        Fund your payment card. Tap to pay whenever you board. Relax and enjoy the trip.
+                    </div>
+                </div>
+                </div>
             </div>
-        </div>
     </section>
 
     <!-- why ct -->
@@ -315,6 +308,32 @@
 
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 third_col white why-title">
                 Why CT...
+            </div>
+        </div>
+    </section>
+
+    <!-- about ct -->
+    <section id="about_sec" class="section_container about-container about_sec w-100">
+
+        <div class="about_content w-100">
+
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 third_col white about-title">
+                About CT...
+
+            </div>
+
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12 graphiti graphiti_one commute_txt_cont half_col">
+
+                <div class="graphiti_text">
+
+                    Corporate Transit is a transportation solution focused on servicing the Lagos workforce by providing comfortable and cost-effective transport choices with an objective to enhance the way workers commute to work and back home.
+                    <br>
+                    <br> Our value proposition is that our service will always be safe, comfotable, reliable and affordable.
+                    <br>
+                    <div class="about_button_container w-100">
+                        <button class="w-100 h-100 dark-no-bg-button" ui-sref="signup">Join CT Now!</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

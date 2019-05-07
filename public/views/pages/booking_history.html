@@ -19,57 +19,148 @@
                 <a class="new_a" ng-click="showBookTrip()">New</a>
             </div>
         </div>
+
+        <div class="sortselect for_mobile" style="display: none;">
+            <label for="sort">
+                <select id="sort" name="sort" class="pretty">
+                    <option value="default" title="Sort by" selected disabled>Sort By</option>
+                    <option value="3">Last 3 Days</option>
+                    <option value="30">Last Month</option>
+                    <option value="90">Last 3 Months</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="layertwo">
+            <div class="layertwo_half_one">
+                <div class="layertwo_first_btn">
+                    <a class="" ng-click="loadHistory('3')">Last 3 Days</a>
+                </div>
+
+                <div class="layertwo_first_btn">
+                    <a class="" ng-click="loadHistory('30')">Last Month</a>
+                </div>
+
+                <div class="layertwo_first_btn">
+                    <a class="" ng-click="loadHistory('90')">Last 3 Months</a>
+                </div>
+            </div>
+
+            <div class="demarcator">
+            </div>
+
+            <div class="layertwo_half_two">
+                <div class="layertwo_half_btn">
+                    <input type="Text" id="tr_from" name="tr_from" ng-model="tr_from" onclick="javascript:NewCssCal('tr_from', 'ddMMyyyy')" placeholder="From" />
+                </div>
+
+                <div class="layertwo_half_btn">
+                    <input type="Text" id="tr_to" name="tr_to" ng-model="tr_to" onclick="javascript:NewCssCal('tr_to', 'ddMMyyyy')" placeholder="To" />
+                </div>
+
+                <div class="layertwo_btn_last">
+                    <a class="" ng-click="searchHistory('3')">Search</a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="history first" ng-repeat="history in booking_history">
-        <div class="booking_history_left">
-            <div class="booking_from" style="width: 7% !important;">
-                <span ng-bind="history.booking.routefrom.split('-')[1].trim()"></span>
-            </div>
-
-            <div class="arrows">
-                <div ng-if="history.booking.bookingtype === 'Round Trip'" class="bk_arrow_one">
-                    <span>&#x2190;</span>
+    <div class="hist">
+        <div class="history first">
+            <div class="booking_history_left">
+                <div class="booking_from">
+                    <span>From </span>
                 </div>
 
-                <div class="bk_arrow_two">
-                    <span>&#x2192;</span>
+                <div class="booking_to">
+                    <span>To</span>
+                </div>
+
+                <div class="arrows_h">
+                    Trip Type
+                </div>
+
+                <div class="booking_date">
+                    <span>Date</span>
+                </div>
+
+                <div class="booking_time">
+                    <span>Time</span>
+                </div>
+
+                <div class="booking_amount">
+                    <span>Cost</span>
+                </div>
+
+                <div class="booking_cirle booking_cirle_h">
+                    <span>Status</span>
                 </div>
             </div>
 
-            <div class="booking_to">
-                <span ng-bind="history.booking.routeto.split('-')[1].trim()"></span>
-            </div>
+            <div class="booking_history_right">
 
-            <div class="booking_date">
-                <span ng-bind="history.booking.bookedon.split('T')[0]"></span>
-            </div>
-
-            <div class="booking_time">
-                <span ng-bind="history.booking.bookingtime"></span>
-            </div>
-
-            <div class="booking_amount">
-                NGN <span ng-bind="history.booking.bookingcost"></span>
-            </div>
-
-            <div ng-if="history.booking.bookingstatus === 'Concluded'" class="booking_circle">
-                <span>&#x2022;</span>
-            </div>
-
-            <div class="booking_circle bK_none" ng-if="history.booking.bookingstatus === 'Pending'">
-                <span>&#x2022;</span>
-            </div>
-
-            <div class="booking_circle bK_cancel" ng-if="history.booking.bookingstatus === 'Cancelled'">
-                <span>&#x2022;</span>
+                <div class="booking_option">
+                    <span>Modify Booking?</span>
+                </div>
             </div>
         </div>
 
-        <div class="booking_history_right">
+        <div class="history first" ng-repeat="history in booking_history">
+            <div class="booking_history_left">
+                <div class="booking_from">
+                    <span ng-bind="history.booking.routefrom.split(' - ')[1].trim()"></span>
+                </div>
 
-            <div class="booking_option" ng-if="history.booking.bookingstatus === 'Pending'">
-                <span ng-click="modifyTrip(history.booking.bookingid, history.booking.bookingstatus)"><i class="large material-icons">arrow_drop_down</i></span>
+                <div class="booking_to">
+                    <span ng-bind="history.booking.routeto.split(' - ')[1].trim()"></span>
+                </div>
+
+                <div class="arrows onlyround" ng-if="history.booking.bookingtype === 'Round Trip'">
+                    <div class="bk_arrow_one">
+                        <span>&#x2190;</span>
+                    </div>
+                </div>
+
+                <div class="arrows" ng-if="history.booking.bookingtype === 'One Way Trip'">
+                    <div class="bk_arrow_one">
+                        <span>&#x2190;</span>
+                    </div>
+
+                    <div class="bk_arrow_two">
+                        <span>&#x2192;</span>
+                    </div>
+                </div>
+
+                <div class="booking_date">
+                    <span ng-bind="history.booking.bookedon.split('T')[0]"></span>
+                </div>
+
+                <div class="booking_time">
+                    <span ng-bind="history.booking.bookingtime"></span>
+                </div>
+
+                <div class="booking_amount">
+                    NGN <span ng-bind="history.booking.bookingcost"></span>
+                </div>
+
+                <div ng-if="history.booking.bookingstatus === 'Concluded'" class="booking_circle">
+                    <span>&#x2022;</span>
+                </div>
+
+                <div class="booking_circle bK_none" ng-if="history.booking.bookingstatus === 'Pending'">
+                    <span>&#x2022;</span>
+                </div>
+
+                <div class="booking_circle bK_cancel" ng-if="history.booking.bookingstatus === 'Cancelled'">
+                    <span>&#x2022;</span>
+                </div>
+            </div>
+
+            <div class="booking_history_right">
+
+                <div class="booking_option" ng-if="history.booking.bookingstatus === 'Pending'">
+                    <span ng-click="modifyTrip(history.booking.bookingid, history.booking.bookingstatus)"><i class="large material-icons">arrow_drop_down</i></span>
+                </div>
             </div>
         </div>
     </div>

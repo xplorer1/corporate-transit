@@ -1,0 +1,426 @@
+.navbar-toggler {
+	position: absolute;
+    right: 5%;
+    top: 5%;
+}
+
+.i_img {
+	position: fixed;
+    left: 5%;
+    top: 3%;
+}
+
+@media (min-width: 1001px) {
+	.f_namee {
+		padding-bottom: 50px !important;
+	}
+}
+
+@media (min-width: 300px) and (max-width: 800px) {
+	.layertwo_half_one {
+		display: none !important;
+	}
+
+	.for_mobile {
+		display: block !important;
+	}
+
+    .submen {
+    	display: none !important;
+    }
+
+    #navbar {
+	    height: auto !important;
+	}
+
+	.img_o img {
+		position: fixed;
+    	left: 5%;
+	}
+
+	#signup, #login {
+	    max-width: 700px;
+	    padding: 20px 20px !important;
+	}
+
+	.forgotp_column {
+	    width: 100% !important;
+	    color: white;
+	    margin: 0 20px !important;
+	}
+
+	.resetpage {
+		padding: 100px 0 !important;
+	}
+
+	.navbar-toggler {
+    	background-color: #4d5862;
+    	margin-top: 5px;
+    }
+
+    .bookinghistorypage, .paymenthistorypage, .transactionhistorypage, .landingpage, .paymentpage, .adminpage {
+	    background-image: linear-gradient(to top left, #91bacb, #ffffff);
+	    width: 100%;
+	    min-height: -webkit-fill-available;
+	    height: 100%;
+	    position: absolute;
+	    overflow: scroll;
+	    right: 0;
+	    /* padding: 150px 50px; */
+	}
+
+	.layerone_btn {
+		width: 100%;
+	}
+
+	.layerone {
+		display: block;
+	}
+
+	.cnts_btn {
+		text-align: left;
+	}
+
+	.pymt_btn {
+		margin-bottom: 40px;
+	}
+
+	.new_a {
+		margin-right: 15px;
+	}
+
+	.demarcator {
+	    border-bottom: 1px solid #999b9d;
+	    /* height: 48px; */
+	    /* width: 78%; */
+	    margin: 0 40px;
+	}
+
+	.l_parttwo_body {
+	    padding: 0 18px;
+	    display: block; 
+	}
+
+	.l_parttwo_one {
+	    width: 100%;
+	}
+
+	.demarcator_points {
+	    border-bottom: 1px solid;
+	    width: 100%;
+	}
+
+	.l_parttwo_two {
+	    position: inherit !important;
+	    /* right: 15%; */
+	    font-weight: 500;
+	}
+
+	.l_btns {
+	    display: block; 
+	    width: 100%;
+	    padding: 50px 25px;
+	}
+
+	.bk_trip_btn {
+	    width: 100%;
+	    padding: 0 !important; 
+	    margin-bottom: 20px;
+	}
+
+	.fd_card_btn {
+	    width: 100%;
+	    padding: 0 !important;
+	}
+
+	.trip_sch_info {
+	    color: #4d5862;
+	    display: block; 
+	    padding: 0 15px;
+	}
+
+	.trip_sch {
+	    width: 100%;
+	    margin-bottom: 25px;
+	}
+
+	.trip_info {
+	    width: 100%;
+	    padding: 0; 
+	}
+
+	.demarcator_starts {
+	    border-bottom: 1px solid;
+	    width: 100%;
+	    margin-left: 0; 
+	}
+
+	.starts_title, .boarding_title {
+	    width: 42%;
+	    font-size: large;
+	}
+
+	.boarding_time, .trip_starts {
+	    width: 100%;
+	    justify-content: center;
+	}
+
+	.bd_time.day {
+	    width: 17%;
+	    font-weight: 100;
+	}
+
+	.trip_days {
+	    display: flex;
+	    justify-content: flex-end;
+	    margin-left: 11%;
+	}
+
+	.num_booked, .num_taken {
+	    font-size: 12pt;
+	    font-weight: 900;
+	}
+
+	.taken {
+	    padding: 0 0 0 15px;
+	    width: 50%;
+	}
+
+	.booked, .deposit {
+	    padding: 0 15px 0 0;
+	}
+
+	.l_parttwo_title {
+	    display: flex;
+	    font-size: 15pt;
+	}
+
+	.b_rt {
+	    padding: 5px 0;
+	}
+
+	#contactus, #booktrip, #pendingtrip, #fundcardform, #verifysuper {
+	    position: absolute;
+	    top: 17%;
+	    width: 95%;
+	    height: 0px;
+	    background: white;
+	    /* right: 20px; */
+	    z-index: 1000000;
+	    border-radius: 2px;
+	    padding: 15px 16px 3px 20px;
+	    opacity: 0;
+	    left: calc(5%);
+	    display: flex;
+	}
+
+	#booktrip, #pendingtrip {
+		top: 100% !important;
+	}
+
+	#fundcardform, #verifysuper, #replycomplaint, #message, #adduserform {
+		top: 150% !important;
+	}
+
+	.for_mobile {
+		display: block;
+	}
+
+	.for_desk {
+		display: none !important;
+	}
+
+	.sid_barr {
+		background-image: linear-gradient(to top, #2b4154, #5e738a) !important;
+		width: 60% !important;
+	}
+
+	.history {
+	    padding: 0 15px !important;
+	    width: 100% !important;
+    	/*overflow-x: scroll !important;*/
+	}
+
+	.hist {
+		overflow-x: scroll !important;
+		width: fit-content;
+		padding-top: 40px;
+	}
+
+	.booking_history_left, .history_left {
+	    width: auto !important;
+	}
+
+	.booking_history_right {
+	    width: 15% !important;
+	    text-align: right !important;
+	    margin: 0 30px !important;
+	    padding: 30px 0px 30px 0 !important
+	}
+
+	.arrows_h {
+	    margin-top: 0px !important;
+	    width: max-content !important;
+	    margin: 0 30px !important;
+	}
+
+	.booking_option {
+	    cursor: pointer !important;
+	    width: max-content !important;
+	    padding: 0 30px 0 0 !important;
+	}
+
+	.booking_from, .arrows, .booking_to, .booking_date, .booking_amount, .booking_time, .booking_circle {
+	    width: max-content;;
+	    margin: 0 30px;
+	    min-width: 45px;
+	}
+
+	.layers {
+	    padding: 100px 15px 30px;
+	}
+
+	.layerone, .layertwo {
+	    display: block;
+	}
+
+	.layertwo_first_btn {
+	    width: 100%;
+	    padding: 0 0 40px;
+	}
+
+	.layertwo_half_one, .layertwo_half_two {
+	    width: 100%;
+	    display: contents;
+	}
+
+	.layertwo_half_one {
+	    border-right: none !important;
+	}
+
+	input#tr_from, input#tr_to {
+	    
+	    width: 100% !important;
+	}
+
+	.layertwo_btn, .layertwo_half_btn, .layertwo_btn_last {
+	    width: 100%;
+	    padding: 15px 0;
+	}
+
+	.layertwo_btn_last {
+		padding-top: 30px;
+		text-align: left;
+	}
+
+	span#calBorder {
+	    left: 15% !important;
+	}
+
+	.transactionhistorypage, .paymenthistorypage {
+		padding: 0 0 80px;
+	}
+
+	.trn_route, .trn_mode, .trn_cost, .trn_date {
+	    width: max-content !important;
+	    margin: 0 30px !important;
+	}
+
+	.trn_status {
+		width: max-content;
+		padding: 0 30px 0 0;
+	}
+
+	.pymt_type, .pymt_date, .pymt_amount {
+	    width: max-content !important;
+	    margin: 0 30px !important;
+	}
+
+	.pymt_total {
+		width: max-content;
+    	padding: 0 30px 0 0;
+	}
+
+	.cnts_btn a {
+	    padding: 5% 10% !important;
+	}
+
+	#sort {
+		padding: 10px 5px;
+		background: none !important;
+		border: 1px solid;
+	}
+
+	.sortselect {
+		padding: 0 0 20px;
+	}
+
+	.onlyround {
+		margin-right: 80px !important;
+	}
+
+	.howpart {
+	    display: block;
+	    padding: 30px 0;
+	}
+
+	.signuppart, .bookpart, .boardpart, .paypart {
+	    width: 100%;
+	    padding: 20px;
+	}
+
+	.dem_signup {
+		border-right: none;
+		height: 0;
+	}
+
+	.howbody {
+		line-height: 1.5;
+	}
+
+	.gen_stats {
+	    display: block;
+	}
+
+	.gen_stat {
+		width: 88%;
+		margin: 20px 25px;
+	}
+
+	.cont_users {
+	    display: block;
+	}
+
+	.users, .complaints {
+	    width: 100%;
+	    padding: 0 25px;
+	}
+
+	.users {
+		margin-top: 25px;
+	}
+
+	.adminpage {
+		padding: 0 0 100px 0;
+	}
+
+	.sender {
+		display: flex;
+	}
+
+	.h_ic {
+	    width: 100%;
+	    padding: 0px 0;
+	    display: none;
+	}
+
+	.how_ic {
+	    display: block;
+	    width: 100%;
+	    padding: 0px 0;
+	}
+
+	#how_it_works {
+	    height: fit-content;
+	}
+}

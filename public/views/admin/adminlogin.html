@@ -1,4 +1,4 @@
-<div class="ui middle aligned center aligned grid forms loginpage" ng-controller="LoginPageController" id="ph_page">
+<div class="ui middle aligned center aligned grid forms loginpage" ng-controller="AdminController" id="ph_page">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <a class="img_logo img_o" ui-sref="home">
             <img src="../../assets/img/logos/ct_logo.png" class="">
@@ -7,13 +7,6 @@
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto nav_o">
-                <li class="nav-item active">
-                    <a class="nav-link" ui-sref="signup" style="color: #4d5862 !important">Sign Up</a>
-                </li>
-            </ul>
-        </div>
     </nav>
 
     <div class="column" id="login">
@@ -39,27 +32,19 @@
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="lock icon"></i> -->
-                        <input type="password" ng-model="password" id="password" name="password" placeholder="Password" style="padding-left: 15px !important;"> <div class="fgt_p" ui-sref="forgotpassword"><i>forgot?</i></div>
+                        <input type="password" ng-model="password" id="password" name="password" placeholder="Password" style="padding-left: 15px !important;">
                     </div>
                 </div>
 
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>
 
-                <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="login()" ng-disabled="loginclicked">Login</button>
+                <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="login()" ng-disabled="loginclicked">Sign In</button>
                 <div class="generalloader"></div>
             </div>
         </form>
 
         <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div class="noacct">
-            Don't have an account? No worries. <a ui-sref="signup">Sign Up</a>
-        </div>
-
-        <div class="noacct">
-            Are you an admin? <a ui-sref="adminlogin">Login</a>
-        </div>
     </div>
 
     <div class="somebar_other">

@@ -14,7 +14,8 @@ let PaymentJournalSchema = new Schema({
         }
     },
     paymentid: { type: String, required: true},
-    paymenttype: { type: String, required: true},
+    paymenttype: { type: String},
+    paymentstatus: { type: String },
     amount: { type: Number, required: true, default: 0 },
     created: { type: Date, default: Date.now },
     createdformatted: { type: String }

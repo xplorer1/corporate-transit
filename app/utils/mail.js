@@ -203,11 +203,65 @@ module.exports = {
 
         // setup e-mail data with unicode symbols
         let mailOptions = {
-            from: '"Hello From Corporate Transit" <chijioke543@gmail.com>', // sender address
+            from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
             to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Your card number! ✔', // Subject line
-            text: 'Hello ' + fullname + 'Hello. This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>Hello. This is your card number. <br><br>' + cardnumber + '<br><br> Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
+            text: 'Hello ' + fullname + 'Your email has been verified! This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
+            html: 'Hello ' + fullname + '!<br><br>Your account has been activated! <br><br> This is your card number. <br><br>' + cardnumber + '<br><br> Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                return console.log('Mail Error: ', error, ' : ', new Date());
+            }
+        });
+    },
+
+    sendAdminMail: function sendAdminMail(fullname, recipient, password){
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            auth: {
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
+            }
+        });
+
+        // setup e-mail data with unicode symbols
+        let mailOptions = {
+            from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
+            to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            subject: 'Admin Invitation! ✔', // Subject line
+            text: 'Hello ' + fullname + 'You have been invited to collaborate on Corporate Transit. ' + password + ' is your password.', // plaintext body
+            html: 'Hello ' + fullname + '!<br><br>You have been invited to collaborate on Corporate Transit! <br><br> This is your password. <br><br><b>' + password + '<b><br><br' // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                return console.log('Mail Error: ', error, ' : ', new Date());
+            }
+        });
+    },
+
+    sendReplyText: function sendReplyText(prevsubject, recipient, text) {
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            auth: {
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
+            }
+        });
+
+        // setup e-mail data with unicode symbols
+        let mailOptions = {
+            from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
+            to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            subject: 'Re: ' + prevsubject, // Subject line
+            text: text, // plaintext body
+            html: text // html body
         };
 
         // send mail with defined transport object

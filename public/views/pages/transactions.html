@@ -1,8 +1,8 @@
 <article ng-controller="TransactionController" class="transactionhistorypage">
 
-    <!-- <div class="ui active dimmer">
+    <div class="ui active dimmer">
         <div class="ui loader"></div>
-    </div> -->
+    </div>
 
     <div class="generalloader"></div>
 
@@ -15,6 +15,17 @@
             <div class="layerone_btn cnts_btn">
                 <a class="" ng-click="showContactUs()">Contact Us</a>
             </div>
+        </div>
+
+        <div class="sortselect for_mobile" style="display: none;">
+            <label for="sort">
+                <select id="sort" name="sort" class="pretty">
+                    <option value="default" title="Sort by" selected disabled>Sort By</option>
+                    <option value="3">Last 3 Days</option>
+                    <option value="30">Last Month</option>
+                    <option value="90">Last 3 Months</option>
+                </select>
+            </label>
         </div>
 
         <div class="layertwo">
@@ -53,11 +64,39 @@
         </div>
     </div>
 
+    <div class="history first">
+        <div class="booking_history_left">
+            <div class="trn_route">
+                <span ng-bind="history.booking.bookingtype"></span>
+                <span>Booking Type</span>
+            </div>
+
+            <div class="trn_cost">
+                <span>Trip Cost</span>
+            </div>
+
+            <div class="trn_date">
+                <span>Trip Date</span>
+            </div>
+
+            <div class="trn_mode">
+                <span>Payment Mode</span>
+            </div>
+        </div>
+
+        <div class="booking_history_right">
+
+            <div class="trn_status">
+                <span>Trip Status</span>
+            </div>
+        </div>
+    </div>
+
     <div class="history first" ng-repeat="history in transaction_history track by $index">
         <div class="booking_history_left">
             <div class="trn_route">
                 <span ng-bind="history.booking.bookingtype"></span>
-                (<span ng-bind="history.booking.from.split('-')[1].trim() + ' - ' + history.booking.to.split('-')[1].trim()"></span>)
+                (<span ng-bind="history.booking.routefrom.split('-')[1].trim() + ' - ' + history.booking.routeto.split('-')[1].trim()"></span>)
             </div>
 
             <div class="trn_cost">

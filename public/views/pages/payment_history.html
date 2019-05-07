@@ -17,6 +17,17 @@
             </div>
         </div>
 
+        <div class="sortselect for_mobile" style="display: none;">
+            <label for="sort">
+                <select id="sort" name="sort" class="pretty">
+                    <option value="default" title="Sort by" selected disabled>Sort By</option>
+                    <option value="3">Last 3 Days</option>
+                    <option value="30">Last Month</option>
+                    <option value="90">Last 3 Months</option>
+                </select>
+            </label>
+        </div>
+
         <div class="layertwo">
             <div class="layertwo_half_one">
                 <div class="layertwo_first_btn">
@@ -48,34 +59,55 @@
                     <a class="" ng-click="searchHistory('3')">Search</a>
                 </div>
             </div>
-
         </div>
     </div>
 
 
     <div class="row"><div class="column">&nbsp;</div></div>
     <div class="row"><div class="column">&nbsp;</div></div>
-    <!-- <div class="row"><div class="column">&nbsp;</div></div>
-    <div class="row"><div class="column">&nbsp;</div></div> -->
+    
+    <div class="hist">
+        <div class="history first">
+            <div class="history_left">
+                <div class="pymt_type">
+                    <span>Payment type</span>
+                </div>
 
-    <div class="history first" ng-repeat="history in payments_history">
-        <div class="history_left">
-            <div class="pymt_type">
-                <span ng-bind="history.paymenttype"></span>
+                <div class="pymt_amount">
+                    <span>Card Number</span>
+                </div>
+
+                <div class="pymt_date">
+                    <span>Payment Date</span>
+                </div>
             </div>
 
-            <div class="pymt_amount">
-                <span ng-bind="cardnumber"></span>
-            </div>
-
-            <div class="pymt_date">
-                <span ng-bind="history.created.split('T')[0]"></span>
+            <div class="history_right">
+                <div class="pymt_total">
+                    <span>Trip Cost</span>
+                </div>
             </div>
         </div>
 
-        <div class="history_right">
-            <div class="pymt_total">
-                NGN <span ng-bind="history.amount"></span>
+        <div class="history first" ng-repeat="history in payments_history">
+            <div class="history_left">
+                <div class="pymt_type">
+                    <span ng-bind="history.paymenttype"></span>
+                </div>
+
+                <div class="pymt_amount">
+                    <span ng-bind="cardnumber"></span>
+                </div>
+
+                <div class="pymt_date">
+                    <span ng-bind="history.created.split('T')[0]"></span>
+                </div>
+            </div>
+
+            <div class="history_right">
+                <div class="pymt_total">
+                    NGN <span ng-bind="history.amount"></span>
+                </div>
             </div>
         </div>
     </div>

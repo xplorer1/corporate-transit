@@ -18,6 +18,8 @@
             </ul>
         </div>
     </nav>
+
+    <div class="generalloader"></div>
     <div class="column" id="signup">
         <h2 class="ui image header" style="margin: 0 !important;">
             <div class="content">
@@ -59,15 +61,15 @@
                     <label></label>
                     <select class="ui search dropdown" id="work_location" name="work_location" ng-model="work_location">
                         <option disabled value="">Work Location</option>
-                        <option value="AJAH - AJH">AJAH - AJH</option>
+                        <!-- <option value="AJAH - AJH">AJAH - AJH</option>
                         <option value="ANTHONY - ANY">ANTHONY - ANY</option>
                         <option value="APAPA - APA">APAPA - APA</option>
                         <option value="EPE -EPE">EPE - EPE</option>
                         <option value="FESTAC - FTC">FESTAC - FTC</option>
                         <option value="IKEJA - KJA">IKEJA - KJA</option>
-                        <option value="IKORODU - KRD">IKORODU - KRD</option>
+                        <option value="IKORODU - KRD">IKORODU - KRD</option> -->
                         <option value="IKOYI - KYI">IKOYI - KYI</option>
-                        <option value="ISOLO - ISL">ISOLO - ISL</option>
+                        <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
                         <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
                         <option value="LEKKI - LKK">LEKKI - LKK</option>
                         <option value="MAGODO - MGD">MAGODO - MGD</option>
@@ -76,7 +78,7 @@
                         <option value="OMOLE - MLE">OMOLE - MLE</option>
                         <option value="SURULERE - SRL">SURULERE - SRL</option>
                         <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                        <option value="YABA - YBA">YABA - YBA</option>
+                        <option value="YABA - YBA">YABA - YBA</option> -->
                     </select>
                     <span class="ast">*</span>
                 </div>
@@ -85,13 +87,13 @@
                     <label></label>
                     <select class="ui search dropdown" id="home_location" name="home_location" ng-model="home_location">
                         <option disabled value="">Home Location</option>
-                        <option value="AJAH - AJH">AJAH - AJH</option>
+                        <!-- <option value="AJAH - AJH">AJAH - AJH</option>
                         <option value="ANTHONY - ANY">ANTHONY - ANY</option>
                         <option value="APAPA - APA">APAPA - APA</option>
                         <option value="EPE -EPE">EPE - EPE</option>
-                        <option value="FESTAC - FTC">FESTAC - FTC</option>
+                        <option value="FESTAC - FTC">FESTAC - FTC</option> -->
                         <option value="IKEJA - KJA">IKEJA - KJA</option>
-                        <option value="IKORODU - KRD">IKORODU - KRD</option>
+                        <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
                         <option value="IKOYI - KYI">IKOYI - KYI</option>
                         <option value="ISOLO - ISL">ISOLO - ISL</option>
                         <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
@@ -102,7 +104,7 @@
                         <option value="OMOLE - MLE">OMOLE - MLE</option>
                         <option value="SURULERE - SRL">SURULERE - SRL</option>
                         <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                        <option value="YABA - YBA">YABA - YBA</option>
+                        <option value="YABA - YBA">YABA - YBA</option> -->
                     </select>
                     <span class="ast">*</span>
                 </div>
@@ -146,7 +148,6 @@
                     <button class="ui fluid large teal submit button log_in_btn" ng-click="signUp()" ng-disabled="signupclicked">Sign Up</button>
                     <!-- <div class="ui fluid large teal submit button" ng-click="signUp()" >Create Account</div> -->
                 </div>
-                <div class="generalloader"></div>
             </div>
         </form>
 
@@ -157,32 +158,28 @@
         </div>
     </div>
 
-    <div class="column formcolumn" id="email_confirmation" style="display: none">
+    <div class="column incr_code" id="email_confirmation">
         <div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-
-            <div class="act_title">Account successfully created.</div>
-        </div>
-
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
-
-        <div>
-            <div class="act_text">
-                Please check your email for verification code to activate your account. Also check your spam/junk folders in case it's not in your inbox.
+            <div class="pagetitle">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="act_title">Account successfully created.</div>
             </div>
-            <div class="row"><div class="column">&nbsp;</div></div>
-            <span class="info_text">If you didn't find it, click on the button below.</span>
-        </div>
+            <div class="pagetext">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                Please check your email for verification code to activate your account. Also check your spam/junk folders in case it's not in your inbox.
 
-        <div class="row"><div class="column">&nbsp;</div></div>
-        <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <span class="info_text">If you didn't find it, click on the button below.</span>
 
-        <div>
-            <div class="ui fluid large teal submit button" ng-click="resendCode()" style="width: 50% !important;">Resend Activation Code</div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
 
-            <div class="row"><div class="column">&nbsp;</div></div>
+                <button class="ui fluid large teal submit button resendcodebutton" ng-click="resendCode()" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Resend Link</button>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+            </div>
         </div>
     </div>
 

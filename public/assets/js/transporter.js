@@ -6,8 +6,8 @@ function TransporterFnc($http, $q) {
 
     // create a new object
     let transporter = {};
-    let baseurl = "http://127.0.0.1:80";
-    //let baseurl = "https://corporatetransit.com.ng"
+    //let baseurl = "http://127.0.0.1:80";
+    let baseurl = "https://corporatetransit.com.ng"
 
     transporter.signup = function(userData) {
         return $http.post(baseurl+"/api/signup", userData).then(
@@ -41,6 +41,16 @@ function TransporterFnc($http, $q) {
 
     transporter.resendcode = function(userData) {
         return $http.post(baseurl+"/api/resendvcode", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.resendresetcode = function(userData) {
+        return $http.post(baseurl+"/api/resendresetcode", userData).then(
             function(response){
                 return $q.when(response.data);
             },

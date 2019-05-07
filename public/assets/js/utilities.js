@@ -10,70 +10,30 @@ function UtilitiesFnc(Transporter) {
     utility.currency = {name: "Naira", symbol: "₦"};
     utility.user = {};
 
-    utility.callCloseContactUs = () => {
-        $("#booktrip").css("height", "0px");
-        $("#booktrip").css("opacity", "0");
+    utility.showForm = (id, height) => {
+        $("#"+id).css("-webkit-transition", "height 0.5s ease-out");
+        $("#"+id).css("-moz-transition", "height 0.5s ease-out");
+        $("#"+id).css("-o-transition", "height 0.5s ease-out");
+        $("#"+id).css("-ms-transition", "height 0.5s ease-out");
+        $("#"+id).css("transition", "height 0.5s ease-out");
 
-        $("#contactus").css("-webkit-transition", "height 0.5s ease-in");
-        $("#contactus").css("-moz-transition", "height 0.5s ease-in");
-        $("#contactus").css("-o-transition", "height 0.5s ease-in");
-        $("#contactus").css("-ms-transition", "height 0.5s ease-in");
-        $("#contactus").css("transition", "height 0.5s ease-in");
+        $("#"+id).css("height", height);
+        $("#"+id).css("opacity", "1");
 
-        $("#contactus").css("height", "0px");
+        return false;
+    }
+
+    utility.closeForm = (id) => {
+        $("#"+id).css("-webkit-transition", "height 0.5s ease-in");
+        $("#"+id).css("-moz-transition", "height 0.5s ease-in");
+        $("#"+id).css("-o-transition", "height 0.5s ease-in");
+        $("#"+id).css("-ms-transition", "height 0.5s ease-in");
+        $("#"+id).css("transition", "height 0.5s ease-in");
+
+        $("#"+id).css("height", "0px");
         setTimeout(function(){
-            $("#contactus").css("opacity", "0");
+            $("#"+id).css("opacity", "0");
         }, 400);
-
-        return false;
-    }
-
-    utility.closePendingTrip = () => {
-        $("#booktrip").css("height", "0px");
-        $("#booktrip").css("opacity", "0");
-
-        $("#pendingtrip").css("-webkit-transition", "height 0.5s ease-in");
-        $("#pendingtrip").css("-moz-transition", "height 0.5s ease-in");
-        $("#pendingtrip").css("-o-transition", "height 0.5s ease-in");
-        $("#pendingtrip").css("-ms-transition", "height 0.5s ease-in");
-        $("#pendingtrip").css("transition", "height 0.5s ease-in");
-
-        $("#pendingtrip").css("height", "0px");
-        setTimeout(function(){
-            $("#pendingtrip").css("opacity", "0");
-        }, 400);
-
-        return false;
-    }
-
-    utility.callShowContactUs = () => {
-        $("#booktrip").css("height", "0px");
-        $("#booktrip").css("opacity", "0");
-
-        $("#contactus").css("-webkit-transition", "height 0.5s ease-out");
-        $("#contactus").css("-moz-transition", "height 0.5s ease-out");
-        $("#contactus").css("-o-transition", "height 0.5s ease-out");
-        $("#contactus").css("-ms-transition", "height 0.5s ease-out");
-        $("#contactus").css("transition", "height 0.5s ease-out");
-
-        $("#contactus").css("height", "400px");
-        $("#contactus").css("opacity", "1");
-
-        return false;
-    }
-
-    utility.showPendingTrip = () => {
-        $("#booktrip").css("height", "0px");
-        $("#booktrip").css("opacity", "0");
-
-        $("#pendingtrip").css("-webkit-transition", "height 0.5s ease-out");
-        $("#pendingtrip").css("-moz-transition", "height 0.5s ease-out");
-        $("#pendingtrip").css("-o-transition", "height 0.5s ease-out");
-        $("#pendingtrip").css("-ms-transition", "height 0.5s ease-out");
-        $("#pendingtrip").css("transition", "height 0.5s ease-out");
-
-        $("#pendingtrip").css("height", "430px");
-        $("#pendingtrip").css("opacity", "1");
 
         return false;
     }
@@ -104,6 +64,14 @@ function UtilitiesFnc(Transporter) {
 
     utility.hideGeneralLoader = () => {
         $(".generalloader").css("display", "none");
+    }
+
+    utility.showLandingLoader = () => {
+        $(".landingloader").css("display", "block");
+    }
+
+    utility.hideLandingLoader = () => {
+        $(".landingloader").css("display", "none");
     }
 
     utility.validmail = (email) => {
@@ -155,7 +123,7 @@ function UtilitiesFnc(Transporter) {
                 utility.hideGeneralLoader();
 
                 if(response.status) {
-                    $("#supportemail").notify("Message received. You will get an email shortly.", "success", { position: "bottom-center" });
+                    $("#supportemail").notify("Message received.", "success", { position: "bottom-center" });
                     
                     $("#supportemail").val("");
                     $("#supportsubject").val("");
@@ -166,41 +134,10 @@ function UtilitiesFnc(Transporter) {
                     }, 10000);
                     
                 }else {
-                    $("#supportemail").notify("Sorry, there has been a problem. Please try again later.", { position: "bottom-center" });
+                    $("#supportemail").notify("Error. Please try again later.", { position: "bottom-center" });
                 }
             })
         }
-    }
-
-    utility.showBookTrip = () => {
-        $("#contactus").css("height", "0px");
-        $("#contactus").css("opacity", "0");
-
-        $("#booktrip").css("-webkit-transition", "height 0.5s ease-out");
-        $("#booktrip").css("-moz-transition", "height 0.5s ease-out");
-        $("#booktrip").css("-o-transition", "height 0.5s ease-out");
-        $("#booktrip").css("-ms-transition", "height 0.5s ease-out");
-        $("#booktrip").css("transition", "height 0.5s ease-out");
-
-        $("#booktrip").css("height", "520px");
-        $("#booktrip").css("opacity", "1");
-
-        return false;
-    }
-
-    utility.callCloseBookTrip = () => {
-        $("#booktrip").css("-webkit-transition", "height 0.5s ease-in");
-        $("#booktrip").css("-moz-transition", "height 0.5s ease-in");
-        $("#booktrip").css("-o-transition", "height 0.5s ease-in");
-        $("#booktrip").css("-ms-transition", "height 0.5s ease-in");
-        $("#booktrip").css("transition", "height 0.5s ease-in");
-
-        $("#booktrip").css("height", "0px");
-        setTimeout(function(){
-            $("#booktrip").css("opacity", "0");
-        }, 400);
-
-        return false;
     }
 
     utility.formatText = (text) => {
@@ -229,35 +166,6 @@ function UtilitiesFnc(Transporter) {
         newdate = newdate.replace(ye, "");
 
         return newdate+" "+time+date[2].toLowerCase();
-    }
-
-    utility.showTripMode = () => {
-        $("#mode_period").css("-webkit-transition", "height 0.5s ease-out");
-        $("#mode_period").css("-moz-transition", "height 0.5s ease-out");
-        $("#mode_period").css("-o-transition", "height 0.5s ease-out");
-        $("#mode_period").css("-ms-transition", "height 0.5s ease-out");
-        $("#mode_period").css("transition", "height 0.5s ease-out");
-
-        $("#mode_period").css("height", "130px");
-        $("#mode_period").css("opacity", "0.97");
-        $("#mode_period").css("background", "lightgrey");
-
-        return false;
-    }
-
-    utility.closeTripMode = () => {
-        $("#mode_period").css("-webkit-transition", "height 0.5s ease-in");
-        $("#mode_period").css("-moz-transition", "height 0.5s ease-in");
-        $("#mode_period").css("-o-transition", "height 0.5s ease-in");
-        $("#mode_period").css("-ms-transition", "height 0.5s ease-in");
-        $("#mode_period").css("transition", "height 0.5s ease-in");
-
-        $("#mode_period").css("height", "0px");
-        setTimeout(function(){
-            $("#mode_period").css("opacity", "0");
-        }, 400);
-
-        return false;
     }
 
     // return our entire utility object
