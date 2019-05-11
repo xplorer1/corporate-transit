@@ -111,6 +111,7 @@ function UtilitiesFnc(Transporter) {
         else {
             
             utility.showGeneralLoader();
+            utility.showLandingLoader();
             utility.disableButton("sendmessage-button");
 
             Transporter.contactus({
@@ -121,17 +122,18 @@ function UtilitiesFnc(Transporter) {
                 console.log("Res: ", response);
 
                 utility.hideGeneralLoader();
+                utility.hideLandingLoader();
 
                 if(response.status) {
-                    $("#supportemail").notify("Message received.", "success", { position: "bottom-center" });
+                    $("#supporttext").notify("Message received.", "success", { position: "bottom-center" });
                     
                     $("#supportemail").val("");
                     $("#supportsubject").val("");
                     $("#supporttext").val("");
 
                     setTimeout(() => {
-                        utility.callCloseContactUs();
-                    }, 10000);
+                        utility.closeForm("contactus");
+                    }, 5000);
                     
                 }else {
                     $("#supportemail").notify("Error. Please try again later.", { position: "bottom-center" });

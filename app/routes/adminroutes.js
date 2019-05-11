@@ -29,28 +29,9 @@ module.exports = function(app, express) {
         return retVal;
     }
 
-    let IDGenerator = () => {
-     
-         this.length = 8;
-         this.timestamp = +new Date;
-         
-         var _getRandomInt = function( min, max ) {
-            return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
-         }
-         
-         this.generate = function() {
-             var ts = this.timestamp.toString();
-             var parts = ts.split( "" ).reverse();
-             var id = "";
-             
-             for( var i = 0; i < this.length; ++i ) {
-                var index = _getRandomInt( 0, parts.length - 1 );
-                id += parts[index];  
-             }
-             
-             return id;
-         }  
-    }
+    let ID = function () {
+        return '_' + Math.random().toString(36).substr(2, 9);
+    };
 
     adminRouter.post("/adminlogin", (req, res) => {
 
@@ -78,11 +59,14 @@ module.exports = function(app, express) {
                     if(users) {
                         let numusers = users.length;
                         let regions = [];
-                        let userregioncountarray = []
+                        let routes = [];
+                        let userregioncountarray = [];
+                        let userroutecountarray = [];
 
                         users.forEach(key => {
 
                             regions.push(key.home);
+                            routes.push(key.route);
                         });
 
                         let usersbyregion = regions.reduce(function (acc, curr) {
@@ -95,8 +79,22 @@ module.exports = function(app, express) {
                                 return acc;
                         }, {});
 
+                        let usersbyroute = routes.reduce(function (acc, curr) {
+                            if (typeof acc[curr] == 'undefined') {
+                                acc[curr] = 1;
+                            } else {
+                                acc[curr] += 1;
+                            }
+
+                                return acc;
+                        }, {});
+
                         Object.keys(usersbyregion).forEach(key => {
                             userregioncountarray.push({region: key, regioncount: usersbyregion[key]})
+                        });
+
+                        Object.keys(usersbyroute).forEach(key => {
+                            userroutecountarray.push({route: key, routecount: usersbyroute[key]})
                         });
 
                         BookingJournal.find({}, (err, bookings) => {
@@ -126,13 +124,13 @@ module.exports = function(app, express) {
                                             }
                                         });
 
-                                        Complaint.find({}, {"subject" : 1, "email" : 1, "complaint" : 1, "status" : 1, "createdon" : 1}, (err, complaints) => {
+                                        Complaint.find({}, {"subject" : 1, "email" : 1, "complaint" : 1, "status" : 1, "createdon" : 1, "reply": 1, "replyfrom" : 1}, (err, complaints) => {
                                             if(err) return res.json({status: false, data: err.message});
 
                                             if(complaints) {
                                                 let messages = complaints;
 
-                                                Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+                                                Admin.find({}, {"username" : 1, "role" : 1, "id" : 1, name: 1}, (err, admins) => {
                                                     if(err) return res.json({status: false, data: err.message});
 
                                                     if(admins) {
@@ -141,7 +139,7 @@ module.exports = function(app, express) {
                                                         adminobj["numusers"] = numusers;
                                                         adminobj["email"] = admin.email;
                                                         adminobj["role"] = admin.role;
-                                                        adminobj["fullname"] = admin.fullname;
+                                                        adminobj["name"] = admin.name;
                                                         adminobj["numbookings"] = numbookings;
                                                         adminobj["totaldeposited"] = totaldeposited;
                                                         adminobj["numtaken"] = numtaken;
@@ -150,7 +148,8 @@ module.exports = function(app, express) {
                                                         adminobj["token"] = token;
                                                         adminobj["userregioncountarray"] = userregioncountarray;
                                                         adminobj["num_bankpayments"] = num_bankpayments;
-                                                        adminobj["num_cardpayments"] = num_cardpayments
+                                                        adminobj["num_cardpayments"] = num_cardpayments;
+                                                        adminobj["userroutecountarray"] = userroutecountarray;
 
                                                         return res.json({status: true, data: "login_successful", userdata: adminobj});
                                                     }
@@ -168,6 +167,50 @@ module.exports = function(app, express) {
                 return res.json({status: false, data: "account_notfound"});
             }
         })
+    });
+
+    adminRouter.post("/deleteuser", (req, res) => {
+        //remove({createdon: {$gt: new Date("2019-01-20")}})
+        if(!req.body.id) return res.json({status: false, data: "id_required"});
+        if(!req.body.token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(req.body.token, adminsecret, (err, decoded) => {
+
+            if (err) {
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                Admin.findOne({id: req.body.id}, (err, user) => {
+                    if(err) return res.json({status: false, data: err.message});
+                    console.log("user: ", user.role);
+
+                    if(!user) {
+                        return res.json({status: false, data: "account_notfound"});
+                    }
+
+                    else if (user) {
+                        if (user.role === "Super User") {
+                            return res.json({status: false, data: "found_superuser"});
+                        }
+                        else {
+                            Admin.remove({id: req.body.id}, (err, deleted) => {
+                                if(err) return res.json({status: false, data: err.message});
+
+                                if(deleted) {
+                                    Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+                                        if(err) return res.json({status: false, data: err.message});
+
+                                        if(admins) {
+                                            return res.json({status: false, data: admins, message: "admin_deleted"});
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                });
+            }
+        });
     });
 
     adminRouter.post("/adduser", (req, res) => {
@@ -189,25 +232,46 @@ module.exports = function(app, express) {
                         return res.json({status: false, data: "username_exists"});
                     }
                     else if(!exists) {
-                        let admin = new Admin();
-                        let password = generatePassword();
-
-                        admin.email = req.body.email;
-                        admin.password = password;
-                        admin.role = "Admin";
-                        admin.id = "IDGenerator";
-                        admin.createdon = new Date();
-                        admin.superuser = false;
-                        admin.username = req.body.name.toLowerCase();
-
-                        admin.save((err, saved) => {
+                        Admin.findOne({email: req.body.email}, (err, email_exists) => {
                             if(err) return res.json({status: false, data: err.message});
 
-                            if(saved) {
-                                mailer.sendAdminMail(req.body.name, req.body.email, password);
-                                return res.json({status: true, data: "admin_saved"});
+                            if(email_exists) {
+                                return res.json({status: false, data: "user_exists"});
                             }
-                        });
+
+                            else if(!email_exists) {
+
+                                let admin = new Admin();
+                                let password = generatePassword();
+                                let id = ID();
+
+                                if(id) {
+
+                                    admin.email = req.body.email;
+                                    admin.password = password;
+                                    admin.role = "Admin";
+                                    admin.id = id;
+                                    admin.createdon = new Date();
+                                    admin.superuser = false;
+                                    admin.username = req.body.name.toLowerCase();
+
+                                    admin.save((err, saved) => {
+                                        if(err) return res.json({status: false, data: err.message});
+
+                                        if(saved) {
+                                            Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+                                                if(err) return res.json({status: false, data: err.message});
+
+                                                if(admins) {
+                                                    mailer.sendAdminMail(req.body.name, req.body.email, password);
+                                                    return res.json({status: true, data: "admin_saved", admins: admins});
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                            }
+                        })
                     }
                 })
             }
@@ -218,18 +282,18 @@ module.exports = function(app, express) {
     });
 
     adminRouter.post("/verifysuper", (req, res) => {
-        if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.password) return res.json({status: false, data: "password_required"});
+        if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
 
-        jwt.verify(req.body.token, adminsecret, function (err, decoded) {
+        jwt.verify(req.body.token.trim(), adminsecret, function (err, decoded) {
 
             if (err) {
                 console.log("err: ", err.message);
                 return res.json({status: false, data: "token_expired"})
             }
             else if(decoded) {
-                Admin.findOne({email: req.body.email, password: req.body.password, superuser: true}, (err, admin) => {
+                Admin.findOne({email: req.body.email, password: req.body.password.trim(), superuser: true}, (err, admin) => {
                     if(err) return res.json({status: false, data: err.message});
 
                     if(!admin) {
@@ -251,6 +315,7 @@ module.exports = function(app, express) {
         if(!req.body.replytext) return res.json({status: false, data: "replytext_required"});
         if(!req.body.subject) return res.json({status: false, data: "subject_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
+        if(!req.body.replyfrom) return res.json({status: false, data: "replyfrom_required"});
 
         jwt.verify(req.body.token, adminsecret, function (err, decoded) {
 
@@ -270,14 +335,19 @@ module.exports = function(app, express) {
                     }
                     else if(complaint && complaint.status === "Pending") {
                         Complaint.findOneAndUpdate({_id: req.body.id}, 
-                            {$set: {status: "Replied", reply: req.body.replytext} }, {new: true},  (err, modified) => {
+                            {$set: {status: "Replied", reply: req.body.replytext, replyfrom: req.body.replyfrom} }, {new: true},  (err, modified) => {
                                 if(err) return res.json({status: false, data: err.message});
 
                                 if(modified) {
-                                    mailer.sendReplyText(req.body.subject, complaint.email, req.body.replytext);
-                                    return res.json({status: true, data: "replied"});
-                                }
+                                    Complaint.find({}, {"subject" : 1, "email" : 1, "complaint" : 1, "status" : 1, "createdon" : 1, "reply": 1, "replyfrom": 1}, (err, complaints) => {
+                                        if(err) return res.json({status: false, data: err.message});
 
+                                        if(complaints) {
+                                            mailer.sendReplyText(req.body.subject, complaint.email, req.body.replytext);
+                                            return res.json({status: true, data: "replied", complaints: complaints});
+                                        }
+                                    })
+                                }
                         })
 
                     }
@@ -287,6 +357,10 @@ module.exports = function(app, express) {
                 return res.json({status: false, data: "token_expired"})
             }
         });
+    });
+
+    adminRouter.post("/transfersuperuser", (req, res) => {
+        //coming soon.
     });
     
     return adminRouter;

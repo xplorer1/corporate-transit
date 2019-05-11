@@ -88,7 +88,7 @@
                     <span>Time</span>
                 </div>
 
-                <div class="booking_amount">
+                <div class="booking_amount ba_h">
                     <span>Cost</span>
                 </div>
 
@@ -175,9 +175,9 @@
                     <button class="nav-link a_l cancel_btn" ng-click="getChoice()" id="cancel-button">Cancel</button>
                 </div>
 
-                <div>
-                    <button class="nav-link a_l" ng-click="editBooking()" id="edit-button">Edit</button>
-                </div>            
+                <!-- <div>
+                    <button class="nav-link a_l" id="edit-button">Edit</button>
+                </div>   -->          
             </div>
         </div>
     </div>
@@ -189,12 +189,11 @@
 
             <div class="dynamic_cat_body">
                 <div>
-                    <button class="nav-link a_l" ng-click="modifyChoice('yes')" id="yes-button">YES</a>
+                    <button class="nav-link a_l cancel_btn" ng-click="modifyChoice('yes')" id="cancel-button">Yes</button>
                 </div>
-
                 <div>
-                    <button class="nav-link a_l" ng-click="modifyChoice('no')" id="no-button">NO</a>
-                </div>            
+                    <button class="nav-link a_l cancel_btn" ng-click="modifyChoice('no')" id="cancel-button">No</button>
+                </div>         
             </div>
         </div>
     </div>

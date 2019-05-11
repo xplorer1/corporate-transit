@@ -39,6 +39,16 @@ function AdminService($http, $q) {
             });
     };
 
+    adminservice.deleteuser = function(userData) {
+        return $http.post(baseurl+"/admin/deleteuser", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
     adminservice.replymessage = function(userData) {
         return $http.post(baseurl+"/admin/replymessage", userData).then(
             function(response){

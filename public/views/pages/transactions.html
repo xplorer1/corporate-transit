@@ -64,66 +64,68 @@
         </div>
     </div>
 
-    <div class="history first">
-        <div class="booking_history_left">
-            <div class="trn_route">
-                <span ng-bind="history.booking.bookingtype"></span>
-                <span>Booking Type</span>
+    <div class="hist">
+        <div class="history first">
+            <div class="booking_history_left">
+                <div class="trn_route">
+                    <span ng-bind="history.booking.bookingtype"></span>
+                    <span>Booking Type</span>
+                </div>
+
+                <div class="trn_cost">
+                    <span>Trip Cost</span>
+                </div>
+
+                <div class="trn_date">
+                    <span>Trip Date</span>
+                </div>
+
+                <div class="trn_mode">
+                    <span>Payment Mode</span>
+                </div>
             </div>
 
-            <div class="trn_cost">
-                <span>Trip Cost</span>
-            </div>
+            <div class="booking_history_right">
 
-            <div class="trn_date">
-                <span>Trip Date</span>
-            </div>
-
-            <div class="trn_mode">
-                <span>Payment Mode</span>
+                <div class="trn_status">
+                    <span>Trip Status</span>
+                </div>
             </div>
         </div>
 
-        <div class="booking_history_right">
+        <div class="history first" ng-repeat="history in transaction_history track by $index">
+            <div class="booking_history_left">
+                <div class="trn_route">
+                    <span ng-bind="history.booking.bookingtype"></span>
+                    (<span ng-bind="history.booking.routefrom.split('-')[1].trim() + ' - ' + history.booking.routeto.split('-')[1].trim()"></span>)
+                </div>
 
-            <div class="trn_status">
-                <span>Trip Status</span>
+                <div class="trn_cost">
+                    NGN <span ng-bind="history.booking.bookingcost"></span>
+                </div>
+
+                <div class="trn_date">
+                    <span ng-bind="history.booking.bookedonformatted"></span>
+                </div>
+
+                <div class="trn_mode">
+                    <span ng-bind="history.booking.mode"></span>
+                </div>
+            </div>
+
+            <div class="booking_history_right">
+
+                <div class="trn_status" ng-if="history.booking.bookingstatus !== 'Concluded'">
+                    <span ng-bind="history.booking.bookingstatus"></span>
+                </div>
+
+                <div class="trn_status confirmed" ng-if="history.booking.bookingstatus === 'Concluded'">
+                    <span ng-bind="history.booking.bookingstatus"></span>
+                </div>
             </div>
         </div>
+        
     </div>
-
-    <div class="history first" ng-repeat="history in transaction_history track by $index">
-        <div class="booking_history_left">
-            <div class="trn_route">
-                <span ng-bind="history.booking.bookingtype"></span>
-                (<span ng-bind="history.booking.routefrom.split('-')[1].trim() + ' - ' + history.booking.routeto.split('-')[1].trim()"></span>)
-            </div>
-
-            <div class="trn_cost">
-                NGN <span ng-bind="history.booking.bookingcost"></span>
-            </div>
-
-            <div class="trn_date">
-                <span ng-bind="history.booking.bookedonformatted"></span>
-            </div>
-
-            <div class="trn_mode">
-                <span ng-bind="history.booking.mode"></span>
-            </div>
-        </div>
-
-        <div class="booking_history_right">
-
-            <div class="trn_status" ng-if="history.booking.bookingstatus !== 'Concluded'">
-                <span ng-bind="history.booking.bookingstatus"></span>
-            </div>
-
-            <div class="trn_status confirmed" ng-if="history.booking.bookingstatus === 'Concluded'">
-                <span ng-bind="history.booking.bookingstatus"></span>
-            </div>
-        </div>
-    </div>
-
 
     <div class="row"><div class="column">&nbsp;</div></div>
     <div class="row"><div class="column">&nbsp;</div></div>

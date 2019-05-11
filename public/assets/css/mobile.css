@@ -39,6 +39,8 @@
 	}
 
 	#signup, #login {
+		margin: 100px 0 150px;
+		height: -webkit-fill-available;
 	    max-width: 700px;
 	    padding: 20px 20px !important;
 	}
@@ -199,7 +201,7 @@
 	    padding: 5px 0;
 	}
 
-	#contactus, #booktrip, #pendingtrip, #fundcardform, #verifysuper {
+	#contactus, #booktrip, #pendingtrip, #fundcardform, #verifysuper, #viewrepliedmessage, #repliedmessage {
 	    position: absolute;
 	    top: 17%;
 	    width: 95%;
@@ -218,7 +220,7 @@
 		top: 100% !important;
 	}
 
-	#fundcardform, #verifysuper, #replycomplaint, #message, #adduserform {
+	#fundcardform, #verifysuper, #replycomplaint, #message, #adduserform, #verifysuper, #viewrepliedmessage, #repliedmessage {
 		top: 150% !important;
 	}
 
@@ -326,14 +328,22 @@
 	    margin: 0 30px !important;
 	}
 
+	.trn_route {
+		width: 170px !important;
+	}
+
 	.trn_status {
 		width: max-content;
 		padding: 0 30px 0 0;
 	}
 
 	.pymt_type, .pymt_date, .pymt_amount {
-	    width: max-content !important;
+	    width: 95px !important;
 	    margin: 0 30px !important;
+	}
+
+	.booking_amount.ba_h {
+	    width: 110px !IMPORTANT;
 	}
 
 	.pymt_total {
@@ -422,5 +432,34 @@
 
 	#how_it_works {
 	    height: fit-content;
+	}
+
+	.booking_date, .booking_time {
+	    width: 85px !important;
+	    text-align: end !important;
+	}
+
+	.booking_amount {
+		width: 85px !important;
+		text-align: end !important;
+	}
+
+	.booking_cirle_h {
+	    font-size: 12pt;
+	    width: 85px !important;
+	    text-align: end;
+	}
+
+	#edit_options, #edit_choice {
+	    width: 40%;
+	}
+
+	.termspage {
+	    padding: 60px 20px;
+	    color: #4d5862;
+	}
+
+	.terms_header {
+		line-height: 1.2;
 	}
 }

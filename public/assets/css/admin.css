@@ -124,7 +124,7 @@ a {
 	cursor: pointer;
 }
 
-input#newadminemail, input#newadminname, input#superpassword, input#superpassword, input#superpassword, textarea#replytext {
+input#newadminemail, input#newadminname, input#superpassword, input#superpassword, input#superpassword, textarea#replytext, input#deletehoice {
     width: 100%;
     outline: none;
     background: none !important;
@@ -168,8 +168,8 @@ input#replytext {
 	display: flex;
 }
 
-#message, #replycomplaint {
-	position: fixed;
+#message, #replycomplaint, #repliedmessage, #viewrepliedmessage, #verifydelete {
+	position: fixed; 
     top: 13%;
     width: 40%;
     height: 0px;
@@ -185,7 +185,7 @@ input#replytext {
     display: flex;
 }
 
-.closemessage, .closereplycomplaint {
+.closemessage, .closereplycomplaint, .closerepliedmessage, .closeviewrepliedmessage, .closeverifydelete {
 	position: absolute;
     top: 9px;
     right: 16px;
@@ -202,4 +202,23 @@ input#replytext {
 .mes_body {
 	font-size: 14px;
 	font-weight: 100;
+}
+
+.reply_body {
+    height: 150px;
+    overflow: auto;
+}
+
+.rep_from {
+    padding: 0 10px;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.user_det {
+    cursor: pointer;
+}
+
+.transferrole {
+    cursor: pointer;
 }

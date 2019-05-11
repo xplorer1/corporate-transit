@@ -17,7 +17,8 @@ let ComplaintsSchema = new Schema({
     createdon: {type: Date, default: Date.now },
     complaint: {type: String},
     status: { type: String },
-    reply: { type: String }
+    reply: { type: String },
+    replyfrom: { type: String }
 });
 
 module.exports = mongoose.model('Complaints', ComplaintsSchema);

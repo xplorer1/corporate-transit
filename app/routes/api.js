@@ -123,6 +123,7 @@ module.exports =(app, express, appstorage) => {
 
                                 user.work = req.body.work;
                                 user.home = req.body.home;
+                                user.route = req.body.home + "To " + req.body.work;
                                 user.gender = req.body.gender;
                                 user.password = req.body.password;
                                 user.location = req.body.location;

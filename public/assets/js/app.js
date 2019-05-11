@@ -50,6 +50,11 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/notfound.html',
                 controller: "GeneralController"
             })
+            .state('terms', {
+                url: '/terms',
+                templateUrl: '../views/pages/terms.html',
+                controller: "GeneralController"
+            })
             .state('payment_history', {
                 parent: 'landing',
                 url: '/payment_history',

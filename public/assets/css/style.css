@@ -1405,6 +1405,7 @@ button#contact-btn {
 .ui.loader {
     font-size: 8em !important;
     top: 40% !important;
+    left: calc(45%) !important;
 }
 
 .ui[class*="left icon"].input > input {
@@ -1442,7 +1443,7 @@ button#contact-btn {
     position: absolute;
     top: calc(50%);
     z-index: 434343434334983948348394;
-    left: calc(45%);
+    left: calc(35%);
     display: none;
 }
 
@@ -1465,7 +1466,7 @@ button#contact-btn {
     position: fixed;
     top: calc(20%);
     z-index: 434343434334983948348394;
-    left: calc(45%);
+    left: calc(35%);
     display: none;
 }
 
@@ -1962,12 +1963,17 @@ div#db, div#dp, div#dc, div#ds {
     /*padding: 150px 50px;*/
 }
 
-.notfoundpage, .incr_code {
+.notfoundpage, .incr_code, .termspage {
     background-image: linear-gradient(to top left, #91bacb, #ffffff);
     width: 100%;
     min-height: 1024px;
     position: absolute;
     right: 0;
+}
+
+.termspage {
+    padding: 150px 50px;
+    color: #4d5862;
 }
 
 .booking_one, .booking_two {
@@ -2309,7 +2315,7 @@ li#item1548456588046-1 {
 
 #edit_choice {
     position: fixed;
-    top: 50%;
+    top: 21%;
     width: 10%;
     height: 0px;
     background: white;
@@ -3203,6 +3209,21 @@ i.boarding_img.bus.icon {
 }
 
 .h_title {
-    text-align: center;
+    text-align: left;
     font-size: 20pt;
+    margin: 0px 70px;
+}
+
+.terms_header {
+    font-size: x-large;
+    font-weight: 700;
+}
+
+.t_head {
+    font-size: large;
+    font-weight: 700;
+}
+
+.noacct {
+    color: white;
 }

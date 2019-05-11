@@ -434,7 +434,7 @@ angular.module('ControllersModule', [])
         };
 
         let showOptions = () => {
-            return Utilities.showForm("edit_options", "87px");
+            return Utilities.showForm("edit_options", "55px");
         }
 
         $scope.closeOptions = () => {
@@ -999,6 +999,8 @@ angular.module('ControllersModule', [])
 
         let user = store.get("user");
 
+        $log.log("sd: ", user.data.totaldeposited);
+
         let currency = {name: "Naira", symbol: "₦"};
 
         let ravepublic = "FLWPUBK_TEST-8f1ee05b1e4c692149cccd3afd56b1bd-X";
@@ -1018,7 +1020,7 @@ angular.module('ControllersModule', [])
             $scope.user_work = user.data.work;
             $scope.user_trips_booked = user.data.numtrips;
             $scope.user_trips_taken = user.data.numtaken;
-            $scope.user_total_dep = "N"+Utilities.numberWithCommas(user.data.totaldeposited);
+            $scope.user_total_dep = Utilities.numberWithCommas(user.data.totaldeposited);
             if(user.data.latestbooking) {
                 $scope.user_next_trip_time = Utilities.formatDateDisplay(user.data.latestbooking)
             }
@@ -1066,7 +1068,7 @@ angular.module('ControllersModule', [])
         };
 
         $scope.closecontactus = () => {
-            return Utilities.showForm("contactus", "400px");
+            return Utilities.closeForm("contactus", "400px");
         };
 
         $scope.closePendingTrip = () => {
@@ -1075,6 +1077,10 @@ angular.module('ControllersModule', [])
 
         $scope.showBookTrip = () => {
             return Utilities.showForm("booktrip", "520px");
+        };
+
+        $scope.closeBookTrip = () => {
+            return Utilities.closeForm("booktrip");
         };
 
         $scope.cancelTrip = () => {
@@ -1115,10 +1121,6 @@ angular.module('ControllersModule', [])
             }
         }
 
-        $scope.closeBookTrip = () => {
-            return Utilities.callForm("booktrip");
-        };
-
         $scope.sendComplaint = () => {
             
             let email = $scope.supportemail;
@@ -1147,16 +1149,17 @@ angular.module('ControllersModule', [])
                 .then(response => {
                     Utilities.hideLandingLoader();
 
-                    $scope.user_balance = response.data;
+                    $scope.user_balance = Utilities.numberWithCommas(response.data);
 
-                    $scope.user_total_dep = response.totaldeposited;
+                    $scope.user_total_dep = Utilities.numberWithCommas(response.totaldeposited);
                     let obj = store.get("user");
 
                     obj.data.balance = response.data;
+                    obj.data.totaldeposited = response.totaldeposited;
 
                     store.set("user", obj);
 
-                    $(".successful_payment").css("display", "none");
+                    $(".payment_end").css("display", "none");
                 });
             }
         }
@@ -1396,7 +1399,6 @@ angular.module('ControllersModule', [])
                 email: user.data.email,
                 token: user.data.token
             }).then(response => {
-                $log.log("response transaction: ", response);
 
                 Utilities.hideLoader();
 
@@ -1408,12 +1410,14 @@ angular.module('ControllersModule', [])
                             Utilities.alternateColors();
                         }, 1000);
 
-                    }else{
+                    }
+                    else{
                         $scope.transaction_history = response.data;
                         $(".transaction_one").css("display", "block");
                         console.log("no transaction history found.");
                     }
-                }else {
+                }
+                else {
                     if(response.data === "token_expired") {
                         store.remove("user");
                         $state.go("login");
@@ -1533,10 +1537,8 @@ angular.module('ControllersModule', [])
 
         let admindata = store.get("admindata");
 
-        $log.log("data: ", admindata);
-
         if(admindata) {
-            $scope.fullname = admindata.fullname;
+            $scope.name = admindata.name;
             $scope.role = admindata.role;
             $scope.numusers = admindata.numusers;
             $scope.numbookings = admindata.numbookings;
@@ -1546,6 +1548,10 @@ angular.module('ControllersModule', [])
             $scope.messages = admindata.messages;
             $scope.admins = admindata.admins;
             $scope.regionscount = admindata.userregioncountarray;
+            $scope.routescount = admindata.userroutecountarray;
+        }
+        else {
+            $scope.adminLogOut();
         }
 
         $scope.login = () => {
@@ -1597,7 +1603,13 @@ angular.module('ControllersModule', [])
             }
         };
 
-        $scope.checkSuper = () => {
+        $scope.checkSuper = (mode, id) => {
+            $scope.adminmode = mode;
+
+            if(id) {
+                $scope.admin_id = id;
+            }
+
             Utilities.showForm("verifysuper", "220px");
         }
 
@@ -1621,14 +1633,27 @@ angular.module('ControllersModule', [])
                 .then(response => {
                     Utilities.hideGeneralLoader();
 
-                    $log.log("response: ", response);
+                    $log.log("response verify super: ", response);
 
                     if(response.data === "account_notfound") {
-                        $("#superpassword").notify("Invalid username or password", { position: "bottom-center" });
+                        $("#superpassword").notify("Invalid password.", { position: "bottom-center" });
                     }
                     else if (response.data === "user_exists") {
                         $scope.closeVerifySuper();
-                        Utilities.showForm("adduserform", "250px");
+
+                        if($scope.adminmode === "delete" && $scope.admin_id) {
+                            $scope.targetadmin = admindata.admins.find(function(value) {
+
+                                return value.id === $scope.admin_id;
+                            });
+
+                            $log.log("targetadmin: ", $scope.targetadmin);
+
+                            Utilities.showForm("verifydelete", "200px");
+                        }
+                        else if($scope.adminmode === "add") {
+                            Utilities.showForm("adduserform", "250px");
+                        }
                     }
                     else if(response.data === "token_expired") {
                         $scope.adminLogOut();
@@ -1666,12 +1691,74 @@ angular.module('ControllersModule', [])
                     if(response.data === "username_exists") {
                         $("#newadminname").notify("Name exists. Choose another.", { position: "bottom-center" });
                     }
+                    else if(response.data === "user_exists") {
+                        $("#newadminname").notify("Email address exists.", { position: "bottom-center" });
+                    }
                     else if(response.data === "admin_saved") {
                         $("#newadminemail").notify("Admin added.", "success", { position: "bottom-center" });
+
+                        $scope.admins = response.admins;
+
+                        let obj = store.get("admindata");
+
+                        obj.admins = response.admins;
+
+                        store.set("admindata", obj);
 
                         setTimeout(() => {
                             Utilities.closeForm("adduserform");
                         }, 10000);
+                    }
+                    else if(response.data === "token_expired") {
+                        $scope.adminLogOut();
+                    }
+                })
+            }
+        }
+
+        $scope.deleteUser = (adminid) => {
+            if(!$scope.deletehoice) {
+                $("#deletehoice").notify("Required.", { position: "bottom-center" });
+            }
+            else if($scope.deletehoice.toUpperCase().trim() !== "YES" && $scope.deletehoice.toUpperCase().trim() !== "NO") {
+                $("#deletehoice").notify("Please enter YES or NO.", { position: "bottom-center" });
+            }
+            else if($scope.deletehoice.toUpperCase().trim() === "NO") {
+                Utilities.closeForm("verifydelete");
+            }
+            else {
+
+                Utilities.showGeneralLoader();
+
+                AdminService.deleteuser({
+                    id: adminid,
+                    token: admindata.token
+                })
+                .then(response => {
+                    Utilities.hideGeneralLoader();
+
+                    if(response.data === "account_notfound") {
+                        $("#deletehoice").notify("Please refresh your page and try again.", { position: "bottom-center" });
+                    }
+                    else if(response.data === "found_superuser") {
+                        $("#deletehoice").notify("You can not delete a super user.", { position: "bottom-center" });
+                    }
+                    else if(response.message === "admin_deleted") {
+                        $("#deletehoice").notify("Admin removed.", "success", { position: "bottom-center" });
+
+                        $scope.admins = response.data;
+
+                        let obj = store.get("admindata");
+
+                        obj.admins = response.data;
+
+                        store.set("admindata", obj);
+
+                        //location.replace("main.html");
+
+                        setTimeout(() => {
+                            Utilities.closeForm("verifydelete");
+                        }, 5000);
                     }
                     else if(response.data === "token_expired") {
                         $scope.adminLogOut();
@@ -1698,9 +1785,20 @@ angular.module('ControllersModule', [])
 
                 Utilities.showForm("message", "370px");
             }
+            else {
+
+                targetmessage = admindata.messages.find(function(value) {
+
+                    return value._id === id;
+                });
+
+                $scope.targetcomplaint = targetmessage;
+
+                Utilities.showForm("viewrepliedmessage", "370px");
+            }
         }
 
-        $scope.deleteAccount = () => {
+        $scope.transferRole = () => {
             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                 $('.ui.sidebar')
                     .sidebar('toggle')
@@ -1708,6 +1806,21 @@ angular.module('ControllersModule', [])
             }
 
             $window.alert("Feature coming soon.");
+        }
+
+        $scope.viewReply = (id) => {
+            if(id) {
+                $scope.closeViewRepliedMessage();
+                Utilities.showForm("repliedmessage", "300px");
+            }
+        }
+
+        $scope.closeViewRepliedMessage = () => {
+            Utilities.closeForm("viewrepliedmessage");
+        }
+
+        $scope.closeRepliedMessage = () => {
+            Utilities.closeForm("repliedmessage");
         }
 
         $scope.closeMessage = () => {
@@ -1736,7 +1849,8 @@ angular.module('ControllersModule', [])
                     id: targetmessage._id,
                     subject: targetmessage.subject,
                     token: admindata.token,
-                    replytext: $scope.replytext
+                    replytext: $scope.replytext,
+                    replyfrom: admindata.fullname
                 })
                 .then(response => {
                     Utilities.hideGeneralLoader();
@@ -1751,9 +1865,17 @@ angular.module('ControllersModule', [])
                     else if(response.data === "replied") {
                         $("#replytext").notify("Replied.", "success", { position: "bottom-center" });
 
+                        $scope.messages = response.complaints;
+
+                        let obj = store.get("admindata");
+
+                        obj.messages = response.complaints;
+
+                        store.set("admindata", obj);
+
                         setTimeout(() => {
                             Utilities.closeForm("replycomplaint");
-                        }, 10000);
+                        }, 5000);
                     }
                     else if(response.data === "token_expired") {
                         $scope.adminLogOut();

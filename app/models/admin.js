@@ -2,8 +2,8 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let AdminSchema = new Schema({
+    name: {type: String},
     superuser: {type: Boolean, select: false, default: false},
-    fullname: {type: String },
     username: { type: String, lowercase: true, index: { unique: true }, trim: true },
     password: { type: String, minlength: 8},
     email: {
@@ -19,7 +19,7 @@ let AdminSchema = new Schema({
         }
     },
     role: { type: String },
-    id: { type: String },
+    id: { type: String , required: true, index: { unique: true }},
     createdon: { type: Date, select: false, default: Date.now },
     verified: { type: Boolean, select: false, default: false },
     verifiedon: { type: Date, select: false },
