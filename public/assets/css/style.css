@@ -2241,6 +2241,7 @@ li#item1548456588046-1 {
 
 .signuppage, .loginpage, .forgotpasswordpage, .resetpage {
     background-image: linear-gradient(to top left, #022f50, #8cc8f2);
+    padding: 0 0 80vh !IMPORTANT;
 }
 
 .forgotpasswordpage, .resetpage {
@@ -2556,7 +2557,7 @@ li#item1548456588046-1 {
 
 #contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform {
     position: fixed;
-    top: 25%;
+    top: 15%;
     width: 40%;
     height: 0px;
     background: white;

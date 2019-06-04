@@ -1091,8 +1091,6 @@ angular.module('ControllersModule', [])
         $scope.cancelTrip = () => {
             let id = $("#id").val();
 
-            $log.log("Id: ", id);
-
             if(id) {
                 Utilities.showLandingLoader();
 
@@ -1272,9 +1270,6 @@ angular.module('ControllersModule', [])
                 else if((routefrom && routeto) && (routefrom.toString() === routeto.toString())) {
                     $("#dest").notify("Please select a different destination.", { position: "bottom-center" });
                 }
-                else if(!ct_cardnumber) {
-                    $("#cardnumber").notify("Please enter your card number.", { position: "bottom-center" });
-                }
                 else {
 
                     if(document.querySelector("input[value=roundtrip]").checked) {
@@ -1301,11 +1296,10 @@ angular.module('ControllersModule', [])
                         routeto: routeto,
                         from: from,
                         to: to,
-                        ct_cardnumber: ct_cardnumber,
+                        ct_cardnumber: user.data.cardnumber,
                         token: token,
                         tripmode: $("#tripmode").val()
                     }).then(response => {
-                        console.log("response: ", response.pendingbooking);
 
                         Utilities.hideLandingLoader();
 
