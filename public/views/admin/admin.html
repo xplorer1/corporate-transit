@@ -24,6 +24,18 @@
             <div ng-if="role === 'Super User'" class="transferrole">
                 <span ng-click="transferRole()">Transfer Role</span>
             </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="transferrole">
+                <span ng-click="enableUserCard()">Enable Card</span>
+            </div>
+
+            <div class="row"><div class="column">&nbsp;</div></div>
+
+            <div class="transferrole">
+                <span ng-click="disableUserCard()">Disable Card</span>
+            </div>
             
         </div>
         <div class="row"><div class="column">&nbsp;</div></div>
@@ -159,6 +171,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                    <div class="rou addroute" ng-click="showAddRouteForm()">Add Route</div>
                 </div>
 
                 <div class="users">
@@ -188,14 +203,16 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row"><div class="column">&nbsp;</div></div>
+                    <div class="rou addroute" ng-click="showChangeFareForm()">Change Fare</div>
                 </div>
             </div>
 
             <div class="row"><div class="column">&nbsp;</div></div>
-            <div class="row"><div class="column">&nbsp;</div></div>
 
             <div class="cont_users">
-                <div class="complaints com_regions">
+                <div class="complaints com_regions byreg">
                     <div class="c_tab">
                         <i class="fas fa-walking"></i> Commuters by region
                     </div>
@@ -377,6 +394,276 @@
                 </div>
             </div>
 
+            <div id="changefareform" class="">
+                <a class="closechangefareform" ng-click="closeChangeFareForm()">x</a>
+
+                <div class="mode_p">
+                    <header class="formheader fareheader">
+                        <h4>Change fare</h4>
+                    </header>
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <label></label>
+                                        <select class="ui search dropdown" id="c_dep" name="c_dep" ng-model="c_dep">
+                                            <option disabled value="" selected>Route From</option>
+                                            <option value="AJAH - AJH">AJAH - AJH</option>
+                                            <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                            <option value="APAPA - APA">APAPA - APA</option>
+                                            <option value="EPE - EPE">EPE - EPE</option>
+                                            <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                            <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                            <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                            <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                            <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                            <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                            <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                            <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                            <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                            <option value="OGBA - GBA">OGBA - GBA</option>
+                                            <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                            <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                            <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                            <option value="YABA - YBA">YABA - YBA</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <label></label>
+                                        <select class="ui search dropdown" id="c_dest" name="c_dest" ng-model="c_dest">
+                                            <option disabled value="" selected>Route To</option>
+                                            <option value="AJAH - AJH">AJAH - AJH</option>
+                                            <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                            <option value="APAPA - APA">APAPA - APA</option>
+                                            <option value="EPE - EPE">EPE - EPE</option>
+                                            <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                            <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                            <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                            <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                            <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                            <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                            <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                            <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                            <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                            <option value="OGBA - GBA">OGBA - GBA</option>
+                                            <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                            <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                            <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                            <option value="YABA - YBA">YABA - YBA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range">
+                            <div class="ui form">
+
+                                <div class="two fields">
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            <input type="number" ng-model="c_fareoneway" id="c_fareoneway" name="c_fareoneway" placeholder="Fare (One Way)" style="padding-left: 15px !important;">
+                                        </div>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            <input type="number" ng-model="c_farereturn" id="c_farereturn" name="c_farereturn" placeholder="Fare (Return)" style="padding-left: 15px !important;">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="changeFare()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div id="addrouteform" class="">
+                <a class="closeaddrouteform" ng-click="closeAddRouteForm()">x</a>
+
+                <div class="mode_p">
+                    <header class="formheader routeheader">
+                        <h4>Add new route</h4>
+                    </header>
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <label></label>
+                                        <select class="ui search dropdown" id="dep" name="dep" ng-model="dep">
+                                            <option disabled value="" selected>Route From</option>
+                                            <option value="AJAH - AJH">AJAH - AJH</option>
+                                            <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                            <option value="APAPA - APA">APAPA - APA</option>
+                                            <option value="EPE - EPE">EPE - EPE</option>
+                                            <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                            <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                            <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                            <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                            <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                            <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                            <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                            <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                            <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                            <option value="OGBA - GBA">OGBA - GBA</option>
+                                            <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                            <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                            <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                            <option value="YABA - YBA">YABA - YBA</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <label></label>
+                                        <select class="ui search dropdown" id="dest" name="dest" ng-model="dest">
+                                            <option disabled value="" selected>Route To</option>
+                                            <option value="AJAH - AJH">AJAH - AJH</option>
+                                            <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                            <option value="APAPA - APA">APAPA - APA</option>
+                                            <option value="EPE - EPE">EPE - EPE</option>
+                                            <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                            <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                            <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                            <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                            <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                            <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                            <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                            <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                            <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                            <option value="OGBA - GBA">OGBA - GBA</option>
+                                            <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                            <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                            <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                            <option value="YABA - YBA">YABA - YBA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input ng-model="morningpickup" id="morningpickup" type="text" class="timepicker" placeholder="Morning pick up time" style="padding-left: 15px !important;">
+                                                
+                                        </div>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input ng-model="morningdrop" id="morningdrop" type="text" class="timepicker" placeholder="Morning drop time" style="padding-left: 15px !important;">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input ng-model="eveningpickup" id="eveningpickup" type="text" class="timepicker" placeholder="Evening pick up time" style="padding-left: 15px !important;">
+                                                
+                                        </div>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input ng-model="eveningdrop" id="eveningdrop" type="text" class="timepicker" placeholder="Evening drop time" style="padding-left: 15px !important;">
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            <input type="text" ng-model="morningpickuppoint" id="morningpickuppoint" name="morningpickuppoint" placeholder="Morning pick up point" style="padding-left: 15px !important;">
+                                        </div>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input type="text" ng-model="morningdroppoint" id="morningdroppoint" name="morningdroppoint" placeholder="Morning drop point" style="padding-left: 15px !important;">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            <input type="text" ng-model="eveningpickuppoint" id="eveningpickuppoint" name="eveningpickuppoint" placeholder="Evening pick up point" style="padding-left: 15px !important;">
+                                        </div>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input type="text" ng-model="eveningdroppoint" id="eveningdroppoint" name="eveningdroppoint" placeholder="Evening drop point" style="padding-left: 15px !important;">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            <input type="number" ng-model="fareoneway" id="fareoneway" name="fareoneway" placeholder="Fare (One Way)" style="padding-left: 15px !important;">
+                                        </div>
+                                    </div>
+
+                                    <div class="field sel_field">
+                                        <div class="input-group">
+                                            
+                                            <input type="number" ng-model="farereturn" id="farereturn" name="farereturn" placeholder="Fare (Return)" style="padding-left: 15px !important;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="addRoute()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
             <div id="adduserform" class="">
                 <a class="closeadduserform" ng-click="closeAddUserForm()">x</a>
 
@@ -395,6 +682,46 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="addUser()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div id="enablecardform" class="">
+                <a class="closeadduserform" ng-click="closeEnableCardForm()">x</a>
+
+                <div class="mode_p">
+                    <header>
+                        <h3>Enter card number to enable it...</h3>
+                    </header>
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <input type="text" ng-model="e_cardnumber" id="e_cardnumber" name="e_cardnumber" placeholder="Card number..." style="padding-left: 15px !important;">
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="enableCard()" ng-disabled="loginclicked">Submit</button>         
+                    </div>
+                </div>
+            </div>
+
+            <div id="disablecardform" class="">
+                <a class="closeadduserform" ng-click="closeDisableCardForm()">x</a>
+
+                <div class="mode_p">
+                    <header>
+                        <h3>Enter card number you want to disable...</h3>
+                    </header>
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <input type="text" ng-model="d_cardnumber" id="d_cardnumber" name="d_cardnumber" placeholder="Card number..." style="padding-left: 15px !important;">
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="disableCard()" ng-disabled="loginclicked">Submit</button>         
                     </div>
                 </div>
             </div>

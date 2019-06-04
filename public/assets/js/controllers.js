@@ -77,7 +77,8 @@ angular.module('ControllersModule', [])
                 if(response.status) {
                     $("#notverified").css("display", "none");
                     $("#verified").css("display", "block");
-                }else {
+                }
+                else {
                     if(response.data === "acct_verified") {
                         $("#verified").css("display", "none");
                         $("#notverified").css("display", "block");
@@ -85,7 +86,6 @@ angular.module('ControllersModule', [])
                         $state.go("notfound");
                     }
                 }
-                $log.log("response: ", response);
             })
         }
 
@@ -105,8 +105,6 @@ angular.module('ControllersModule', [])
                 username: $scope.username,
                 password: $scope.password
             }).then(response => {
-                $log.log("Response: ", response);
-
                 Utilities.hideGeneralLoader();
 
                 switch (response.data){
@@ -301,6 +299,9 @@ angular.module('ControllersModule', [])
                             break;
                         case "account_notfound":
                             $("#loginform").notify("Invalid username or password.", { position: "bottom-center" });
+                            break;
+                        case "carddisabled":
+                            $("#loginform").notify("Your card has been disabled. Please contact support.", { position: "bottom-center" });
                             break;
                         case "ErrorMongoError: Topology was destroyed":
                             $("#loginform").notify("There was an error. Please refresh your page and try again.", { position: "bottom-center" });
@@ -999,8 +1000,6 @@ angular.module('ControllersModule', [])
 
         let user = store.get("user");
 
-        $log.log("sd: ", user.data.totaldeposited);
-
         let currency = {name: "Naira", symbol: "₦"};
 
         let ravepublic = "FLWPUBK_TEST-8f1ee05b1e4c692149cccd3afd56b1bd-X";
@@ -1015,7 +1014,13 @@ angular.module('ControllersModule', [])
             $scope.user_fullname = Utilities.formatText(firstname) + " " + Utilities.formatText(lastname);
             $scope.user_username = "@"+user.data.username;
             $scope.user_balance = Utilities.numberWithCommas(user.data.balance);
+            
+            setTimeout(() => {
+                $("#cardnumber").val(user.data.cardnumber);
+            }, 500);
+
             $scope.user_cardnumber = user.data.cardnumber;
+            
             $scope.user_home = " " + user.data.home;
             $scope.user_work = user.data.work;
             $scope.user_trips_booked = user.data.numtrips;
@@ -1535,7 +1540,16 @@ angular.module('ControllersModule', [])
     function AdminController($scope, $log, $state, $stateParams, Utilities, AdminService, $window) { 
         $(".ui.active.dimmer").css("display", "none");
 
+        $('.timepicker').pickatime({
+            interval: 5
+        })
+
         let admindata = store.get("admindata");
+
+        $scope.adminLogOut = () => {
+            store.remove(admindata);
+            $state.go("adminlogin");
+        }
 
         if(admindata) {
             $scope.name = admindata.name;
@@ -1613,8 +1627,198 @@ angular.module('ControllersModule', [])
             Utilities.showForm("verifysuper", "220px");
         }
 
+        $scope.enableUserCard = () => {
+            Utilities.showForm("enablecardform", "210px");
+        }
+
+        $scope.disableUserCard = () => {
+            Utilities.showForm("disablecardform", "210px");
+        }
+
         $scope.closeVerifySuper = () => {
             Utilities.closeForm("verifysuper");
+        }
+
+        $scope.showAddRouteForm = () => {
+            Utilities.showForm("addrouteform", "520px");
+        }
+
+        $scope.closeAddRouteForm = () => {
+            Utilities.closeForm("addrouteform");
+        }
+
+        $scope.showChangeFareForm = () => {
+            Utilities.showForm("changefareform", "300px");
+        }
+
+        $scope.closeChangeFareForm = () => {
+            Utilities.closeForm("changefareform");
+        }
+
+        $scope.closeEnableCardForm = () => {
+            Utilities.closeForm("enablecardform");
+        }
+
+        $scope.closeDisableCardForm = () => {
+            Utilities.closeForm("disablecardform");
+        }
+
+        $scope.changeFare = () => {
+            if(!$scope.c_dep) {
+                $("#c_dep").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.c_dest) {
+                $("#c_dest").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.c_fareoneway) {
+                $("#c_fareoneway").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.c_farereturn) {
+                $("#c_farereturn").notify("Required.", { position: "bottom-center" });
+            }
+
+            else {
+                Utilities.showGeneralLoader();
+
+                AdminService.changefare({
+                    token: admindata.token,
+                    route: $scope.c_dep.split(" - ")[1] + " - " + $scope.c_dest.split(" - ")[1],
+                    fareoneway: $scope.c_fareoneway,
+                    farereturn: $scope.c_farereturn
+                })
+                .then(response => {
+                    Utilities.hideGeneralLoader();
+
+                    $log.log("response changeFare: ", response);
+
+                    if(response.data === "fareupdated") {
+                        $(".fareheader").notify("Fare successfully updated.", "success", { position: "bottom-center" });
+                        $("#c_dep").val("");
+                        $("#c_dest").val("");
+                        $("#c_fareoneway").val("");
+                        $("#c_farereturn").val("");
+
+                        setTimeout(() => {
+                            Utilities.closeForm("changefareform");
+                        }, 5000)
+                    }
+                    else if(response.data === "unknown_error") {
+                        $(".fareheader").notify("Error. Please try again.", { position: "bottom-center" });
+                    }
+                    else if(response.data === "token_expired") {
+                        $scope.adminLogOut();
+                    }
+                    else if(response.data === "route_notfound") {
+                        $(".fareheader").notify("This route was not found.", { position: "bottom-center" });
+                    }
+                })
+            }
+        }
+
+        $scope.addRoute = () => {
+            if(!$scope.dep) {
+                $("#dep").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.dest) {
+                $("#dest").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$("#morningpickup").val()) {
+                $("#morningpickup").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$("#morningdrop").val()) {
+                $("#morningdrop").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$("#eveningpickup").val()) {
+                $("#eveningpickup").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$("#eveningdrop").val()) {
+                $("#eveningdrop").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.morningpickuppoint) {
+                $("#morningpickuppoint").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.morningdroppoint) {
+                $("#morningdroppoint").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.eveningpickuppoint) {
+                $("#eveningpickuppoint").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.eveningdroppoint) {
+                $("#eveningdroppoint").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.fareoneway) {
+                $("#fareoneway").notify("Required.", { position: "bottom-center" });
+            }
+
+            else if(!$scope.farereturn) {
+                $("#farereturn").notify("Required.", { position: "bottom-center" });
+            }
+
+            else {
+                Utilities.showGeneralLoader();
+
+                AdminService.addroute({
+                    token: admindata.token,
+                    route: $scope.dep.split(" - ")[1] + " - " + $scope.dest.split(" - ")[1],
+                    morningpickuptime: $("#morningpickup").val(),
+                    eveningpickuptime: $("#eveningpickup").val(),
+                    morningdroptime: $("#morningdrop").val(),
+                    eveningdroptime: $("#eveningdrop").val(),
+                    morningpickupplace: $scope.morningpickuppoint,
+                    morningdropplace: $scope.morningdroppoint,
+                    eveningpickupplace: $scope.eveningpickuppoint,
+                    eveningdropplace: $scope.eveningdroppoint,
+                    fareoneway: $scope.fareoneway,
+                    farereturn: $scope.farereturn
+                })
+                .then(response => {
+                    Utilities.hideGeneralLoader();
+
+                    $log.log("response addroute: ", response);
+
+                    if(response.data === "token_expired") {
+                        $scope.adminLogOut();
+                    }
+                    else if(response.data === "route_exists") {
+                        $(".routeheader").notify("This route exists!", { position: "bottom-center" });
+                    }
+                    else if(response.data === "unknown_error1" || response.data === "unknown_error2") {
+                        $(".routeheader").notify("Error. Please try again later.", { position: "bottom-center" });
+                    }
+                    else if(response.data === "stuffsaved") {
+                        $(".routeheader").notify("Route saved successfully.", { position: "bottom-center" });
+                        $("#dep").val("");
+                        $("#dest").val("");
+                        $("#morningpickup").val("");
+                        $("#eveningpickup").val("");
+                        $("#morningdrop").val("");
+                        $("#eveningdrop").val("");
+                        $("#morningpickuppoint").val("");
+                        $("#morningdroppoint").val("");
+                        $("#eveningpickuppoint").val("");
+                        $("#eveningdroppoint").val("");
+                        $("#fareoneway").val("");
+                        $("#farereturn").val("");
+
+                        setTimeout(() => {
+                            Utilities.closeForm("addrouteform");
+                        }, 5000)
+                    }
+                })
+            }
         }
 
         $scope.verifySuper = () => {
@@ -1633,12 +1837,11 @@ angular.module('ControllersModule', [])
                 .then(response => {
                     Utilities.hideGeneralLoader();
 
-                    $log.log("response verify super: ", response);
-
                     if(response.data === "account_notfound") {
                         $("#superpassword").notify("Invalid password.", { position: "bottom-center" });
                     }
                     else if (response.data === "user_exists") {
+                        $("#superpassword").val("");
                         $scope.closeVerifySuper();
 
                         if($scope.adminmode === "delete" && $scope.admin_id) {
@@ -1646,8 +1849,6 @@ angular.module('ControllersModule', [])
 
                                 return value.id === $scope.admin_id;
                             });
-
-                            $log.log("targetadmin: ", $scope.targetadmin);
 
                             Utilities.showForm("verifydelete", "200px");
                         }
@@ -1765,11 +1966,6 @@ angular.module('ControllersModule', [])
                     }
                 })
             }
-        }
-
-        $scope.adminLogOut = () => {
-            store.remove(admindata);
-            $state.go("adminlogin");
         }
 
         let targetmessage;
@@ -1899,9 +2095,127 @@ angular.module('ControllersModule', [])
                 ;
             }
         }
+
+        $scope.enableCard = () => {
+            if(!$scope.e_cardnumber) {
+                $("#e_cardnumber").notify("Please enter card number.", { position: "bottom-center" });
+            }
+            else {
+                Utilities.showGeneralLoader();
+
+                AdminService.enablecard({
+                    cardnumber: $scope.e_cardnumber,
+                    token: admindata.token
+                })
+                .then (response => {
+                    Utilities.hideGeneralLoader();
+
+                    if(response.status) {
+                        $("#e_cardnumber").notify("Card successfully enabled.", "success", { position: "bottom-center" });
+                        $("#e_cardnumber").val("");
+
+                        setTimeout(() => {
+                            Utilities.closeForm("ensablecardform");
+                        }, 5000)
+                    }
+                    else if(response.data === "card_notfound") {
+                        $("#e_cardnumber").notify("Card number does not exist!", { position: "bottom-center" });
+                    }
+                    else if(response.data === "card_alreadyenabled") {
+                        $("#e_cardnumber").notify("Card number already enabled!", { position: "bottom-center" });
+                    }
+                    else if(response.data === "token_expired") {
+                        $scope.adminLogOut();
+                    }
+
+                })
+            }
+        }
+
+        $scope.disableCard = () => {
+            if(!$scope.d_cardnumber) {
+                $("#d_cardnumber").notify("Please enter card number.", { position: "bottom-center" });
+            }
+            else {
+                Utilities.showGeneralLoader();
+
+                AdminService.disablecard({
+                    cardnumber: $scope.d_cardnumber,
+                    token: admindata.token
+                })
+                .then (response => {
+                    Utilities.hideGeneralLoader();
+
+                    if(response.status) {
+                        $("#d_cardnumber").notify("Card successfully disabled.", "success", { position: "bottom-center" });
+                        $("#d_cardnumber").val("");
+
+                        setTimeout(() => {
+                            Utilities.closeForm("disablecardform");
+                        }, 5000)
+                    }
+                    else if(response.data === "card_notfound") {
+                        $("#d_cardnumber").notify("Card number does not exist!", { position: "bottom-center" });
+                    }
+                    else if(response.data === "card_alreadydisabled") {
+                        $("#d_cardnumber").notify("Card number already disabled!", { position: "bottom-center" });
+                    }
+                    else if(response.data === "token_expired") {
+                        $scope.adminLogOut();
+                    }
+                })
+            }
+        }
     }
 
     function GeneralController($scope, $log, $state, Transporter, Utilities) {
         $(".ui.active.dimmer").css("display", "none");
 
+        let user = store.get("user");
+
+        setTimeout(() => {
+            $("#edit_fullname").val(user.data.fullname);
+            $("#edit_work_location").val(user.data.work);
+            $("#edit_home_location").val(user.data.home);
+            $("#edit_org").val(user.data.org);
+            $("#edit_phone").val(user.data.phone);
+            $("#edit_username").val(user.data.username);
+            $("#edit_email").val(user.data.email);
+        }, 300);
+
+        $scope.updateDetails = () => {
+            Utilities.showGeneralLoader();
+
+            Transporter.updatedetails({
+                token: user.data.token,
+                fullname: $("#edit_fullname").val(),
+                org: $("#edit_org").val(),
+                work: $("#edit_work_location").val(),
+                home: $("#edit_home_location").val(),
+                email: $("#edit_email").val(),
+                phone: $("#edit_phone").val(),
+                username: $("#edit_username").val()
+            })
+            .then(response => {
+                Utilities.hideGeneralLoader();
+
+                if(response.data === "token_expired") {
+                    store.remove("user");
+                    $state.go("login");
+                }
+                else if(response.data === "updated") {
+                    $(".not_img").notify("Update Successful!", "success", { position: "bottom-center" });
+                    $("#edit_fullname").val("");
+                    $("#edit_work_location").val("");
+                    $("#edit_home_location").val("");
+                    $("#edit_org").val("");
+                    $("#edit_phone").val("");
+                    $("#edit_username").val("");
+                    $("#edit_email").val("");
+                }
+                else if(response.data === "unknown_error") {
+                    $(".not_img").notify("There has been a problem.", "success", { position: "bottom-center" });
+                }
+            })
+        }
     }

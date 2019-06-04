@@ -201,7 +201,11 @@
 	    padding: 5px 0;
 	}
 
-	#contactus, #booktrip, #pendingtrip, #fundcardform, #verifysuper, #viewrepliedmessage, #repliedmessage {
+	.byreg {
+		padding: 0 25px 2rem !important;
+	}
+
+	#contactus, #booktrip, #pendingtrip, #fundcardform, #verifysuper, #viewrepliedmessage, #repliedmessage, #enablecardform, #disablecardform {
 	    position: absolute;
 	    top: 17%;
 	    width: 95%;
@@ -216,11 +220,26 @@
 	    display: flex;
 	}
 
+	#addrouteform, #changefareform {
+		position: absolute;
+		top: 13%;
+    	width: 94%;
+    	left: calc(3%);
+	}
+
+	#changefareform {
+		top: 230% !important;
+	}
+
+	#addrouteform  {
+		top: 190% !important;
+	}
+
 	#booktrip, #pendingtrip {
 		top: 100% !important;
 	}
 
-	#fundcardform, #verifysuper, #replycomplaint, #message, #adduserform, #verifysuper, #viewrepliedmessage, #repliedmessage {
+	#fundcardform, #verifysuper, #replycomplaint, #message, #adduserform, #verifysuper, #viewrepliedmessage, #repliedmessage, #enablecardform, #disablecardform {
 		top: 150% !important;
 	}
 
@@ -462,4 +481,8 @@
 	.terms_header {
 		line-height: 1.2;
 	}
+
+	.rou {
+    	width: calc(100%);
+    }
 }

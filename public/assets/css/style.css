@@ -1140,6 +1140,16 @@ input#email, input#username, input#phone, input#new_password, input#password, in
     border-radius: 0 !important;
 }
 
+input#edit_fullname, input#edit_org, select#edit_work_location, select#edit_home_location, input#edit_email, input#edit_phone, input#edit_username {
+    background: none !important;
+    color: rgb(255, 255, 255) !important;
+    border-bottom: 1px solid #fff !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+}
+
 input#supportemail, input#onlineamount, input#onlineemail, input#bankamount, input#bankemail, input#supportsubject, input#demo1, input#demo2, textarea#supporttext, input#cardnumber, input#superpassword, input#superpassword, input#superpassword {
     width: 100%;
     outline: none;
@@ -2238,7 +2248,7 @@ li#item1548456588046-1 {
 }
 
 #signup, #login {
-    margin: 200px 0;
+    margin: 100px 0;
     max-width: 700px;
     padding: 20px 50px !important;
     /*background: white;*/
@@ -2546,7 +2556,7 @@ li#item1548456588046-1 {
 
 #contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform {
     position: fixed;
-    top: 13%;
+    top: 25%;
     width: 40%;
     height: 0px;
     background: white;

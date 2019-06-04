@@ -24,7 +24,7 @@ module.exports =(app, express, appstorage) => {
     let ravepublic = "FLWPUBK-8bfe4998fd6b9ba7e26740d4959535f3-X";
     let ravesecret = "FLWSECK-6e3c53e9f283aff4c35c6b8d55bf27eb-X";
     let raveenckey = "6e3c53e9f283315642573777";
-   
+
     apiRouter.post("/confirm", (req, res) => {
         let vcode = req.body.token;
 
@@ -94,7 +94,7 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.home) return res.json({status: false, data: "home_required"});
         if(!req.body.work) return res.json({status: false, data: "work_required"});
         if(!req.body.phone) return res.json({status: false, data: "work_required"});
-        if(!req.body.org) return res.json({status: false, data: "work_required"});
+        if(!req.body.org) return res.json({status: false, data: "org_required"});
         if(!req.body.username) return res.json({status: false, data: "username_required"});
         if(!req.body.password) return res.json({status: false, data: "password_required"});
         if(!req.body.fullname) return res.json({status: false, data: "fullname_required"});
@@ -126,7 +126,7 @@ module.exports =(app, express, appstorage) => {
                                 user.route = req.body.home + "To " + req.body.work;
                                 user.gender = req.body.gender;
                                 user.password = req.body.password;
-                                user.location = req.body.location;
+                                user.org = req.body.org;
                                 user.email = req.body.email;
                                 user.phone = req.body.phone;
                                 user.username = req.body.username;
@@ -195,6 +195,47 @@ module.exports =(app, express, appstorage) => {
         })
     });
 
+    apiRouter.post("/updatedetails", (req, res) => {
+        let token = req.body.token;
+        if(!token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(req.body.token, supersecret, function (err, decoded) {
+
+            if (err) {
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                User.findOne({email: req.body.email}, (err, user) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(user) {
+                        User.updateOne({email: req.body.email}, {
+                            $set: {
+                                email: req.body.email,
+                                phone: req.body.phone,
+                                username: req.body.username,
+                                work: req.body.work,
+                                home: req.body.home,
+                                org: req.body.org,
+                                fullname: req.body.fullname
+                            }
+                        }, 
+                        (err, updated) => {
+                            if (err) return res.json({status: false, data: err});
+
+                            if(updated) {
+                                return res.json({status: true, data: "updated"});
+                            }
+                            else {
+                                return res.json({status: false, data: "unknown_error"});
+                            }
+                        })
+                    }
+                })
+            }
+        });
+    });
+
     apiRouter.post("/resendresetcode", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required"});
 
@@ -232,7 +273,7 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.password) return res.json({status: false, data: "password_required"});
 
-        User.findOne({email: req.body.email, password: req.body.password}, {"verified" : 1, "work": 1, "home": 1, "balance" : 1, "email": 1, "phone" : 1, "fullname": 1, "username": 1, "ct_cardnumber": 1}, (err, user) => {
+        User.findOne({email: req.body.email, password: req.body.password}, {"verified" : 1, "cardstatus": 1, "work": 1, "home": 1, "balance" : 1, "email": 1, "phone" : 1, "fullname": 1, "username": 1, "ct_cardnumber": 1}, (err, user) => {
             if(err) return res.json({status: false, data: "Error"+err});
 
             if(user) {
@@ -250,7 +291,13 @@ module.exports =(app, express, appstorage) => {
                             return res.json({status: false, data: "not_activated"});
                         }
                     });
-                }else {
+                }
+                else if(user.cardstatus === "disabled") {
+                    console.log("card disabled!");
+
+                    return res.json({status: false, data: "carddisabled"});
+                }
+                else {
                     let token = jwt.sign({
                         name: user.fullname,
                         email: req.body.email,
@@ -302,6 +349,8 @@ module.exports =(app, express, appstorage) => {
                                         return obj2.bookedon - obj1.bookedon;
                                     });
 
+                                    //Routes.find({})
+
                                     let latestbooking = sortedbooking[0];
 
                                     let userobj = {};
@@ -314,6 +363,7 @@ module.exports =(app, express, appstorage) => {
                                     userobj.phone = user.phone;
                                     userobj.work = user.work;
                                     userobj.home = user.home;
+                                    userobj.org = user.org;
                                     userobj.token = token;
                                     userobj.totaldeposited = totaldeposited;
                                     userobj.numtrips = bookings.length;

@@ -8,6 +8,7 @@ let BookingJournal = require("../models/bookingjournal");
 let TransactionJournal = require("../models/transactions");
 let CardNumbers = require("../models/cardnumbers");
 let Routes = require("../models/routes");
+let Fares = require("../models/fares");
 let jwt = require('jsonwebtoken');
 let config = require('../../config');
 let adminsecret = config.adminsecret;
@@ -169,7 +170,7 @@ module.exports = function(app, express) {
         })
     });
 
-    adminRouter.post("/deleteuser", (req, res) => {
+    adminRouter.post("/deleteadmin", (req, res) => {
         //remove({createdon: {$gt: new Date("2019-01-20")}})
         if(!req.body.id) return res.json({status: false, data: "id_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
@@ -206,6 +207,197 @@ module.exports = function(app, express) {
                                     })
                                 }
                             })
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    adminRouter.post("/disablecard", (req, res) => {
+        if(!req.body.cardnumber) return res.json({status: false, data: "cardnumber_required"});
+        if(!req.body.token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(req.body.token, adminsecret, (err, decoded) => {
+
+            if (err) {
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                User.findOne({ct_cardnumber: req.body.cardnumber}, (err, user) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(!user) {
+                        return res.json({status: false, data: "card_notfound"});
+                    }
+
+                    else if (user) {
+                        if (user.cardstatus === "disabled") {
+                            return res.json({status: false, data: "card_alreadydisabled"});
+                        }
+                        else {
+                            User.findOneAndUpdate({ct_cardnumber: req.body.cardnumber}, 
+                                {$set: {cardstatus: "disabled"} }, {new: true},  (err, modified) => {
+                                    if(err) return res.json({status: false, data: err.message});
+
+                                    if(modified) {
+                                        return res.json({status: true, data: "card_disabled"});
+                                    }
+                            })
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    adminRouter.post("/changefare", (req, res) => {
+        if(!req.body.token) return res.json({status: false, data: "token_required"});
+        if(!req.body.route) return res.json({status: false, data: "route_required"});
+        if(!req.body.fareoneway) return res.json({status: false, data: "fareoneway_required"});
+        if(!req.body.farereturn) return res.json({status: false, data: "farereturn_required"});
+
+        jwt.verify(req.body.token, adminsecret, (err, decoded) => {
+
+            if (err) {
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                Routes.findOne({route: req.body.route}, (err, route) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(!route) {
+                        return res.json({status: false, data: "route_notfound"});
+                    }
+                    else if(route) {
+                        Fares.findOneAndUpdate({route: req.body.route}, 
+                            {$set: {farereturn: req.body.farereturn, fareoneway: req.body.fareoneway} }, 
+                            {new: true},  (err, modified) => {
+                                if(err) return res.json({status: false, data: err.message});
+
+                                if(modified) {
+                                    return res.json({status: true, data: "fareupdated"});
+                                }
+                                else {
+                                    return res.json({status: false, data: "unknown_error"});
+                                }
+                        })
+                    }
+                });
+            }
+        });
+    });
+
+    adminRouter.post("/addroute", (req, res) => {
+        if(!req.body.token) return res.json({status: false, data: "token_required"});
+        if(!req.body.route) return res.json({status: false, data: "route_required"});
+
+        if(!req.body.morningpickuptime) return res.json({status: false, data: "morningpickuptime_required"});
+        if(!req.body.morningpickupplace) return res.json({status: false, data: "morningpickupplace_required"});
+        if(!req.body.eveningpickuptime) return res.json({status: false, data: "eveningpickuptime_required"});
+        if(!req.body.eveningpickupplace) return res.json({status: false, data: "eveningpickupplace_required"});
+
+        if(!req.body.morningdroptime) return res.json({status: false, data: "morningdroptime_required"});
+        if(!req.body.morningdropplace) return res.json({status: false, data: "morningdropplace_required"});
+        if(!req.body.eveningdroptime) return res.json({status: false, data: "eveningdroptime_required"});
+        if(!req.body.eveningdropplace) return res.json({status: false, data: "eveningdropplace_required"});
+
+        if(!req.body.fareoneway) return res.json({status: false, data: "fareoneway_required"});
+        if(!req.body.farereturn) return res.json({status: false, data: "farereturn_required"});
+
+        jwt.verify(req.body.token, adminsecret, (err, decoded) => {
+
+            if (err) {
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                Routes.findOne({route: req.body.route}, (err, route) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(route) {
+                        return res.json({status: false, data: "route_exists"});
+                    }
+                    else if(!route) {
+                        let rou = new Routes();
+
+                        rou.route = req.body.route;
+
+                        rou.pickup_morning.time = req.body.morningpickuptime;
+                        rou.pickup_morning.point = req.body.morningpickupplace;
+
+                        rou.pickup_evening.time = req.body.eveningpickuptime;
+                        rou.pickup_evening.point = req.body.eveningpickupplace;
+
+                        rou.drop_morning.time = req.body.morningdroptime;
+                        rou.drop_morning.point = req.body.morningdropplace;
+
+                        rou.drop_evening.time = req.body.eveningdroptime;
+                        rou.drop_evening.point = req.body.eveningdropplace;
+
+                        rou.save((err, routessaved) => {
+
+                            if(err) return res.json({status: false, data: err.message});
+
+                            if(routessaved) {
+                                let fare = new Fares();
+
+                                fare.route = req.body.route;
+                                fare.fareoneway = req.body.fareoneway;
+                                fare.farereturn = req.body.farereturn;
+
+                                fare.save((err, faresaved) => {
+
+                                    if(err) return res.json({status: false, data: err.message});
+
+                                    if(faresaved) {
+                                        return res.json({status: true, data: "stuffsaved"});
+                                    }
+                                    else {
+                                        return res.json({status: false, data: "unknown_error2"});
+                                    }
+                                })
+                            }
+                            else {
+                                return res.json({status: false, data: "unknown_error1"});
+                            }
+                        })
+                    }
+                })
+            }
+        });
+    });
+
+    adminRouter.post("/enablecard", (req, res) => {
+        if(!req.body.cardnumber) return res.json({status: false, data: "cardnumber_required"});
+        if(!req.body.token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(req.body.token, adminsecret, (err, decoded) => {
+
+            if (err) {
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                User.findOne({ct_cardnumber: req.body.cardnumber}, (err, user) => {
+                    if(err) return res.json({status: false, data: err.message});
+                    console.log("user: ", user);
+
+                    if(!user) {
+                        return res.json({status: false, data: "card_notfound"});
+                    }
+
+                    else if (user) {
+                        if (user.cardstatus === "enabled") {
+                            return res.json({status: false, data: "card_alreadyenabled"});
+                        }
+                        else {
+                            User.findOneAndUpdate({ct_cardnumber: req.body.cardnumber}, 
+                            {$set: {cardstatus: "enabled"} }, {new: true},  (err, modified) => {
+                                if(err) return res.json({status: false, data: err.message});
+
+                                if(modified) {
+                                    return res.json({status: true, data: "card_enabled"});
+                                }
+                        })
                         }
                     }
                 });
@@ -349,7 +541,6 @@ module.exports = function(app, express) {
                                     })
                                 }
                         })
-
                     }
                 })
             }

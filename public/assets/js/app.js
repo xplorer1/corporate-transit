@@ -30,6 +30,13 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/signup.html',
                 controller: 'SignUpPageController'
             })
+
+            .state('edit', {
+                url: '/edit',
+                templateUrl: '../views/pages/edit.html',
+                controller: 'GeneralController'
+            })
+
             .state('login', {
                 url: '/login',
                 templateUrl: '../views/pages/login.html',

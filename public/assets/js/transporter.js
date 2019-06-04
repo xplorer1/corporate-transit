@@ -199,6 +199,16 @@ function TransporterFnc($http, $q) {
             });
     };
 
+    transporter.updatedetails = function(userData) {
+        return $http.post(baseurl+"/api/updatedetails", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
     // return our entire transporter object
     return transporter;
 }

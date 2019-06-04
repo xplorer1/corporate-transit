@@ -40,7 +40,7 @@ function AdminService($http, $q) {
     };
 
     adminservice.deleteuser = function(userData) {
-        return $http.post(baseurl+"/admin/deleteuser", userData).then(
+        return $http.post(baseurl+"/admin/deleteadmin", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -51,6 +51,46 @@ function AdminService($http, $q) {
 
     adminservice.replymessage = function(userData) {
         return $http.post(baseurl+"/admin/replymessage", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    adminservice.enablecard = function(userData) {
+        return $http.post(baseurl+"/admin/enablecard", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    adminservice.disablecard = function(userData) {
+        return $http.post(baseurl+"/admin/disablecard", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    adminservice.addroute = function(userData) {
+        return $http.post(baseurl+"/admin/addroute", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    adminservice.changefare = function(userData) {
+        return $http.post(baseurl+"/admin/changefare", userData).then(
             function(response){
                 return $q.when(response.data);
             },

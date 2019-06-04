@@ -13,6 +13,7 @@
     position: absolute;
     right: 0;
     color: #4d5862;
+    padding: 10vh 0 70vh;
 }
 
 .gen_stats {
@@ -28,6 +29,17 @@
     -o-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
     display: flex;
     justify-content: center;
+}
+
+.rou {
+    width: calc(35%);
+    padding: 20px 10px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    -o-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .stat_stats {
@@ -124,7 +136,7 @@ a {
 	cursor: pointer;
 }
 
-input#newadminemail, input#newadminname, input#superpassword, input#superpassword, input#superpassword, textarea#replytext, input#deletehoice {
+input#newadminemail, input#d_cardnumber, input#e_cardnumber, input#newadminname, input#superpassword, input#superpassword, input#superpassword, textarea#replytext, input#deletehoice {
     width: 100%;
     outline: none;
     background: none !important;
@@ -135,6 +147,36 @@ input#newadminemail, input#newadminname, input#superpassword, input#superpasswor
     border-left: none !important;
     border-radius: 0 !important;
     padding: 20px 0 10px;
+}
+
+input#morningpickup, input#morningdrop, input#eveningpickup, input#eveningdrop, input#fareoneway, input#farereturn {
+    width: 100%;
+    outline: none;
+    background: none !important;
+    color: #4d5862 !important;
+    border-bottom: 1px solid #4d5862 !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    padding: 20px 0 10px;
+}
+
+input#morningpickuppoint, select#c_dep, select#c_dest, input#c_fareoneway, input#c_farereturn, input#eveningpickuppoint, input#morningdroppoint, input#eveningdroppoint {
+    width: 100%;
+    outline: none;
+    background: none !important;
+    color: #4d5862 !important;
+    border-bottom: 1px solid #4d5862 !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    padding: 20px 0 10px;
+}
+
+select#c_dest, select#c_dep {
+    padding: 0px;
 }
 
 input#replytext {
@@ -168,7 +210,7 @@ input#replytext {
 	display: flex;
 }
 
-#message, #replycomplaint, #repliedmessage, #viewrepliedmessage, #verifydelete {
+#message, #replycomplaint, #addrouteform, #changefareform, #repliedmessage, #viewrepliedmessage, #verifydelete, #enablecardform, #disablecardform {
 	position: fixed; 
     top: 13%;
     width: 40%;
@@ -185,7 +227,7 @@ input#replytext {
     display: flex;
 }
 
-.closemessage, .closereplycomplaint, .closerepliedmessage, .closeviewrepliedmessage, .closeverifydelete {
+.closemessage, .closereplycomplaint, .closeaddrouteform, .closechangefareform, .closerepliedmessage, .closeviewrepliedmessage, .closeverifydelete {
 	position: absolute;
     top: 9px;
     right: 16px;
@@ -221,4 +263,8 @@ input#replytext {
 
 .transferrole {
     cursor: pointer;
+}
+
+.formheader {
+    text-align: center;
 }
