@@ -3,10 +3,12 @@ angular.module('MainModule', [
     'ui.router',
     'Transporter',
     'AdminService',
+    'CompanyService',
     'Utilities',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui-notification'
 ])
-    .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', function($stateProvider, $locationProvider, $urlRouterProvider) {
+    .config(['$stateProvider', '$locationProvider', '$urlRouterProvider', 'NotificationProvider', function($stateProvider, $locationProvider, $urlRouterProvider, NotificationProvider) {
 
         $stateProvider
             .state('home', {
@@ -25,12 +27,16 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/verify.html',
                 controller: 'SignUpPageController'
             })
+            .state('cverify', {
+                url: '/cverify/:vccode',
+                templateUrl: '../views/pages/companyverify.html',
+                controller: 'CompanyController'
+            })
             .state('signup', {
                 url: '/signup',
                 templateUrl: '../views/pages/signup.html',
                 controller: 'SignUpPageController'
             })
-
             .state('edit', {
                 url: '/edit',
                 templateUrl: '../views/pages/edit.html',
@@ -48,7 +54,7 @@ angular.module('MainModule', [
                 controller: "LoginPageController"
             })
             .state('reset', {
-                url: '/reset',
+                url: '/reset/:resetcode',
                 templateUrl: '../views/pages/resetpassword.html',
                 controller: "LoginPageController"
             })
@@ -88,12 +94,41 @@ angular.module('MainModule', [
                 url: '/adminlogin',
                 templateUrl: '../views/admin/adminlogin.html',
                 controller: "AdminController"
-            });
+            })
+            .state('companylogin', {
+                url: '/companylogin',
+                templateUrl: '../views/company/companylogin.html',
+                controller: "CompanyLoginController"
+            })
+            .state('company', {
+                url: '/company',
+                templateUrl: '../views/company/company.html',
+                controller: "CompanyController"
+            })
+            .state('companysignup', {
+                url: '/companysignup',
+                templateUrl: '../views/company/companysignup.html',
+                controller: "CompanySignUpController"
+            })
 
         $urlRouterProvider.otherwise('/notfound');
 
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
+        });
+        //error
+        //info
+        //warning
+        //success
+
+        NotificationProvider.setOptions({
+            delay: 10000,
+            startTop: 30,
+            startRight: 10,
+            verticalSpacing: 20,
+            horizontalSpacing: 20,
+            positionX: 'center',
+            positionY: 'top'
         });
     }]);

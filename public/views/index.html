@@ -7,6 +7,7 @@
 
     <title>Corporate Transit</title>
 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -14,10 +15,10 @@
     <link href="../assets/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/company.css">
     <link rel="stylesheet" href="../assets/css/mobile.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css" />
-    <link rel="stylesheet" href="../assets/lib/bootstrap/icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -29,8 +30,9 @@
     <script src="../assets/js/utilities.js"></script>
     <script src="../assets/js/transporter.js"></script>
     <script src="../assets/js/adminservice.js"></script>
-
-    <base href="/">
+    <script src="../assets/js/companyservice.js"></script>
+    <link rel="stylesheet" href="../assets/lib/bootstrap/angular-ui-notification.min.css"/>
+    <script type="text/javascript" src="../assets/lib/bootstrap/angular-ui-notification.min.js"></script>
 </head>
 
 <body ng-controller="MainPageController">
@@ -72,13 +74,14 @@
                 </li>
 
                 <li class="nav-item active">
-                    <a class="nav-link" ui-sref="signup">Sign Up</a>
+                    <a class="nav-link" ng-click="determineSignUpType()">Sign Up</a>
                 </li>
             </ul>
         </div>
     </nav>
 
     <section class="container-fluid top-section">
+        <div id="ohsnap"></div>
         <div class="row"><div class="column">&nbsp;</div></div>
         <div class="row"><div class="column">&nbsp;</div></div>
         <div class="row"><div class="column">&nbsp;</div></div>
@@ -358,6 +361,38 @@
         </div>
     </div>
 
+    <div id="signuptype" class="">
+        <a href="#" class="closecontactus" ng-click="closeType()">x</a>
+
+        <div class="user_register modalregister">
+           
+            <div class="choice-menu">
+                <div class="as-comp" ui-sref="signup">
+                    <div class="choice-txt">
+                        Sign up as an individual
+                    </div>
+
+                    <div class="ind choice-img">
+                        <img src="../assets/img/person.png" class="">
+                    </div>
+                    
+                </div>
+
+                <div class="as-ind" ui-sref="companysignup">
+                    <div class="choice-txt">
+                        Sign up as an organisation
+                    </div>
+
+                    <div class="or_g choice-img ">
+                        <img src="../assets/img/org2.png" class="">
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div id="contactus" class="">
         <a href="#" class="closecontactus" ng-click="closecontactus()">x</a>
 
@@ -403,12 +438,13 @@
             </div>
         </div>
     </div>
+
 </ui-view>
 
 <!-- this rave script is for test-->
 <script type="text/javascript" defer src="https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script defer defer src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
 <script defer src="../assets/lib/bootstrap/datetimepicker_css.js"></script>

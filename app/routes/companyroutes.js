@@ -6,19 +6,20 @@ let Complaint = require("../models/contactus");
 let PaymentJournal = require("../models/payment");
 let BookingJournal = require("../models/bookingjournal");
 let TransactionJournal = require("../models/transactions");
+let Company = require("../models/company");
 let CardNumbers = require("../models/cardnumbers");
 let Routes = require("../models/routes");
 let Fares = require("../models/fares");
 let jwt = require('jsonwebtoken');
 let config = require('../../config');
-let adminsecret = config.adminsecret;
+let companysecret = config.companysecret;
 let crypto = require("crypto");
 let fs = require('fs');
 let axios = require('axios');
 let moment = require('moment');
 
 module.exports = function(app, express) {
-    let adminRouter = express.Router();
+    let companyRouter = express.Router();
 
     let generatePassword = () => {
         var length = 12,
@@ -34,7 +35,63 @@ module.exports = function(app, express) {
         return '_' + Math.random().toString(36).substr(2, 9);
     };
 
-    adminRouter.post("/adminlogin", (req, res) => {
+    companyRouter.post("/signup", (req, res) => {
+        if(!req.body.companyname) return res.json({status: false, data: "companyname_required"});
+        if(!req.body.officelocation) return res.json({status: false, data: "offlice_location_required"});
+        if(!req.body.companyphone) return res.json({status: false, data: "companyphone_required"});
+        if(!req.body.companyemail) return res.json({status: false, data: "companyemail_required"});
+        if(!req.body.employeesno) return res.json({status: false, data: "employeesno_required"});
+        if(!req.body.route) return res.json({status: false, data: "route_required"});
+        if(!req.body.password) return res.json({status: false, data: "password_required"});
+
+        Company.findOne({email: req.body.email}, function(err, email) {
+            if(err) return res.json({status: false, data: err.message});
+
+            if(email) return res.json({status: false, data: "email_exists"});
+
+            if(!email) {
+                Company.findOne({phone: req.body.phone}, (err, phone) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(phone) return res.json({status: false, data: "phone_exists"});
+
+                    if(!phone) {
+                        let company = new Company();
+                        let vcode = uuid.v4();
+
+                        company.email = req.body.email;
+                        company.offlice_location = req.body.offlice_location;
+                        company.phone = req.body.phone;
+                        company.org_name = req.body.org_name;
+                        company.password = req.body.password;
+                        company.route = req.body.route;
+                        company.email = req.body.email;
+                        company.employeescount = req.body.employeescount;
+                        company.vcode = vcode;
+                        company.verified = false;
+
+                        company.save((err, success) => {
+                            if(err) console.log("Error saving user.");
+
+                            if(success) {
+                                mailer.sendEmailVerificationMail(req.body.org_name.split(" ")[0], "https://corporatetransit.com.ng/companyverify/"+vcode, req.body.email);
+
+                                return res.json({status: true, data: "signup_successful"})
+                            }
+                            else {
+                                return res.json({status: false, data: "unknown_error"})
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                return res.json({status: false, data: "unknown_error"})
+            }
+        });
+    });
+
+    companyRouter.post("/adminlogin", (req, res) => {
 
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.password) return res.json({status: false, data: "password_required"});
@@ -170,7 +227,7 @@ module.exports = function(app, express) {
         })
     });
 
-    adminRouter.post("/deleteadmin", (req, res) => {
+    companyRouter.post("/deleteadmin", (req, res) => {
         //remove({createdon: {$gt: new Date("2019-01-20")}})
         if(!req.body.id) return res.json({status: false, data: "id_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
@@ -214,7 +271,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/disablecard", (req, res) => {
+    companyRouter.post("/disablecard", (req, res) => {
         if(!req.body.cardnumber) return res.json({status: false, data: "cardnumber_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
 
@@ -251,7 +308,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/changefare", (req, res) => {
+    companyRouter.post("/changefare", (req, res) => {
         if(!req.body.token) return res.json({status: false, data: "token_required"});
         if(!req.body.route) return res.json({status: false, data: "route_required"});
         if(!req.body.fareoneway) return res.json({status: false, data: "fareoneway_required"});
@@ -288,7 +345,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/addroute", (req, res) => {
+    companyRouter.post("/addroute", (req, res) => {
         if(!req.body.token) return res.json({status: false, data: "token_required"});
         if(!req.body.route) return res.json({status: false, data: "route_required"});
 
@@ -367,7 +424,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/enablecard", (req, res) => {
+    companyRouter.post("/enablecard", (req, res) => {
         if(!req.body.cardnumber) return res.json({status: false, data: "cardnumber_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
 
@@ -379,6 +436,7 @@ module.exports = function(app, express) {
             else if(decoded) {
                 User.findOne({ct_cardnumber: req.body.cardnumber}, (err, user) => {
                     if(err) return res.json({status: false, data: err.message});
+                    console.log("user: ", user);
 
                     if(!user) {
                         return res.json({status: false, data: "card_notfound"});
@@ -404,7 +462,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/adduser", (req, res) => {
+    companyRouter.post("/adduser", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.name) return res.json({status: false, data: "name_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
@@ -472,7 +530,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/verifysuper", (req, res) => {
+    companyRouter.post("/verifysuper", (req, res) => {
         if(!req.body.password) return res.json({status: false, data: "password_required"});
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.token) return res.json({status: false, data: "token_required"});
@@ -501,7 +559,7 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/replymessage", (req, res) => {
+    companyRouter.post("/replymessage", (req, res) => {
         if(!req.body.id) return res.json({status: false, data: "email_required"});
         if(!req.body.replytext) return res.json({status: false, data: "replytext_required"});
         if(!req.body.subject) return res.json({status: false, data: "subject_required"});
@@ -549,9 +607,9 @@ module.exports = function(app, express) {
         });
     });
 
-    adminRouter.post("/transfersuperuser", (req, res) => {
+    companyRouter.post("/transfersuperuser", (req, res) => {
         //coming soon.
     });
     
-    return adminRouter;
+    return companyRouter;
 };

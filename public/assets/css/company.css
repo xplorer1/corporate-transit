@@ -1,0 +1,36 @@
+body {
+	
+}
+
+.companylogin {
+    padding: 15vh 0 0 !important;
+}
+
+input#companyemail, 
+input#companypassword, 
+input#companyname, 
+input#companyphone, 
+input#employeesno,
+input#officelocation {
+	width: 100%;
+    outline: none;
+    background: none !important;
+    color: #fff !important;
+    border-bottom: 1px solid #fff !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    padding: 20px 0 10px;
+}
+
+select#co_dep, select#co_dest {
+    background: none !important;
+    color: #4d5862 !important;
+    /* color: rgb(255, 255, 255) !important; */
+    border-bottom: 1px solid #fff !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+}

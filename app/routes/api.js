@@ -1,16 +1,20 @@
 let mailer = require('../utils/mail');
 let uuid = require('node-uuid');
 let User = require("../models/user");
+let Individual = require("../models/individual");
 let Admin = require("../models/admin");
 let Complaint = require("../models/contactus");
 let PaymentJournal = require("../models/payment");
 let BookingJournal = require("../models/bookingjournal");
 let TransactionJournal = require("../models/transactions");
 let CardNumbers = require("../models/cardnumbers");
+let CardTransactions = require("../models/cardtransactions");
 let Routes = require("../models/routes");
+let Company = require("../models/company");
 let jwt = require('jsonwebtoken');
 let config = require('../../config');
 let supersecret = config.secret;
+let companysecret = config.companysecret;
 let crypto = require("crypto");
 let fs = require('fs');
 let axios = require('axios');
@@ -24,6 +28,15 @@ module.exports =(app, express, appstorage) => {
     let ravepublic = "FLWPUBK-8bfe4998fd6b9ba7e26740d4959535f3-X";
     let ravesecret = "FLWSECK-6e3c53e9f283aff4c35c6b8d55bf27eb-X";
     let raveenckey = "6e3c53e9f283315642573777";
+    let generatePassword = () => {
+        var length = 8,
+            charset = "0123456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
 
     apiRouter.post("/confirm", (req, res) => {
         let vcode = req.body.token;
@@ -38,11 +51,13 @@ module.exports =(app, express, appstorage) => {
                     }
 
                     if(!user.verified) {
+                        let tempnumber = generatePassword();
+
                         User.updateOne({email: user.email}, {
                             $set: {
                                 verified: true,
                                 verifiedon: new Date(),
-                                ct_cardnumber: "ewew23232",
+                                ct_cardnumber: tempnumber,
                                 ct_cardstatus: "assigned"
                             }
                         }, (err, verified) => {
@@ -89,6 +104,78 @@ module.exports =(app, express, appstorage) => {
         }
     });
 
+    apiRouter.post("/companysignup", (req, res) => {
+
+        if(!req.body.companyname) return res.json({status: false, data: "companyname_required"});
+        if(!req.body.officelocation) return res.json({status: false, data: "offlice_location_required"});
+        if(!req.body.companyphone) return res.json({status: false, data: "companyphone_required"});
+        if(!req.body.companyemail) return res.json({status: false, data: "companyemail_required"});
+        if(!req.body.employeesno) return res.json({status: false, data: "employeesno_required"});
+        if(!req.body.password) return res.json({status: false, data: "password_required"});
+        if(!req.body.routefrom) return res.json({status: false, data: "routefrom_required"});
+        if(!req.body.routeto) return res.json({status: false, data: "routeto_required"});
+
+        User.findOne({email: req.body.email}, function(err, email) {
+            if(err) return res.json({status: false, data: err.message});
+
+            if(email) return res.json({status: false, data: "email_exists"});
+
+            if(!email) {
+                User.findOne({phone: req.body.phone}, (err, phone) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(phone) return res.json({status: false, data: "phone_exists"});
+
+                    if(!phone) {
+
+                        let company = new Company();
+                        let user = new User();
+                        let vcode = uuid.v4();
+
+                        company.email = req.body.companyemail;
+                        company.offlice_location = req.body.offlice_location;
+                        company.phone = req.body.companyphone;
+                        company.route = req.body.routefrom + " To " + req.body.routeto;
+                        company.companyname = req.body.companyname;
+                        company.password = req.body.password;
+                        company.employeescount = req.body.employeesno;
+                        company.vcode = vcode;
+                        company.verified = false;
+                        company.role = "company";
+
+                        user.email = req.body.companyemail;
+                        user.password = req.body.password;
+                        user.role = "company";
+                        user.createdon = new Date();
+                        user.vcode = vcode;
+                        user.verified = false;
+
+                        company.save((err, success) => {
+                            if(err) console.log("Error saving user: ", err.message);
+
+                            if(success) {
+
+                                user.save((err, success) => {
+
+                                });
+                                
+                                mailer.sendEmailVerificationMail(req.body.org_name.split(" ")[0], "https://corporatetransit.com.ng/companyverify/"+vcode, req.body.email);
+
+                                return res.json({status: true, data: "signup_successful"})
+                            }
+                            else {
+                                return res.json({status: false, data: "unknown_error"})
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                return res.json({status: false, data: "unknown_error"})
+            }
+        });
+    });
+
     apiRouter.post("/signup", (req, res) => {
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.home) return res.json({status: false, data: "home_required"});
@@ -100,7 +187,7 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.fullname) return res.json({status: false, data: "fullname_required"});
         if(!req.body.gender) return res.json({status: false, data: "gender_required"});
 
-        User.findOne({username: req.body.username.toLowerCase()}, function(err, username) {
+        Individual.findOne({username: req.body.username.toLowerCase()}, function(err, username) {
             if(err) return res.json({status: false, data: err});
 
             if(username) return res.json({status: false, data: "username_exists"});
@@ -112,25 +199,31 @@ module.exports =(app, express, appstorage) => {
                     if(email) return res.json({status: false, data: "email_exists"});
 
                     if(!email) {
-                        User.findOne({phone: req.body.phone}, (err, phone) => {
+                        Individual.findOne({phone: req.body.phone}, (err, phone) => {
                             if(err) return res.json({status: false, data: "db_error."});
 
                             if(phone) return res.json({status: false, data: "phone_exists"});
 
                             if(!phone) {
                                 let user = new User();
+                                let ind = new Individual();
                                 let vcode = uuid.v4();
 
-                                user.work = req.body.work;
-                                user.home = req.body.home;
-                                user.route = req.body.home + "To " + req.body.work;
-                                user.gender = req.body.gender;
+                                ind.work = req.body.work;
+                                ind.home = req.body.home;
+                                ind.route = req.body.home + " To " + req.body.work;
+                                ind.gender = req.body.gender;
+                                ind.password = req.body.password;
+                                ind.org = req.body.org;
+                                ind.email = req.body.email;
+                                ind.phone = req.body.phone;
+                                ind.username = req.body.username;
+                                ind.fullname = req.body.fullname;
+
+                                user.email = req.body.companyemail;
                                 user.password = req.body.password;
-                                user.org = req.body.org;
-                                user.email = req.body.email;
-                                user.phone = req.body.phone;
-                                user.username = req.body.username;
-                                user.fullname = req.body.fullname;
+                                user.role = "individual";
+                                user.createdon = new Date();
                                 user.vcode = vcode;
                                 user.verified = false;
 
@@ -138,9 +231,13 @@ module.exports =(app, express, appstorage) => {
                                     if(err) console.log("Error saving user.");
 
                                     if(success) {
-                                        mailer.sendEmailVerificationMail(req.body.fullname.split(" ")[0], "https://corporatetransit.com.ng/verify/"+vcode, req.body.email);
+                                        ind.save((err, success) => {
+                                            if(err) console.log("err: ", err.message);
 
-                                        return res.json({status: true, data: "signup_successful"})
+                                            mailer.sendEmailVerificationMail(req.body.fullname.split(" ")[0], "https://corporatetransit.com.ng/verify/"+vcode, req.body.email);
+
+                                            return res.json({status: true, data: "signup_successful"});
+                                        });
                                     }
                                     else {
                                         return res.json({status: false, data: "unknown_error"})
@@ -211,13 +308,13 @@ module.exports =(app, express, appstorage) => {
                     if(user) {
                         User.updateOne({email: req.body.email}, {
                             $set: {
-                                email: req.body.email,
-                                phone: req.body.phone,
-                                username: req.body.username,
-                                work: req.body.work,
-                                home: req.body.home,
-                                org: req.body.org,
-                                fullname: req.body.fullname
+                                email: req.body.email || user.email,
+                                phone: req.body.phone || user.phone,
+                                username: req.body.username || user.username,
+                                work: req.body.work || user.work,
+                                home: req.body.home || user.home,
+                                org: req.body.org || user.org,
+                                fullname: req.body.fullname || user.fullname
                             }
                         }, 
                         (err, updated) => {
@@ -273,10 +370,11 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.password) return res.json({status: false, data: "password_required"});
 
-        User.findOne({email: req.body.email, password: req.body.password}, {"verified" : 1, "cardstatus": 1, "work": 1, "home": 1, "balance" : 1, "email": 1, "phone" : 1, "fullname": 1, "username": 1, "ct_cardnumber": 1}, (err, user) => {
-            if(err) return res.json({status: false, data: "Error"+err});
+        User.findOne({email: req.body.email, password: req.body.password}, (err, user) => {
+            if(err) return res.json({status: false, data: err.message});
 
             if(user) {
+                
                 if(!user.verified) {
                     let vcode = uuid.v4();
 
@@ -293,95 +391,201 @@ module.exports =(app, express, appstorage) => {
                     });
                 }
                 else if(user.cardstatus === "disabled") {
-                    console.log("card disabled!");
 
                     return res.json({status: false, data: "carddisabled"});
                 }
-                else {
-                    let token = jwt.sign({
-                        name: user.fullname,
-                        email: req.body.email,
-                        username: user.username,
-                    }, supersecret, {
-                        expiresIn: 86400 // expires in 24 hours.
-                    });
+                else if(user.role === "individual") {
 
-                    let totaldeposited = 0;
-                    let numtaken = 0;
-                    let pendingtrip;
-                    let num_cardpayments = 0;
-                    let num_bankpayments = 0;
+                    Individual.findOne({email: req.body.email}, (err, ind) => {
+                        if(err) console.log("err: ", err.message);
 
-                    PaymentJournal.find({email: req.body.email, paymentstatus: "Confirmed"}, (err, paid) => {
-                        if(err) console.log("Err: ", err.message);
-
-                        if(paid) {
-                            
-                            paid.forEach(item => {
-                                totaldeposited += item.amount;
-
-                                if(item.paymenttype === "Online Instant") {
-                                    num_cardpayments += item.amount;
-                                }
-                                else if(item.paymenttype === "Bank Payment") {
-                                    num_bankpayments += item.amount;
-                                }
+                        if(ind) {
+                            let token = jwt.sign({
+                                email: req.body.email,
+                            }, supersecret, {
+                                expiresIn: 86400 // expires in 24 hours.
                             });
 
-                            BookingJournal.find({email: req.body.email}, (err, bookings) => {
-                                if(err) {
-                                    console.log("Err: ", err.message);
-                                    return res.json({status: false, data: err.message});
+                            let totaldeposited = 0;
+                            let numtaken = 0;
+                            let pendingtrip;
+                            let num_cardpayments = 0;
+                            let num_bankpayments = 0;
+
+                            PaymentJournal.find({email: req.body.email, paymentstatus: "Confirmed"}, (err, paid) => {
+                                if(err) console.log("Err: ", err.message);
+
+                                if(paid) {
+                                    
+                                    paid.forEach(item => {
+                                        totaldeposited += item.amount;
+
+                                        if(item.paymenttype === "Online Instant") {
+                                            num_cardpayments += item.amount;
+                                        }
+                                        else if(item.paymenttype === "Bank Payment") {
+                                            num_bankpayments += item.amount;
+                                        }
+                                    });
+
+                                    BookingJournal.find({email: req.body.email}, (err, bookings) => {
+                                        if(err) {
+                                            console.log("Err: ", err.message);
+                                            return res.json({status: false, data: err.message});
+                                        }
+
+                                        if(bookings) {
+                                            bookings.forEach(booking => {
+                                                if(booking.booking.bookingstatus === "Concluded") {
+                                                    numtaken++;
+                                                }
+
+                                                if(booking.booking.bookingstatus === "Pending") {
+                                                    pendingtrip = booking.booking.from + " " + booking.booking.bookingtime;
+                                                }
+                                            });
+
+                                            let sortedbooking = bookings.sort(function (obj1, obj2) {
+                                                return obj2.bookedon - obj1.bookedon;
+                                            });
+
+                                            let latestbooking = sortedbooking[0];
+
+                                            let userobj = {};
+
+                                            Routes.findOne({route: rou1 +" - "+ rou2}, (err, routeinfo) => {
+                                                if(err) console.log("err: ", err.message);
+
+                                                let rou = ind.route.split(",");
+
+                                                let rou1 = rou[0].split(' - ')[1].trim();
+                                                let rou2 = rou[1].split(' - ')[1].trim();
+
+                                                userobj.balance = ind.balance;
+                                                userobj.email = ind.email;
+                                                userobj.fullname = ind.fullname;
+                                                userobj.username = ind.username;
+                                                userobj.cardnumber = ind.ct_cardnumber;
+                                                userobj.phone = ind.phone;
+                                                userobj.work = ind.work;
+                                                userobj.home = ind.home;
+                                                userobj.org = ind.org;
+                                                userobj.routeinfo = routeinfo;
+                                                userobj.role = user.role;
+                                                userobj.token = token;
+                                                userobj.totaldeposited = totaldeposited;
+                                                userobj.numtrips = bookings.length;
+                                                userobj.numtaken = numtaken;
+                                                userobj.latestbooking = pendingtrip;
+                                                userobj.num_bankpayments = num_bankpayments;
+                                                userobj.num_cardpayments = num_cardpayments;
+
+                                                return res.json({status: true, data: "login_successful", user: userobj});
+
+                                            });
+                                        }
+                                    })
                                 }
+                            });
+                        }
+                    });
+                }
+                else if(user.role === "company") {
+                    Company.findOne({email: req.body.email}, (err, com) => {
+                        if(err) console.log("err: ", err.message);
 
-                                if(bookings) {
-                                    bookings.forEach(booking => {
-                                        if(booking.booking.bookingstatus === "Concluded") {
-                                            numtaken++;
+                        console.log("com: ", com);
+
+                        if(com) {
+                            let token = jwt.sign({
+                                email: req.body.email,
+                            }, supersecret, {
+                                expiresIn: 86400 // expires in 24 hours.
+                            });
+
+                            let totaldeposited = 0;
+                            let numtaken = 0;
+                            let pendingtrip;
+                            let num_cardpayments = 0;
+                            let num_bankpayments = 0;
+
+                            PaymentJournal.find({email: req.body.email, paymentstatus: "Confirmed"}, (err, paid) => {
+                                if(err) console.log("Err: ", err.message);
+
+                                if(paid) {
+                                    
+                                    paid.forEach(item => {
+                                        totaldeposited += item.amount;
+
+                                        if(item.paymenttype === "Online Instant") {
+                                            num_cardpayments += item.amount;
                                         }
-
-                                        if(booking.booking.bookingstatus === "Pending") {
-                                            pendingtrip = booking.booking.from + " " + booking.booking.bookingtime;
+                                        else if(item.paymenttype === "Bank Payment") {
+                                            num_bankpayments += item.amount;
                                         }
                                     });
 
-                                    let sortedbooking = bookings.sort(function (obj1, obj2) {
-                                        return obj2.bookedon - obj1.bookedon;
-                                    });
+                                    BookingJournal.find({email: req.body.email}, (err, bookings) => {
+                                        if(err) {
+                                            console.log("Err: ", err.message);
+                                            return res.json({status: false, data: err.message});
+                                        }
 
-                                    //Routes.find({})
+                                        if(bookings) {
+                                            bookings.forEach(booking => {
+                                                if(booking.booking.bookingstatus === "Concluded") {
+                                                    numtaken++;
+                                                }
 
-                                    let latestbooking = sortedbooking[0];
+                                                if(booking.booking.bookingstatus === "Pending") {
+                                                    pendingtrip = booking.booking.from + " " + booking.booking.bookingtime;
+                                                }
+                                            });
 
-                                    let userobj = {};
+                                            let sortedbooking = bookings.sort(function (obj1, obj2) {
+                                                return obj2.bookedon - obj1.bookedon;
+                                            });
 
-                                    userobj.balance = user.balance;
-                                    userobj.email = user.email;
-                                    userobj.fullname = user.fullname;
-                                    userobj.username = user.username;
-                                    userobj.cardnumber = user.ct_cardnumber;
-                                    userobj.phone = user.phone;
-                                    userobj.work = user.work;
-                                    userobj.home = user.home;
-                                    userobj.org = user.org;
-                                    userobj.token = token;
-                                    userobj.totaldeposited = totaldeposited;
-                                    userobj.numtrips = bookings.length;
-                                    userobj.numtaken = numtaken;
-                                    userobj.latestbooking = pendingtrip;
-                                    userobj.num_bankpayments = num_bankpayments;
-                                    userobj.num_cardpayments = num_cardpayments;
+                                            let rou = com.route.split("To");
 
-                                    return res.json({status: true, data: "login_successful", reason: "Login is successful.", user: userobj});
+                                            let rou1 = rou[0].split(' - ')[1].trim();
+                                            let rou2 = rou[1].split(' - ')[1].trim();
+
+                                            Routes.findOne({route: rou1 +" - "+ rou2}, (err, routeinfo) => {
+                                                if(err) console.log("err: ", err.message);
+
+                                                let latestbooking = sortedbooking[0];
+
+                                                let userobj = {};
+
+                                                userobj.balance = com.balance;
+                                                userobj.email = com.email;
+                                                userobj.companyname = com.companyname;
+                                                userobj.cardnumber = com.ct_cardnumber;
+                                                userobj.route = com.route;
+                                                userobj.routeinfo = routeinfo;
+                                                userobj.token = token;
+                                                userobj.role = user.role;
+                                                userobj.totaldeposited = totaldeposited;
+                                                userobj.numtrips = bookings.length;
+                                                userobj.numtaken = numtaken;
+                                                userobj.latestbooking = pendingtrip;
+                                                userobj.num_bankpayments = num_bankpayments;
+                                                userobj.num_cardpayments = num_cardpayments;
+
+                                                return res.json({status: true, data: "login_successful", user: userobj});
+
+                                            });
+                                        }
+                                    })
                                 }
                             })
                         }
-                    })
-                    
+                    });
                 }
             }
             if(!user) {
-                return res.json({status: false, data: "account_notfound", reason: "The email or password is incorrect. Advice to check and try again, or register if they have no account."});
+                return res.json({status: false, data: "account_notfound"});
             }
         })
     });
@@ -423,16 +627,16 @@ module.exports =(app, express, appstorage) => {
         if(!token) return res.json({status: false, data: "token_required"});
 
         User.findOne({resetpasswordtoken: token}, (err, valid) => {
-            if(err) return res.json({status: false, data: "db_error", reason: err});
+            if(err) return res.json({status: false, data: err.message});
 
             if(!valid) {
-                return res.json({status: false, data: "invalid_token", reason: "Password reset token invalid."});
+                return res.json({status: false, data: "invalid_token"});
             }
             if(valid) {
-                return res.json({status: true, data: "token_valid", reason: "Password token is valid."});
+                return res.json({status: true, data: "token_valid"});
             }
             else {
-                return res.json({status: false, data: "unknown_error", reason: "Password token is valid."});
+                return res.json({status: false, data: "unknown_error"});
             }
         })
     });
@@ -450,11 +654,12 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded) {
                 User.findOne({email: req.body.email}, (err, user) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: err});
+                    if(err) return res.json({status: false, data: err.message});
 
                     if(!user) {
-                        return res.json({status: false, data: "user_notfound", reason: "User with email not found."});
+                        return res.json({status: false, data: "user_notfound"});
                     }
+
                     if(user) {
                         PaymentJournal.find({email: req.body.email, paymentstatus: "Confirmed"}, (err, paid) => {
                         if(err) console.log("Err: ", err.message);
@@ -463,7 +668,7 @@ module.exports =(app, express, appstorage) => {
                             
                             paid.forEach(item => {
                                 totaldeposited += item.amount;
-                            })
+                            });
 
                             return res.json({status: true, data: user.balance, totaldeposited: totaldeposited});
                         }
@@ -491,7 +696,7 @@ module.exports =(app, express, appstorage) => {
                     if(err) console.log("error changing password: ", err);
 
                     if(changed) {
-                        //mailer.sendPasswordChangedMail(user.fullname, req.body.email);
+                        mailer.sendPasswordChangedMail(user.fullname, req.body.email);
 
                         return res.json({status: true, data: "password_change_successful"});
                     }
@@ -537,7 +742,7 @@ module.exports =(app, express, appstorage) => {
             if(success) {
                 mailer.sendSuccessfulBookingMail(fullname, email, booking_info);
 
-                return res.json({status: true, data: "booking_successful.", reason: "Booking is successful."})
+                return res.json({status: true, data: "booking_successful."})
             }
         });
     }
@@ -579,9 +784,9 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded) {
                 User.findOne({email: decoded.email}, (err, user) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(err) return res.json({status: false, data: err.message});
 
-                    if(!user) return res.json({status: false, data: "user_not_found", reason: "User with email address not registered."});
+                    if(!user) return res.json({status: false, data: "user_not_found"});
 
                     if(user) {
                         BookingJournal.findOne({email: req.body.email, "booking.bookingstatus" : "Pending"}, (err, trip) => {
@@ -621,7 +826,7 @@ module.exports =(app, express, appstorage) => {
     });
 
     apiRouter.post("/cancelbooking", (req, res) => {
-        if(!req.body.bookingid) return res.json({status: false, data: "bookingid_required", reason: "No booking id supplied."});
+        if(!req.body.bookingid) return res.json({status: false, data: "bookingid_required"});
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
         jwt.verify(token, supersecret, function (err, decoded) {
@@ -630,9 +835,9 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded && decoded.email) {
                 User.findOne({email: decoded.email}, (err, client) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(err) return res.json({status: false, data: "db_error"});
 
-                    if(!client) return res.json({status: false, data: "user_not_found", reason: "No account with that email address was found."});
+                    if(!client) return res.json({status: false, data: "user_not_found"});
 
                     if(client) {
                         BookingJournal.findOne({email: decoded.email}, (err, user) => {
@@ -674,7 +879,7 @@ module.exports =(app, express, appstorage) => {
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
 
         if(!token) return res.json({status: false, data: "token_required"});
-        if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
+        if(!req.body.email) res.json({status: false, data: "email_required"});
 
         jwt.verify(token, supersecret, function (err, decoded) {
             if (err) {
@@ -682,12 +887,12 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded && decoded.email) {
                 User.findOne({email: req.body.email}, {"fullname" : 1, "balance" : 1}, (err, client) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-                    if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                    if(err) return res.json({status: false, data: "db_error"});
+                    if(!client) return res.json({status: false, data: "user_notfound"});
 
                     if(client) {
                         PaymentJournal.find({email: req.body.email, paymentstatus: "Confirmed"}, {"paymenttype" : 1, "amount" : 1, "created" : 1}, (err, history) => {
-                            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                            if(err) return res.json({status: false, data: "db_error"});
                             if(history) {
                                 return res.json({status: true, data: history, user_details: client})
                             }
@@ -710,12 +915,12 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded && decoded.email) {
                 User.findOne({email: req.body.email}, {"fullname" : 1, "balance" : 1}, (err, client) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
-                    if(!client) return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                    if(err) return res.json({status: false, data: "db_error"});
+                    if(!client) return res.json({status: false, data: "user_notfound"});
 
                     if(client) {
                         TransactionJournal.find({email: req.body.email}, {"transaction" : 1, "amount" : 1, "success" : 1, "created" : 1}, (err, history) => {
-                            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                            if(err) return res.json({status: false, data: err.message});
                             if(history) {
                                 return res.json({status: true, data: history, user_details: client})
                             }
@@ -728,7 +933,7 @@ module.exports =(app, express, appstorage) => {
 
     apiRouter.post("/bookinghistory", (req, res) => {
         let token = req.body.token || req.params.token || req.headers['x-access-token'];
-        if(!req.body.email) res.json({status: false, data: "email_required", reason: "Email not found."});
+        if(!req.body.email) res.json({status: false, data: "email_required"});
         if(!token) return res.json({status: false, data: "token_required"});
 
         jwt.verify(token, supersecret, function (err, decoded) {
@@ -737,15 +942,15 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded && decoded.email) {
                 User.findOne({email: req.body.email}, {"fullname" : 1}, (err, client) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(err) return res.json({status: false, data: err.message});
                     if(!client) {
                         console.log("Client: ", client)
-                        return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                        return res.json({status: false, data: "user_notfound"});
                     }
 
                     if(client) {
                         BookingJournal.find({email: req.body.email}, {"booking" : 1, "email" : 1}, (err, history) => {
-                            if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                            if(err) return res.json({status: false, data: err.message});
                             if(history) {
                                 return res.json({status: true, data: history, fullname: client.fullname})
                             }
@@ -771,10 +976,10 @@ module.exports =(app, express, appstorage) => {
             }
             else if(decoded && decoded.email) {
                 User.findOne({email: req.body.email}, (err, client) => {
-                    if(err) return res.json({status: false, data: "db_error", reason: "Database error. Advice user to try again later."});
+                    if(err) return res.json({status: false, data: "db_error"});
                     
                     if(!client) {
-                        return res.json({status: false, data: "user_notfound", reason: "No account found for that email address."});
+                        return res.json({status: false, data: "user_notfound"});
                     }
 
                     if(client) {
@@ -981,7 +1186,7 @@ module.exports =(app, express, appstorage) => {
                 return res.json({status: false, data: err.message});
             }
             else if(success) {
-                mailer.sendComplaintRecieptMail(req.body.name, req.body.email);
+                mailer.sendComplaintRecieptMail(req.body.email);
 
                 //mailer.sendComplaintMail(req.body.name, req.body.email, req.body.complaint, corporatemail);
 
@@ -1020,14 +1225,11 @@ module.exports =(app, express, appstorage) => {
                             console.log(err.message);
                         }
 
-                        console.log("Payment: ", payment);
-
                         if(payment) {
                             if(req.body.status === "successful") {
                                 User.updateOne({email: req.body.customer.email}, {$inc: {balance: req.body.amount}}, (err, updated) => {
                                     if(err) console.log("error updating balance: ", err);
                                     if(updated) {
-                                        console.log("Updated! ", updated);
                                         //return res.sendStatus(200);
                                         //return res.json({status: true, data: "Balance updated."})
                                     }
@@ -1046,37 +1248,123 @@ module.exports =(app, express, appstorage) => {
     });
 
     apiRouter.post("/cardpayment", (req, res) => {
-        if(!req.body.email) return res.json({status: false, data: "email_required", reason: "Email address not found."});
-        if(!req.body.cardnumber) return res.json({status: false, data: "ct_cardnumber_required", reason: "User card number not found."});
-        if(!req.body.amount) return res.json({status: false, data: "amount_required", reason: "Amount user paid is required."});
 
-        let amount = -1 * req.body.amount;
+        if(!Array.isArray(req.body)) return res.json({status: false, data: "not-array"});
+        if((req.body.length < 1)) return res.json({status: false, data: "array-empty"});
 
-        User.findOne({email: req.body.email, ct_cardnumber: req.body.cardnumber}, {"fullname" : 1}, (err, user) => {
+        let details = req.body[0];
+
+        let amount = -1 * details.amount;
+        let cardnumber = details.cardSerial;
+        let transid = details.transID;
+        let transdate = details.transDate;
+
+        if(!amount) return res.json({status: false, data: "no-amount"});
+        if(!cardnumber) return res.json({status: false, data: "no-cardnumber"});
+        if(!transid) return res.json({status: false, data: "no_transid"});
+        if(!transdate) return res.json({status: false, data: "no_transdate"});
+
+        User.findOne({ct_cardnumber: cardnumber}, {"email" : 1}, (err, user) => {
             if(err) {
-                console.log("Error finding user: ", err);
+                console.log("Error finding user: ", err.message);
+                return res.json({status: false, data: err.message});
             }
             if(user) {
-                User.updateOne({email: req.body.email}, {$inc: {balance: amount}}, (err, update) => {
-                    if(err) {
-                        console.log("error deducting from user's balance: ", err);
-                    }
-                    if(update.nModified > 0){
-                        BookingJournal.findOneAndUpdate({"booking.bookingstatus": "Pending"}, 
-                            {$set: {"booking.bookingstatus": "Concluded"}
-                        }, {new: true},  (err, concluded) => {
-                            if(err) return res.json({status: false, data: "finding booking error: " + err});
 
-                            if(concluded) {
-                                mailer.sendBookingCancelledMail(user.fullname, req.body.email);
-                                return res.json({status: true, data: "Updated"});
-                            }
-                            else {
-                                return res.json({status: false, data: "Unable to cancel booking."})
+                CardTransactions.findOne({cardnumber: cardnumber, transid: transid}, (err, _id) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    console.log("id: ", _id);
+
+                    if(_id) {
+                        return res.json({status: false, data: "dup-id"});
+                    }
+
+                    if(!_id) {
+
+                        let trs = new CardTransactions();
+
+                        trs.cardnumber = cardnumber;
+                        trs.transid = transid;
+                        trs.transdate = transdate;
+                        trs.amount = amount;
+                        trs.create = new Date();
+                        trs.createdonformatted = new Date().toDateString();
+
+                        trs.save((err, saved) => {
+                            if(err) return res.json({status: false, data: err.message});
+
+                            if(saved) {
+                                User.updateOne({ct_cardnumber: cardnumber}, {$inc: {balance: amount}}, (err, update) => {
+                                    if(err) {
+                                        console.log("error deducting from user's balance: ", err.message);
+                                        return res.json({status: false, data: err.message});
+                                    }
+                                    if(update.nModified > 0){
+                                        BookingJournal.findOneAndUpdate({"booking.bookingstatus": "Pending", ct_cardnumber: cardnumber}, 
+                                            {$set: {"booking.bookingstatus": "Concluded"}
+                                        }, {new: true},  (err, concluded) => {
+                                            if(err) return res.json({status: false, data: err.message});
+
+                                            if(concluded) {
+                                                mailer.sendBookingConcludedMail(user.email);
+                                                return res.json({status: true, data: "updated"});
+                                            }
+                                            else {
+                                                return res.json({status: false, data: "Unable to conclude booking."})
+                                            }
+                                        })
+                                    }
+                                })
                             }
                         })
                     }
                 })
+            }
+            else {
+                return res.json({status: false, data: "account_notfound"})
+            }
+        })
+    });
+
+    apiRouter.post("/checkbalance", (req, res) => {
+        if(!req.body.cardnumber) return res.json({status: false, data: "ct_cardnumber_required"});
+
+        User.findOne({ct_cardnumber: req.body.cardnumber}, {"fullname" : 1, "balance" : 1}, (err, user) => {
+            if(err) {
+                return res.json({status: false, data: err.message});
+            }
+            if(user) {
+                return res.json({status: true, data: user.balance});
+            }
+            else {
+                return res.json({status: false, data: "account_notfound"})
+            }
+        })
+    });
+
+    apiRouter.post("/confirmbalancewritten", (req, res) => {
+        if(!req.body.cardnumber) return res.json({status: false, data: "ct_cardnumber_required"});
+        if(!req.body.status) return res.json({status: false, data: "status_required"});
+
+        User.findOne({ct_cardnumber: req.body.cardnumber}, {"fullname" : 1}, (err, user) => {
+            if(err) {
+                console.log("Error finding user: ", err.message);
+                return res.json({status: false, data: err.message});
+            }
+            if(user) {
+                User.updateOne({ct_cardnumber: req.body.cardnumber}, {$set: {updatestatus: req.body.status}}, (err, update) => {
+                    if(err) {
+                        
+                        return res.json({status: false, data: err.message});
+                    }
+                    if(update.nModified > 0){
+                        console.log("Write to card balance successful.");
+                    }
+                })
+            }
+            else {
+                return res.json({status: false, data: "account_notfound"})
             }
         })
     });

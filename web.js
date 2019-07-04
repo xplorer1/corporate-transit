@@ -74,8 +74,9 @@ const httpServer = http.createServer(app, function(req, res) {
 });
 const httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(80, () => {
+httpServer.listen(80, (req, res) => {
     console.log('HTTP Server running on port 80');
+    res.redirect('https://' + req.headers.host + req.url);
     /* res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
     res.end(); */
 });

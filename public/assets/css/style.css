@@ -1130,7 +1130,17 @@ input#name {
     border: 1px solid rgb(77, 88, 98);
 }
 
-input#email, input#username, input#phone, input#new_password, input#password, input#confirm_password, input#org, input#fullname, input#ct_cardnumber, input#newadminemail, input#newadminname {
+input#email, 
+input#username, 
+input#phone, 
+input#resetemail,
+input#new_password, 
+input#password, 
+input#confirm_password, 
+input#org, input#fullname, 
+input#ct_cardnumber, 
+input#newadminemail, 
+input#newadminname {
     background: none !important;
     color: rgb(255, 255, 255) !important;
     border-bottom: 1px solid #fff !important;
@@ -1140,7 +1150,13 @@ input#email, input#username, input#phone, input#new_password, input#password, in
     border-radius: 0 !important;
 }
 
-input#edit_fullname, input#edit_org, select#edit_work_location, select#edit_home_location, input#edit_email, input#edit_phone, input#edit_username {
+input#edit_fullname, 
+input#edit_org, 
+select#edit_work_location, 
+select#edit_home_location, 
+input#edit_email, 
+input#edit_phone, 
+input#edit_username {
     background: none !important;
     color: rgb(255, 255, 255) !important;
     border-bottom: 1px solid #fff !important;
@@ -2241,7 +2257,7 @@ li#item1548456588046-1 {
 
 .signuppage, .loginpage, .forgotpasswordpage, .resetpage {
     background-image: linear-gradient(to top left, #022f50, #8cc8f2);
-    padding: 0 0 80vh !IMPORTANT;
+    padding: 8vh 0 0 !IMPORTANT;
 }
 
 .forgotpasswordpage, .resetpage {
@@ -3237,4 +3253,59 @@ i.boarding_img.bus.icon {
 
 .noacct {
     color: white;
+}
+
+#signuptype {
+    visibility: hidden;
+    position: absolute;
+    top: 101px;
+    left: 0;
+    right: 0;
+    z-index: 193;
+    width: 400px;
+    height: 200px;
+    margin: 0 auto;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.12);
+    /*overflow: hidden;*/
+}
+
+.choice-img img {
+    width: 50%;
+}
+
+.choice-menu {
+    display: flex;
+}
+
+.as-comp, .as-ind {
+    width: 70%;
+    margin: 2rem 2rem;
+}
+
+.choice-txt {
+    color: #4d5862;
+    padding: 1rem;
+    font-size: 12pt;
+}
+
+.or_g {
+    text-align: right;
+}
+
+.or_g img {
+    width: 70%;
+}
+
+.ind img {
+    width: 80%;
+    margin-top: -15px;
+}
+
+.as-ind .choice-txt {
+    text-align: right;
+}
+
+.as-comp, .as-ind {
+    cursor: pointer;
 }

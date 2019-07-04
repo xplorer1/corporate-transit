@@ -1,0 +1,195 @@
+
+<div class="ui middle aligned center aligned grid forms signuppage" ng-controller="CompanySignUpController" id="ph_page">
+    <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
+        <div class="ct_logo">
+            <a class="img_logo" ui-sref="home">
+                <img src="../../assets/img/logos/ct_logo.png" class="">
+            </a>
+        </div>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+         <div class="collapse navbar-collapse nav_o" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" ui-sref="companylogin">Sign In</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="column" id="signup">
+        <h2 class="ui image header" style="margin: 0 !important;">
+            <div class="content">
+                <a class="cont_img" ui-sref="home">
+                    <img src="../../assets/img/logos/ctlogowhite.png" class="">
+                </a>
+            </div>
+        </h2>
+        <form class="ui large form" novalidate name="signupform" id="signupform">
+            <div class="ui stacked secondary  segment removestyle">
+
+                <div class="range">
+                    <div class="ui form">
+                        <div class="two fields">
+                            <div class="field sel_field">
+                                <label></label>
+                                <select class="ui search dropdown" id="co_dep" name="co_dep" ng-model="co_dep">
+                                    <option disabled value="" selected>Route From</option>
+                                    <!-- <option value="AJAH - AJH">AJAH - AJH</option>
+                                    <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                    <option value="APAPA - APA">APAPA - APA</option>
+                                    <option value="EPE -EPE">EPE - EPE</option>
+                                    <option value="FESTAC - FTC">FESTAC - FTC</option> -->
+                                    <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                    <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
+                                    <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                    <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                    <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                    <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                    <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                    <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                    <option value="OGBA - GBA">OGBA - GBA</option>
+                                    <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                    <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                    <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                    <option value="YABA - YBA">YABA - YBA</option> -->
+                                </select>
+                            </div>
+
+                            <div class="field sel_field">
+                                <label></label>
+                                <select class="ui search dropdown" id="co_dest" name="co_dest" ng-model="co_dest">
+                                    <option disabled value="" selected>Route To</option>
+                                    <!-- <option value="AJAH - AJH">AJAH - AJH</option>
+                                    <option value="ANTHONY - ANY">ANTHONY - ANY</option>
+                                    <option value="APAPA - APA">APAPA - APA</option>
+                                    <option value="EPE -EPE">EPE - EPE</option>
+                                    <option value="FESTAC - FTC">FESTAC - FTC</option>
+                                    <option value="IKEJA - KJA">IKEJA - KJA</option>
+                                    <option value="IKORODU - KRD">IKORODU - KRD</option> -->
+                                    <option value="IKOYI - KYI">IKOYI - KYI</option>
+                                    <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
+                                    <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
+                                    <option value="LEKKI - LKK">LEKKI - LKK</option>
+                                    <option value="MAGODO - MGD">MAGODO - MGD</option>
+                                    <option value="MARYLAND - MYD">MARYLAND - MYD</option>
+                                    <option value="OGBA - GBA">OGBA - GBA</option>
+                                    <option value="OMOLE - MLE">OMOLE - MLE</option>
+                                    <option value="SURULERE - SRL">SURULERE - SRL</option>
+                                    <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
+                                    <option value="YABA - YBA">YABA - YBA</option> -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="text" name="companyname" id="companyname" placeholder="Company Name" ng-model="companyname" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="text" name="companyemail" id="companyemail" placeholder="E-mail address" ng-model="companyemail" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <!-- <i class="user icon"></i> -->
+                        <input class="inpt" type="tel" name="companyphone" id="companyphone" placeholder="Phone" ng-model="companyphone" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <input class="inpt" type="number" name="employeesno" id="employeesno" placeholder="Number of employees" ng-model="employeesno" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <!-- <i class="lock icon"></i> -->
+                        <input class="inpt" type="text" name="officelocation" id="officelocation" placeholder="Office Location" ng-model='officelocation' style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left icon input">
+                        <!-- <i class="lock icon"></i> -->
+                        <input class="inpt" type="password" name="companypassword" id="companypassword" placeholder="Password" ng-model='companypassword' style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
+                    </div>
+                </div>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="noacct">
+                    By clicking Sign Up, you agree to <a ui-sref="terms">our terms and conditions.</a>
+                </div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <div class="si_btn">
+                    <button id="companysignup" class="ui fluid large teal submit button log_in_btn" ng-click="companySignUp()" ng-disabled="signupclicked">Sign Up</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row"><div class="column">&nbsp;</div></div>
+
+        <div class="noacct">
+            Already has an account? <a ui-sref="companylogin">Login</a>
+        </div>
+    </div>
+
+    <div class="column incr_code" id="email_confirmation">
+        <div>
+            <div class="pagetitle">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="act_title">Account successfully created.</div>
+            </div>
+            <div class="pagetext">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                Please check your email for verification code to activate your account. Also check your spam/junk folders in case it's not in your inbox.
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <span class="info_text">If you didn't find it, click on the button below.</span>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <button class="ui fluid large teal submit button resendcodebutton" ng-click="resendCode()" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Resend Link</button>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="somebar_other">
+        <div class="bottombar_other">
+            <div class="bar">
+                <div class="copyright link_other">Copyright, <span class="buzzmi">2018  Corporate Transit</span></div>
+                <div class="privacy link_other" ui-sref="terms">Terms And Conditions</div>
+                <div class="privacy link_other">Privacy Policy</div>
+                <div class="privacy link_other">Faqs</div>
+                <div class="contact link_other" ui-sref="contact_us">Contact Us</div>
+
+                <div class="facebook link_other"><i class="inverted facebook f icon"></i>Facebook</div>
+                <div class="twitter link_other"><i class="inverted twitter icon"></i>Twitter</div>
+                <div class="instagram link_other"><i class="inverted instagram icon"></i>Instagram</div>
+            </div>
+        </div>
+    </div>
+</div>

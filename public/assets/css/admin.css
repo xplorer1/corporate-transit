@@ -136,7 +136,15 @@ a {
 	cursor: pointer;
 }
 
-input#newadminemail, input#d_cardnumber, input#e_cardnumber, input#newadminname, input#superpassword, input#superpassword, input#superpassword, textarea#replytext, input#deletehoice {
+input#newadminemail, 
+input#d_cardnumber, 
+input#e_cardnumber, 
+input#newadminname, 
+input#superpassword, 
+input#superpassword, 
+input#superpassword, 
+textarea#replytext, 
+input#deletehoice {
     width: 100%;
     outline: none;
     background: none !important;
@@ -149,7 +157,12 @@ input#newadminemail, input#d_cardnumber, input#e_cardnumber, input#newadminname,
     padding: 20px 0 10px;
 }
 
-input#morningpickup, input#morningdrop, input#eveningpickup, input#eveningdrop, input#fareoneway, input#farereturn {
+input#morningpickup, 
+input#morningdrop, 
+input#eveningpickup, 
+input#eveningdrop, 
+input#fareoneway, 
+input#farereturn {
     width: 100%;
     outline: none;
     background: none !important;
@@ -162,7 +175,14 @@ input#morningpickup, input#morningdrop, input#eveningpickup, input#eveningdrop, 
     padding: 20px 0 10px;
 }
 
-input#morningpickuppoint, select#c_dep, select#c_dest, input#c_fareoneway, input#c_farereturn, input#eveningpickuppoint, input#morningdroppoint, input#eveningdroppoint {
+input#morningpickuppoint, 
+select#c_dep, 
+select#c_dest, 
+input#c_fareoneway, 
+input#c_farereturn, 
+input#eveningpickuppoint, 
+input#morningdroppoint, 
+input#eveningdroppoint {
     width: 100%;
     outline: none;
     background: none !important;
@@ -192,7 +212,10 @@ input#replytext {
     font-size: 21px;
 }
 
-.stat_icon i.users.icon, .stat_icon i.list.alternate.outline.icon, .stat_icon i.money.bill.alternate.outline.icon, .stat_icon i.bus.icon {
+.stat_icon i.users.icon, 
+.stat_icon i.list.alternate.outline.icon, 
+.stat_icon i.money.bill.alternate.outline.icon, 
+.stat_icon i.bus.icon {
     font-size: 4rem;
     line-height: 0.6; 
     width: 100%;
@@ -210,7 +233,15 @@ input#replytext {
 	display: flex;
 }
 
-#message, #replycomplaint, #addrouteform, #changefareform, #repliedmessage, #viewrepliedmessage, #verifydelete, #enablecardform, #disablecardform {
+#message, 
+#replycomplaint, 
+#addrouteform, 
+#changefareform, 
+#repliedmessage, 
+#viewrepliedmessage, 
+#verifydelete, 
+#enablecardform, 
+#disablecardform {
 	position: fixed; 
     top: 13%;
     width: 40%;
@@ -227,7 +258,13 @@ input#replytext {
     display: flex;
 }
 
-.closemessage, .closereplycomplaint, .closeaddrouteform, .closechangefareform, .closerepliedmessage, .closeviewrepliedmessage, .closeverifydelete {
+.closemessage, 
+.closereplycomplaint, 
+.closeaddrouteform, 
+.closechangefareform, 
+.closerepliedmessage, 
+.closeviewrepliedmessage, 
+.closeverifydelete {
 	position: absolute;
     top: 9px;
     right: 16px;
@@ -267,4 +304,38 @@ input#replytext {
 
 .formheader {
     text-align: center;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #eed3d7;
+  border-radius: 4px;
+  position: absolute;
+  bottom: 0px;
+  right: 21px;
+  /* Each alert has its own width */
+  float: right;
+  clear: right;
+}
+
+.alert-red {
+  color: white;
+  background-color: #DA4453;
+}
+.alert-green {
+  color: white;
+  background-color: #37BC9B;
+}
+.alert-blue {
+  color: white;
+  background-color: #4A89DC;
+}
+.alert-yellow {
+  color: white;
+  background-color: #F6BB42;
+}
+.alert-orange {
+  color:white;
+  background-color: #E9573F;
 }

@@ -11,11 +11,10 @@ function UtilitiesFnc(Transporter) {
     utility.user = {};
 
     utility.showForm = (id, height) => {
-        $("#"+id).css("-webkit-transition", "height 0.5s ease-out");
-        $("#"+id).css("-moz-transition", "height 0.5s ease-out");
-        $("#"+id).css("-o-transition", "height 0.5s ease-out");
-        $("#"+id).css("-ms-transition", "height 0.5s ease-out");
-        $("#"+id).css("transition", "height 0.5s ease-out");
+        $("#"+id).css("visibility", "visible");
+        $("#"+id).css("display", "inherit");
+        $("#"+id).css("z-index", 20000);
+        $("#"+id)[0].classList.add("animated", "fadeIn", "delay-0.5s");
 
         $("#"+id).css("height", height);
         $("#"+id).css("opacity", "1");
@@ -24,18 +23,26 @@ function UtilitiesFnc(Transporter) {
     }
 
     utility.closeForm = (id) => {
-        $("#"+id).css("-webkit-transition", "height 0.5s ease-in");
-        $("#"+id).css("-moz-transition", "height 0.5s ease-in");
-        $("#"+id).css("-o-transition", "height 0.5s ease-in");
-        $("#"+id).css("-ms-transition", "height 0.5s ease-in");
-        $("#"+id).css("transition", "height 0.5s ease-in");
-
-        $("#"+id).css("height", "0px");
-        setTimeout(function(){
-            $("#"+id).css("opacity", "0");
-        }, 400);
+        $("#"+id)[0].classList.remove("animated", "fadeIn", "delay-0.5s");
+        $("#"+id)[0].classList.add("animated", "fadeOut", "delay-0.5s");
+        setTimeout(function() {
+            $("#"+id)[0].classList.remove("animated", "fadeOut", "delay-0.5s");
+            $("#"+id).css("display", "none");
+            $("#"+id).css("z-index", 0);
+        }, 100);
+        $("#"+id).css("z-index", 0);
 
         return false;
+    }
+
+    utility.failedRequestNotice = (xhr, ajaxOptions, thrownError) => {
+        if(xhr.statusText == "error" && xhr.status == 0){
+            console.log("No internet!");
+            //mainFactory.notifyIt("Unable to fetch profile data. Please check your Internet connection.", "error");
+        }else{
+            console.log("error!");
+            //mainFactory.notifyIt("Something went wrong while fetching your profile data. Please reload page to try again.", "error");
+        }
     }
 
     utility.alternateColors = () => {
@@ -46,8 +53,14 @@ function UtilitiesFnc(Transporter) {
         }
     }
 
-    utility.disableButton = (id) => {
-        $("+id+").attr("disabled", "disabled");
+    utility.disableButton = (id, text) => {
+        $("#"+id).attr("disabled", "disabled");
+        $("#"+id).text(text);
+    }
+
+    utility.enableButton = (id, text) => {
+        $("#"+id).removeAttr('disabled');
+        $("#"+id).text(text);
     }
 
     utility.showLoader = () => {
@@ -168,6 +181,24 @@ function UtilitiesFnc(Transporter) {
         newdate = newdate.replace(ye, "");
 
         return newdate+" "+time+date[2].toLowerCase();
+    }
+
+    utility.showSignUpType = () => {
+        $("#signuptype").css("visibility", "visible");
+        $("#signuptype").css("display", "inherit");
+        $("#signuptype").css("z-index", 20000);
+        $("#signuptype")[0].classList.add("animated", "fadeIn", "delay-0.5s");
+    }
+
+    utility.closeSignUpType = () => {
+        $("#signuptype")[0].classList.remove("animated", "fadeIn", "delay-0.5s");
+        $("#signuptype")[0].classList.add("animated", "fadeOut", "delay-0.5s");
+        setTimeout(function() {
+            $("#signuptype")[0].classList.remove("animated", "fadeOut", "delay-0.5s");
+            $("#signuptype").css("display", "none");
+            $("#signuptype").css("z-index", 0);
+        }, 100);
+        $("#signuptype").css("z-index", 0);
     }
 
     // return our entire utility object

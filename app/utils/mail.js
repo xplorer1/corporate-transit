@@ -110,7 +110,7 @@ module.exports = {
         });
     },
 
-    sendComplaintRecieptMail: function sendComplaintRecieptMail(fullname, recipients){
+    sendComplaintRecieptMail: function sendComplaintRecieptMail(recipients){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -125,8 +125,8 @@ module.exports = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Complaint Received. ✔', // Subject line
-            text: 'Hello ' + fullname + '!This is to inform you that your message was received. We will get in touch soon.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>This is to inform you that your message was received. We will get in touch soon.<br>' // html body
+            text: 'Hello!This is to inform you that your message was received. We will get in touch soon.', // plaintext body
+            html: 'Hello!<br><br>This is to inform you that your message was received. We will get in touch soon.<br>' // html body
         };
 
         // send mail with defined transport object
@@ -181,6 +181,33 @@ module.exports = {
             subject: 'Booking Cancelled. ✔', // Subject line
             text: 'Hello ' + fullname + '!This is to inform you that your request to cancel your booking was successful. Thanks for choosing us.', // plaintext body
             html: 'Hello ' + fullname + '!<br><br>This is to inform you that your request to cancel your booking was successful. Thanks for choosing us.<br>' // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                return console.log('Mail Error: ', error, ' : ', new Date());
+            }
+        });
+    },
+
+    sendBookingConcludedMail: function sendBookingConcludedMail(recipients){
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            auth: {
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
+            }
+        });
+
+        // setup e-mail data with unicode symbols
+        let mailOptions = {
+            from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
+            to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            subject: 'You have a message. ✔', // Subject line
+            text: 'Hello!This is to inform your of your successful card payment. Thanks for choosing us.', // plaintext body
+            html: 'Hello! <br><br>This is to inform your of your successful card payment. Thanks for choosing us.<br>' // html body
         };
 
         // send mail with defined transport object

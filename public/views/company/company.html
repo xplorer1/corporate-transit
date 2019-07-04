@@ -51,7 +51,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto nav_o">
                 <li>
-                    <button class="massive ui button" ng-click="logOut()">
+                    <button class="massive ui button" ng-click="companyLogOut()">
                         Log Out
                     </button>
                 </li>
@@ -60,7 +60,7 @@
     </nav>
 
     <ui-view>
-        <div ng-controller="LandingController" class="landingpage">
+        <div ng-controller="CompanyController" class="landingpage">
             <div class="ui active dimmer">
                 <div class="ui loader"></div>
             </div>
@@ -70,21 +70,21 @@
             <div class="l_layers">
                 <div class="layerone">
                     <div class="layerone_btn pymt_btn">
-                        <a class="">Welcome, <span ng-bind="user_fullname.split(' ')[0]"></span></a>.
+                        <a class="">Welcome, <span ng-bind="companyname"></span></a>.
                     </div>
 
                     <div class="layerone_btn cnts_btn">
-                        <a class="new_a" ng-click="logOut()">Log Out</a>
+                        <a class="new_a" ng-click="companyLogOut()">Log Out</a>
                         <a class="" ng-click="showContactUs()">Contact Us</a>
                     </div>
                 </div>
 
                 <div class="cardnumber_l">
-                    Card No: <span ng-bind="user_cardnumber"></span>
+                    Card No: <span ng-bind="company_cardnumber"></span>
                 </div>
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="cardnumber_l">
-                    Card Bal: N<span ng-bind="user_balance"></span>
+                    Card Bal: N<span ng-bind="company_balance"></span>
                 </div>
             </div>
 
@@ -148,6 +148,8 @@
                         <div class="demarcator_points">
                         </div>
 
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
                         <div class="b_rt"> 
                             <i class="boarding_img bus icon"></i>
                             <span class="route-peven-time">6:30 pm</span> : 
@@ -159,7 +161,7 @@
                             <span class="route-deven-time">8:15 pm</span>: 
                             <span class="route-deven-place">Oworo / Maryland / Ikeja</span>
                         </div>
-                        
+
                         <div class="row"><div class="column">&nbsp;</div></div>
                         <div class="row"><div class="column">&nbsp;</div></div>
                     </div>
@@ -244,11 +246,11 @@
 
             <div class="l_btns">
                 <div class="bk_trip_btn">
-                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showBookTrip()" ng-disabled="booktripclicked">Book A Trip</button>
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showBookTrip()">Add New Employees</button>
                 </div>
 
                 <div class="fd_card_btn">
-                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showFundCard()" ng-disabled="fundcardclicked">Fund Your Card</button>
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showFundCard()" ng-disabled="fundcardclicked">Top Up Wallet</button>
                 </div>
             </div>
 
@@ -457,7 +459,7 @@
                             <div class="row"><div class="column">&nbsp;</div></div>
                             <div class="row"><div class="column">&nbsp;</div></div>
 
-                            <button class="ui fluid large teal submit button log_in_btn" ng-click="sendComplaint()" style="width: 80%;" ng-disabled="contactusclicked">Send Message</button>
+                            <button class="ui fluid large teal submit button log_in_btn clickbtn" ng-click="sendComplaint()" style="width: 80%;">Send Message</button>
                         </form>
                     </div>
                 </div>
@@ -590,7 +592,7 @@
                             <div class="row"><div class="column">&nbsp;</div></div>
                             <div class="row"><div class="column">&nbsp;</div></div>
 
-                            <button class="ui fluid large teal submit button log_in_btn" ng-click="bookTrip()" style="width: 80%;" id="bookaride-button">Book A Ride
+                            <button class="ui fluid large teal submit button log_in_btn clickbtn" ng-click="bookTrip()" style="width: 80%;" id="bookaride-button">Book A Ride
                             </button>
 
                             <div class="warning">
@@ -635,7 +637,7 @@
                         
                         <div class="row"><div class="column">&nbsp;</div></div>
 
-                        <button class="ui fluid large teal submit button log_in_btn" ng-click="cancelTrip()" style="width: 80%;" ng-disabled="canceltripclicked">Cancel this trip</button>
+                        <button class="ui fluid large teal submit button log_in_btn clickbtn" ng-click="cancelTrip()" style="width: 80%;">Cancel this trip</button>
                         
                     </div>
                 </div>
@@ -649,12 +651,12 @@
 
                     <div class="mode_period_body">
                         <div>
-                            <button class="nav-link m_button" ng-click="modifyMode('evening')" id="yes-button">Evening</a>
+                            <button class="nav-link m_button clickbtn" ng-click="modifyMode('evening')" id="yes-button">Evening</a>
                         </div>
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div>
-                            <button class="nav-link m_button" ng-click="modifyMode('morning')" id="no-button">Morning</a>
+                            <button class="nav-link m_button clickbtn" ng-click="modifyMode('morning')" id="no-button">Morning</a>
                         </div>            
                     </div>
                 </div>
@@ -674,7 +676,7 @@
 
                             <div class="row"><div class="column">&nbsp;</div></div>
 
-                            <button class="ui fluid large teal submit button log_in_btn" ng-click="payInstant()" style="width: 80%;" ng-disabled="contactusclicked">Pay</button>
+                            <button class="ui fluid large teal submit button log_in_btn clickbtn" ng-click="payInstant()" style="width: 80%;">Pay</button>
                         </form>
                     </div>
                 </div>

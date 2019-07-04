@@ -6,8 +6,19 @@ function TransporterFnc($http, $q) {
 
     // create a new object
     let transporter = {};
-    //let baseurl = "http://127.0.0.1:80";
-    let baseurl = "https://corporatetransit.com.ng"
+    let baseurl = "http://127.0.0.1:8080";
+    //let baseurl = "https://039053aa.ngrok.io";
+    //let baseurl = "https://corporatetransit.com.ng"
+
+    /*transporter.test = function(userData) {
+        return $http.post(baseurl+"/api/cardpayment", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };*/
 
     transporter.signup = function(userData) {
         return $http.post(baseurl+"/api/signup", userData).then(
