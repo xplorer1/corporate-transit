@@ -10,7 +10,55 @@ function UtilitiesFnc(Transporter) {
     utility.currency = {name: "Naira", symbol: "₦"};
     utility.user = {};
 
+    utility.ravepublic = "FLWPUBK_TEST-8f1ee05b1e4c692149cccd3afd56b1bd-X";
+    utility.ravesecret = "FLWSECK_TEST-381f15e4245f9053fdd1bc29ce32a69a-X";
+    utility.raveenckey = "FLWSECK_TEST31dbdcbb6286";
+
+    utility.home = [
+        "AJAH - AJH", 
+        "ANTHONY - ANY", 
+        "APAPA - APA", 
+        "EPE - EPE", 
+        "FESTAC - FTC", 
+        "IKEJA - KJA", 
+        "IKORODU - KRD", 
+        "IKOYI - KYI", 
+        "ISOLO - ISL",
+        "IYANA-IPAJA - IPJ",
+        "LEKKI - LKK",
+        "MAGODO - MGD",
+        "MARYLAND - MYD",
+        "OGBA - GBA",
+        "OMOLE - MLE",
+        "SURULERE - SRL",
+        "VICTORIA-ISLAND - VI",
+        "YABA - YBA"
+    ];
+
+    utility.work = [
+        "AJAH - AJH", 
+        "ANTHONY - ANY", 
+        "APAPA - APA", 
+        "EPE - EPE", 
+        "FESTAC - FTC", 
+        "IKEJA - KJA", 
+        "IKORODU - KRD", 
+        "IKOYI - KYI", 
+        "ISOLO - ISL",
+        "IYANA-IPAJA - IPJ",
+        "LEKKI - LKK",
+        "MAGODO - MGD",
+        "MARYLAND - MYD",
+        "OGBA - GBA",
+        "OMOLE - MLE",
+        "SURULERE - SRL",
+        "VICTORIA-ISLAND - VI",
+        "YABA - YBA"
+    ];
+
     utility.showForm = (id, height) => {
+        utility.toTop();
+        
         $("#"+id).css("visibility", "visible");
         $("#"+id).css("display", "inherit");
         $("#"+id).css("z-index", 20000);
@@ -20,6 +68,16 @@ function UtilitiesFnc(Transporter) {
         $("#"+id).css("opacity", "1");
 
         return false;
+    }
+
+    utility.loginCleanUp = () => {
+        store.remove("user");
+        store.remove("company");
+    }
+
+    utility.toTop = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
 
     utility.closeForm = (id) => {

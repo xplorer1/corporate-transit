@@ -6,6 +6,8 @@ var UserSchema = new Schema({
     'password' : String,
     'role' : String,
     'cardstatus': { type: String, default: "enabled"},
+    'ct_cardnumber' : { type: String },
+    'ct_cardstatus' : { type: String },
     'createdon' : Date,
     'verified': { type: Boolean },
     'verifiedon': { type: Date, default: new Date() },

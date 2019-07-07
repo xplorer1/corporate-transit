@@ -3,14 +3,13 @@ angular.module('ControllersModule', [])
     .controller('PaymentHistoryController', ['$scope', '$log', 'Transporter', '$state', 'Utilities', 'Notification', PaymentHistoryController])
     .controller('SignUpPageController', ['$scope',  '$log', 'Transporter', '$stateParams', '$state', 'Utilities', 'Notification', SignUpPageController])
     .controller('LoginPageController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', 'Utilities', 'Notification', LoginPageController])
-    .controller('CompanyLoginController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', 'Utilities', 'Notification', CompanyLoginController])
     .controller('LandingController', ['$scope', '$log', '$state', 'Transporter', 'Utilities', 'Notification', LandingController])
     .controller('GeneralController', ['$scope', '$log', '$state', 'Transporter', 'Utilities', 'Notification', GeneralController])
     .controller('AdminController', ['$scope', '$log', '$state', '$stateParams', 'Utilities', 'AdminService', '$window', AdminController])
     .controller('BookingHistoryController', ['$scope', '$log', '$state', 'Transporter', 'Utilities', 'Notification', BookingHistoryController])
     .controller('TransactionController', ['$scope', 'Utilities', '$log', 'Transporter', '$state', 'Notification', TransactionController])
-    .controller('CompanyController', ['$scope', 'Utilities', '$log', '$state', '$stateParams', 'CompanyService', '$window', 'Notification', CompanyController])
-    .controller('CompanySignUpController', ['$scope', '$log', '$stateParams', '$state', 'Utilities', 'CompanyService', 'Notification', CompanySignUpController])
+    .controller('CompanyController', ['$scope', 'Utilities', '$log', '$state', '$stateParams', 'CompanyService', '$window', 'Notification', 'Transporter', CompanyController])
+    .controller('CompanySignUpController', ['$scope', '$log', '$stateParams', '$state', 'Utilities', 'CompanyService', 'Notification', 'Transporter', CompanySignUpController])
 
     function MainPageController($scope, $state, $log, $window, $location, Transporter, Utilities, Notification) {
 
@@ -98,7 +97,6 @@ angular.module('ControllersModule', [])
             Transporter.confirm({
                 token: token
             }).then(response => {
-                $log.log("response: ", response);
 
                 $(".ui.active.dimmer").css("display", "none");
 
@@ -107,14 +105,19 @@ angular.module('ControllersModule', [])
                     $("#verified").css("display", "block");
                 }
                 else {
-                    if(response.data === "acct_verified") {
-                        $("#verified").css("display", "none");
-                        $("#notverified").css("display", "block");
+                    if(response.data === "account_activated") {
+                        $("#confirmed").css("display", "block");
+
+                        //$("#verified").css("display", "none");
+                        //$("#notverified").css("display", "block");
                     }else if(response.data === "token_notfound") {
                         $state.go("notfound");
                     }
                 }
-            })
+            }).catch(error => {
+                Notification.warning("There has been an error. Please refresh your page and try again.");
+                $log.log("error: ", error);
+            });
         }
 
         $(".ui.active.dimmer").css("display", "none");
@@ -135,8 +138,6 @@ angular.module('ControllersModule', [])
             }).then(response => {
                 Utilities.enableButton("indsignup", "Sign Up");
 
-                $log.log("ind signup: ", response);
-
                 switch (response.data){
                     case "username_exists":
                         $("#username").notify("Username is not available. Please choose another.", { position: "bottom-center" });
@@ -156,10 +157,13 @@ angular.module('ControllersModule', [])
                         break;
                     case "signup_successful":
                         store.set("user", {email: $scope.email});
+
                         Utilities.user["email"] = $scope.email;
 
                         $("#signup").hide("slow");
                         $("#email_confirmation").show("slow");
+
+                        Utilities.toTop();
                         break;
                     default:
                         Notification.error('There has been a problem. Please try again later.');
@@ -248,14 +252,13 @@ angular.module('ControllersModule', [])
 
             let email = Utilities.user["email"] || user.email;
 
-            Utilities.showGeneralLoader();
+            Utilities.disableButton("resetbtn", "Resending link...");
 
             Transporter.resendcode({
                 email: email
             }).then(response => {
-                $log.log("Response: ", response);
 
-                Utilities.hideGeneralLoader();
+                Utilities.enableButton("resetbtn", "Resend Link");
 
                 switch (response.data){
                     case "user_notfound":
@@ -266,16 +269,19 @@ angular.module('ControllersModule', [])
                         $("#email_confirmation").hide("slow");
                         break;
                     case "db_error":
-                        Notification.error("Error. Please refresh your page and try again.");
+                        Notification.warning("Error. Please refresh your page and try again.");
                         break;
                     case "vcode_sent":
                         Notification.success("Activation email has been sent to your email address.");
                         break;
                     default:
-                        Notification.error("There has been a problem. Please try again later.");
+                        Notification.warning("There has been a problem. Please try again later.");
                         break;
                 }
-            })
+            }).catch(error => {
+                Notification.error("Error: ", error);
+                $log.log("error: ", error);
+            });
         }
     }
 
@@ -291,7 +297,7 @@ angular.module('ControllersModule', [])
 
                 if(response.status) {
                     $("#resetform").show();
-                    $("#loginbutton").hide();
+                    //$("#loginbutton").hide();
                 }else {
                     if(response.data === "invalid_token") {
                         $("#resetform").hide();
@@ -323,7 +329,7 @@ angular.module('ControllersModule', [])
             else {
                 $scope.loginclicked = true;
 
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("login_button", "Signing in...");
 
                 Transporter.login({
                     email: $scope.email,
@@ -332,13 +338,15 @@ angular.module('ControllersModule', [])
                     $scope.loginclicked = false;
                     console.log("response.data: ", response)
 
-                    Utilities.hideGeneralLoader();
+                   Utilities.enableButton("login_button", "Sign In");
 
                     switch (response.data){
                         case "not_activated":
                             Notification.info("Your account has not been verified. Activation link has been sent to your email address.");
                             break;
                         case "login_successful":
+                            Utilities.loginCleanUp();
+
                             if(response.user.role === "individual") {
                                 store.set("user", {data: response.user});
                                 $state.go("landing");
@@ -361,7 +369,12 @@ angular.module('ControllersModule', [])
                             Notification.warning("There was an error. Please refresh your page and try again.");
                             break;
                     }
-                })
+                }).catch(error => {
+                    Utilities.enableButton("login_button", "Sign In");
+
+                    Notification.warning("Unable to sign in. Please try again later.");
+                    $log.log("error: ", error);
+                });
             }
         };
 
@@ -370,31 +383,30 @@ angular.module('ControllersModule', [])
                 $("#resetemail").notify("Email address is required.", { position: "bottom-center" });
             }
             else {
-                Utilities.showGeneralLoader();
-
-                $scope.resetpasswordclicked = true;
+                Utilities.disableButton("forgotbtn", "Submit");
 
                 Transporter.forgotpassword({
                     email: $scope.resetemail
                 }).then(response => {
                     $log.log("Response: ", response);
 
-                    $scope.resetpasswordclicked = false;
-
-                    Utilities.hideGeneralLoader();
+                    Utilities.enableButton("forgotbtn", "Submit");
 
                     switch (response.data){
                         case "user_notfound":
                             Notification.warning("Email is not registered.");
                             break;
                         case "password_resetlink_sent":
-                            Notification.warning("Link to reset password has been sent to your email.");
+                            Notification.success("Link to reset password has been sent to your email.");
                             break;
                         default:
                             Notification.warning("There has been a problem. Please try again later.");
                             break;
                     }
-                })
+                }).catch(error => {
+                    Notification.error("Unable to verify email.");
+                    $log.log("error: ", error);
+                });
             }
         };
 
@@ -416,22 +428,17 @@ angular.module('ControllersModule', [])
                 $("#confirm_password").focus();
             }
             else {
-                Utilities.showGeneralLoader();
-
-                $scope.changepasswordclicked = true;
+                Utilities.disableButton("resetbtn", "Changing...");
 
                 Transporter.resetpassword({
                     password: $scope.new_password,
                     token: $stateParams.resetcode
                 }).then(response => {
-                    $log.log("response: ", response);
 
-                    Utilities.hideGeneralLoader();
-
-                    $scope.changepasswordclicked = false;
+                    Utilities.enableButton("resetbtn", "Change Password");
 
                     if(response.status) {
-                        Notification.warning("Your password has been successfully changed.");
+                        Notification.success("Your password has been successfully changed.");
 
                         setTimeout(() => {
                             $state.go("login");
@@ -439,7 +446,10 @@ angular.module('ControllersModule', [])
                     }else {
                         Notification.warning("Password change unsuccessful. Please try again later.");
                     }
-                })
+                }).catch(error => {
+                    Notification.error("Unable to reset password. Please try again later.");
+                    $log.log("error: ", error);
+                });
             }
         };
 
@@ -468,7 +478,10 @@ angular.module('ControllersModule', [])
                         Notification.warning("There has been a problem. Please try again later.");
                         break;
                 }
-            })
+            }).catch(error => {
+                Notification.error("Error: ", error);
+                $log.log("error: ", error);
+            });
         };
 
         $scope.determineSignUpType = () => {
@@ -481,6 +494,7 @@ angular.module('ControllersModule', [])
     }
 
     function BookingHistoryController($scope, $log, $state, Transporter, Utilities, Notification) {
+        Utilities.toTop();
 
         $scope.showContactUs = () => {
             Utilities.showForm("contactus", "400px");
@@ -536,7 +550,7 @@ angular.module('ControllersModule', [])
 
                         setTimeout(() => {
                             Utilities.alternateColors();
-                        }, 1000);
+                        }, 700);
                     }else{
                         $(".booking_one").css("display", "block");
 
@@ -544,6 +558,8 @@ angular.module('ControllersModule', [])
                 }else {
                     console.log("there has been an unknown problem.")
                 }
+            }).catch(error => {
+                Notification.warning("There has been a problem.");
             })
         }
         else {
@@ -917,6 +933,7 @@ angular.module('ControllersModule', [])
     function PaymentHistoryController($scope, $log, Transporter, $state, Utilities, Notification) {
 
         let user = store.get("user");
+        Utilities.toTop();
 
         if(user) {
             $scope.fullname = user.data.fullname;
@@ -1068,14 +1085,12 @@ angular.module('ControllersModule', [])
     function LandingController($scope, $log, $state, Transporter, Utilities, Notification) {
         $(".ui.active.dimmer").css("display", "none");
 
+        $scope.home = Utilities.home;
+        $scope.work = Utilities.work;
+
         let user = store.get("user");
 
         let currency = {name: "Naira", symbol: "₦"};
-
-        let ravepublic = "FLWPUBK_TEST-8f1ee05b1e4c692149cccd3afd56b1bd-X";
-
-        let ravesecret = "FLWSECK_TEST-381f15e4245f9053fdd1bc29ce32a69a-X";
-        let raveenckey = "FLWSECK_TEST31dbdcbb6286";
 
         if(user && user.data) {            
             let firstname = user.data.fullname.split(" ")[0];
@@ -1102,7 +1117,7 @@ angular.module('ControllersModule', [])
                 $(".route-peven-place").text(routeinfo.pickup_evening.point);
 
                 $(".route-deven-time").text(routeinfo.drop_evening.time);
-                $("route-deven-place").text(routeinfo.drop_evening.point);
+                $(".route-deven-place").text(routeinfo.drop_evening.point);
             }
 
             $scope.user_cardnumber = user.data.cardnumber;
@@ -1122,7 +1137,7 @@ angular.module('ControllersModule', [])
             $(".ui.active.dimmer").css("display", "none");
         }
         else {
-            $state.go("login");
+            //$state.go("login");
         }
 
         $scope.logOut = () => {
@@ -1229,33 +1244,33 @@ angular.module('ControllersModule', [])
 
         let getBalance = (email) => {
             if(email) {
-                Utilities.showLandingLoader();
 
-                Transporter.getbalance({
-                    email: email,
-                    token: user.data.token
-                })
-                .then(response => {
-                    Utilities.hideLandingLoader();
+                setTimeout(() => {
+                    Transporter.getbalance({
+                        email: email,
+                        token: user.data.token
+                    })
+                    .then(response => {
 
-                    $scope.user_balance = Utilities.numberWithCommas(response.data);
+                        $scope.user_balance = Utilities.numberWithCommas(response.data);
 
-                    $scope.user_total_dep = Utilities.numberWithCommas(response.totaldeposited);
-                    let obj = store.get("user");
+                        $scope.user_total_dep = Utilities.numberWithCommas(response.totaldeposited);
+                        let obj = store.get("user");
 
-                    obj.data.balance = response.data;
-                    obj.data.totaldeposited = response.totaldeposited;
+                        obj.data.balance = response.data;
+                        obj.data.totaldeposited = response.totaldeposited;
 
-                    store.set("user", obj);
+                        store.set("user", obj);
 
-                    $(".payment_end").css("display", "none");
-                });
+                        $(".payment_end").css("display", "none");
+                    });
+                }, 2000);
             }
         }
 
         let payWithRavePay = (email, phone, txref, amount) => {
             var x = getpaidSetup({
-                PBFPubKey: ravepublic,
+                PBFPubKey: Utilities.ravepublic,
                 customer_email: email,
                 amount: amount,
                 customer_phone: phone,
@@ -1303,25 +1318,33 @@ angular.module('ControllersModule', [])
             
             else {
 
-                Utilities.showLandingLoader();
+                Utilities.disableButton("payinst", "Pay");
 
                 Transporter.fund_ct({
                     email: $scope.onlineemail,
                     amount: $scope.onlineamount,
                     token: user.data.token
                 }).then(response => {
+                    $log.log("res: ", response);
+                    Utilities.enableButton("payinst", "Pay");
+
                     if(response.status) {
-                        Utilities.hideLandingLoader();
 
                         Utilities.closeForm("fundcardform");
                         payWithRavePay(response.email, response.phone, response.ref, $scope.onlineamount);
                     }
-                    else {
-                        if(response.data === "token_expired") {
+                    else if(response.data === "token_expired") {
                             $scope.logOut();
-                        }
                     }
-                });
+                    else {
+                        Notification.warning("There has been an error. Please refresh your page and try again.");
+                    }
+                }).catch(error => {
+                    Utilities.enableButton("payinst", "Pay");
+
+                    Notification.warning("There was a problem initiating payment.");
+                    $log.log("error: ", error);
+                })
             }
         }
 
@@ -1386,8 +1409,7 @@ angular.module('ControllersModule', [])
                         to = Utilities.formatDate(to);
                     }
 
-                    Utilities.showLandingLoader();
-                    Utilities.disableButton("bookaride-button");
+                    Utilities.disableButton("cardnumber", "Booking...");
 
                     Transporter.booktrip({
                         email: email,
@@ -1401,7 +1423,7 @@ angular.module('ControllersModule', [])
                         tripmode: $("#tripmode").val()
                     }).then(response => {
 
-                        Utilities.hideLandingLoader();
+                        Utilities.enableButton("cardnumber", "Booking A Ride");
 
                         if(response.status) {
                             Notification.success("Your booking was successful. Check your mail for details.");
@@ -1482,6 +1504,7 @@ angular.module('ControllersModule', [])
 
     function TransactionController($scope, Utilities, $log, Transporter, $state, Notification) {
         let user = store.get("user");
+        Utilities.toTop();
 
         if(user) {
             $scope.fullname = user.data.fullname;
@@ -2294,13 +2317,15 @@ angular.module('ControllersModule', [])
 
     function CompanySignUpController($scope, $log, $stateParams, $state, Utilities, CompanyService, Notification) {
 
-        let token = $stateParams.vccode;
+        let token = $stateParams.vcode;
+
+        console.log("token: ", token);
 
         if(token) {
             Transporter.confirm({
                 token: token
             }).then(response => {
-                $log.log("response: ", response);
+                $log.log("response com: ", response);
 
                 $(".ui.active.dimmer").css("display", "none");
 
@@ -2340,17 +2365,16 @@ angular.module('ControllersModule', [])
                 Utilities.enableButton("companysignup", "Sign Up");
 
                 switch (response.data){
-                    case "username_exists":
-                        $("#username").notify("Username is not available. Please choose another.", { position: "bottom-center" });
-                        break;
                     case "email_exists":
-                        $("#email").notify("Email is registered. Please login if you have an account.", { position: "bottom-center" });
+                        $("#companyemail").notify("Email is registered. Please login if you have an account.", { position: "bottom-center" });
+                        $("#companyemail").focus();
                         break;
                     case "phone_exists":
-                        $("#phone").notify("Phone is registered. Please login if you have an account.", { position: "bottom-center" });
+                        $("#companyphone").notify("Phone is registered. Please login if you have an account.", { position: "bottom-center" });
+                        $("#companyphone").focus();
                         break;
                     case "db_error":
-                        $("#signupform").notify("Error. Please try again later.", { position: "bottom-center" });
+                        Notification.warning("There has been a problem. Please try again later.");
                         break;
                     case "signup_successful":
                         store.set("user", {email: $scope.email});
@@ -2358,15 +2382,17 @@ angular.module('ControllersModule', [])
 
                         $("#signup").hide("slow");
                         $("#email_confirmation").show("slow");
+
+                        Utilities.toTop();
                         break;
                     default:
-                        $("#signupform").notify("There has been a problem. Please try again later.", { position: "bottom-center" });
+                        Notification.warning("There has been a problem. Please try again later.");
                         break;
                 }
             }).catch(response => {
                 Utilities.enableButton("companysignup", "Sign Up");
                 if(response.xhrStatus === "error") {
-                    Utilities.notifyIt("There has been a problem. Please try again later.", "error");
+                    Notification.warning("There has been a problem. Please try again later.", "error");
                 }
                 $log.log("error response: ", response);
             })
@@ -2376,15 +2402,12 @@ angular.module('ControllersModule', [])
         $scope.companySignUp = () => {           
             if(!$scope.co_dep) {
                 $("#co_dep").notify("Required.", { position: "bottom-center" });
-                return Utilities.notifyIt("Your password is required.", "error");
             }
             if(!$scope.co_dest) {
                 $("#co_dest").notify("Required.", { position: "bottom-center" });
-                return Utilities.notifyIt("Your password is required.", "error");
             }
             if(!$scope.companyname) {
                 $("#companyname").notify("Company name is required.", { position: "bottom-center" });
-                return Utilities.notifyIt("Your password is required.", "error");
             }
             else if(!$scope.companyemail) {
                 $("#companyemail").notify("Organization email is required.", { position: "bottom-center" });
@@ -2469,192 +2492,10 @@ angular.module('ControllersModule', [])
         }
     }
 
-    function CompanyLoginController($scope, $log, Transporter, $state, $stateParams, Utilities, Notification) {
-
-        if($stateParams.resetcode) {
-            Transporter.checkcode({
-                token: $stateParams.resetcode
-            }).then(response => {
-                $log.log("response: ", response);
-
-                $(".ui.active.dimmer").css("display", "none");
-
-                if(response.status) {
-                    $("#resetform").show();
-                    $("#loginbutton").hide();
-                }else {
-                    if(response.data === "invalid_token") {
-                        $("#resetform").hide();
-                        $("#notverified").show();
-                    }
-                    else if(response.data === "notfound") {
-                        $state.go("notfound");
-                    }
-                }
-            });
-        }
-
+    function CompanyController($scope, Utilities, $log, $state, $stateParams, CompanyService, $windo, Notification, Transporter) { 
         $(".ui.active.dimmer").css("display", "none");
-
-        $scope.login = () => {
-
-            if(!$scope.email) {
-                $("#email").notify("Please enter your email address.", { position: "bottom-center" });
-            }
-            else if(!Utilities.validmail($scope.email)){
-                $("#email").notify("Please enter a valid email.", { position: "bottom-center" });
-            }
-            else if(!$scope.password) {
-                $("#password").notify("Please enter your password.", { position: "bottom-center" });
-            }
-            else {
-                Utilities.disableButton("loginbutton", "Signing in...");
-
-                Transporter.login({
-                    email: $scope.email,
-                    password: $scope.password
-                }).then(response => {
-                   Utilities.enableButton("loginbutton", "Sign In");
-
-                    switch (response.data){
-                        case "not_activated":
-                            $("#loginform").notify("Your account has not been verified. Activation link has been sent to your email address. Also check your spam/junk folders.", { position: "bottom-center" });
-                            break;
-                        case "login_successful":
-
-                            store.set("company", {data: response.user});
-
-                            $state.go("company");
-                            break;
-                        case "account_notfound":
-                            $("#loginform").notify("Invalid username or password.", { position: "bottom-center" });
-                            Utilities.notifyIt("Invalid username or password.", "error");
-                            break;
-                        case "carddisabled":
-                            $("#loginform").notify("Your card has been disabled. Please contact support.", { position: "bottom-center" });
-                            break;
-                        case "ErrorMongoError: Topology was destroyed":
-                            $("#loginform").notify("There was an error. Please refresh your page and try again.", { position: "bottom-center" });
-                        default:
-                            $("#loginform").notify("There has been a problem. Please try again later.", { position: "bottom-center" });
-                            break;
-                    }
-                }).catch(error => {
-                    Utilities.enableButton("loginbutton", "Sign In");
-                    Notification.warning("There has been a problem. Please refresh your page and try again.");
-                })
-            }
-        };
-
-        $scope.verifyEmail = () => {
-            if(!$scope.resetemail) {
-                $("#resetemail").notify("Email address is required.", { position: "bottom-center" });
-            }
-            else {
-                Utilities.showGeneralLoader();
-
-                $scope.resetpasswordclicked = true;
-
-                Transporter.forgotpassword({
-                    email: $scope.resetemail
-                }).then(response => {
-                    $log.log("Response: ", response);
-
-                    $scope.resetpasswordclicked = false;
-
-                    Utilities.hideGeneralLoader();
-
-                    switch (response.data){
-                        case "user_notfound":
-                            $("#resetemail").notify("Email is not registered.", { position: "bottom-center" });
-                            break;
-                        case "password_resetlink_sent":
-                            $("#resetemail").notify("Link to reset password has been sent to your email.", "success", { position: "bottom-center" });
-                            break;
-                        default:
-                            $("#resetemail").notify("There has been a problem. Please try again later.", { position: "bottom-center" });
-                            break;
-                    }
-                })
-            }
-        };
-
-        $scope.resetPassword = () => {
-            if(!$scope.new_password) {
-                $("#new_password").notify("Please provide a new password.", {position: "bottom-center"});
-            }
-            else if($scope.new_password && $scope.new_password.trim().length < 8) {
-                $("#new_password").notify("Password must have at least 8 characters.", { position: "bottom-center" });
-            }
-            else if(!$scope.confirm_password) {
-                $("#confirm_password").notify("Please confirm your password.", { position: "bottom-center" });
-            }
-            else if($scope.new_password.toString() !== $scope.confirm_password.toString()) {
-                $("#confirm_password").notify("Passwords don't match.", { position: "bottom-center" });
-            }
-            else {
-                Utilities.showGeneralLoader();
-
-                $scope.changepasswordclicked = true;
-
-                Transporter.resetpassword({
-                    password: $scope.new_password,
-                    token: $stateParams.resetcode
-                }).then(response => {
-                    $log.log("response: ", response);
-
-                    Utilities.hideGeneralLoader();
-
-                    $scope.changepasswordclicked = false;
-
-                    if(response.status) {
-                        $(".resetbutton").notify("Your password has been successfully changed.", "success", { position: "bottom-center" });
-
-                        setTimeout(() => {
-                            $state.go("login");
-                        }, 3000)
-                    }else {
-                        $(".resetbutton").notify("Password change unsuccessful. Please try again later.", { position: "bottom-center" });
-                    }
-                })
-            }
-        };
-
-        $scope.resendResetCode = () => {
-            let user = store.get("user");
-
-            let email = Utilities.user["email"] || user.data.email;
-
-            Utilities.showGeneralLoader();
-
-            Transporter.resendresetcode({
-                email: email
-            }).then(response => {
-                $log.log("Response: ", response);
-
-                Utilities.hideGeneralLoader();
-
-                switch (response.data){
-                    case "user_notfound":
-                        $(".resetbutton").notify("Your email address was not found. Please register if you have no account.", { position: "bottom-center" });
-                        break;
-                    case "password_resetlink_sent":
-                        $(".resetbutton").notify("Password reset link has been sent to your email address.", { position: "bottom-center" });
-                        break;
-                    default:
-                        $(".resetbutton").notify("There has been a problem. Please try again later.", { position: "bottom-center" });
-                        break;
-                }
-            })
-        };
-
-        $scope.determineSignUpType = () => {
-            Utilities.showSignUpType();
-        };
-    }
-
-    function CompanyController($scope, Utilities, $log, $state, $stateParams, CompanyService, $windo, Notificationw) { 
-        $(".ui.active.dimmer").css("display", "none");
+        $scope.home = Utilities.home;
+        $scope.work = Utilities.work;
 
         $('.timepicker').pickatime({
             interval: 5
@@ -2664,7 +2505,7 @@ angular.module('ControllersModule', [])
 
         $scope.companyLogOut = () => {
             store.remove("company");
-            $state.go("companylogin");
+            $state.go("login");
         }
 
         if(companydata) {            
@@ -2709,8 +2550,17 @@ angular.module('ControllersModule', [])
             $(".ui.active.dimmer").css("display", "none");
         }
         else {
-            //$scope.companyLogOut();
+            $scope.companyLogOut();
         }
+
+        $scope.showFundCard = () => {
+            Utilities.toTop();
+            return Utilities.showForm("fundcardform", "250px");
+        };
+
+        $scope.closeFundCard = () => {
+            return Utilities.closeForm("fundcardform");
+        };
 
         $scope.showContactUs = () => {
             return Utilities.showForm("contactus", "400px");
@@ -2719,6 +2569,119 @@ angular.module('ControllersModule', [])
         $scope.closecontactus = () => {
             return Utilities.closeForm("contactus", "400px");
         };
+
+        let getBalance = (email) => {
+            if(email) {
+
+                setTimeout(() => {
+                    Transporter.getbalance({
+                        email: email,
+                        token: companydata.data.token
+                    })
+                    .then(response => {
+
+                        $scope.company_balance = Utilities.numberWithCommas(response.data);
+
+                        $scope.user_total_dep = Utilities.numberWithCommas(response.totaldeposited);
+                        let obj = store.get("company");
+
+                        obj.data.balance = response.data;
+                        obj.data.totaldeposited = response.totaldeposited;
+
+                        store.set("company", obj);
+
+                        $(".payment_end").css("display", "none");
+                    });
+                }, 2000);
+            }
+        };
+
+        let payWithRavePay = (email, phone, txref, amount) => {
+            var x = getpaidSetup({
+                PBFPubKey: Utilities.ravepublic,
+                customer_email: email,
+                amount: amount,
+                customer_phone: phone,
+                currency: "NGN",
+                txref: txref,
+                onclose: function() {
+                    console.log("Closed!");
+                },
+                callback: function(response) {
+                    var txref = response.tx.txRef; // collect txRef returned and pass to a server page to complete status check.
+                    console.log("This is the response returned after a charge", response);
+                    if (response.tx.chargeResponseCode == "00" || response.tx.chargeResponseCode == "0" ) {
+
+                        $(".payment_end").css("display", "block");
+                        getBalance(email);
+
+                        console.log("Successfully paid.")
+                        // redirect to a success page
+                    } else {
+                        $(".failed_payment").css("display", "block");
+                        console.log("Payment Failed.")
+                        // redirect to a failure page.
+                    }
+
+                    x.close(); // use this to close the modal immediately after payment.
+                }
+            });
+        };
+
+        $scope.payInstant = () => {
+            if(!$scope.onlineemail) {
+                $("#onlineemail").notify("Please enter your email address.", { position: "bottom-center" });
+                $("#onlineemail").focus();
+            }
+            
+            else if(!Utilities.validmail($scope.onlineemail)) {
+                $("#onlineemail").notify("Please enter a valid email address.", { position: "bottom-center" });
+                $("#onlineemail").focus();
+            }
+            
+            else if(!$scope.onlineamount) {
+                $("#onlineamount").notify("Please enter amount you'd like to pay.", { position: "bottom-center" });
+                $("#onlineamount").focus();
+            }
+            
+            else {
+
+                Utilities.disableButton("payinst", "Pay");
+
+                Transporter.fund_ct({
+                    email: $scope.onlineemail,
+                    amount: $scope.onlineamount,
+                    token: companydata.data.token
+                }).then(response => {
+                    $log.log("res: ", response);
+                    Utilities.enableButton("payinst", "Pay");
+
+                    if(response.status) {
+
+                        Utilities.closeForm("fundcardform");
+                        payWithRavePay(response.email, response.phone, response.ref, $scope.onlineamount);
+                    }
+                    else if(response.data === "token_expired") {
+                            $scope.logOut();
+                    }
+                    else {
+                        Notification.warning("There has been an error. Please refresh your page and try again.");
+                    }
+                }).catch(error => {
+                    Utilities.enableButton("payinst", "Pay");
+
+                    Notification.warning("There was a problem initiating payment.");
+                    $log.log("error: ", error);
+                })
+            }
+        };
+
+        $scope.showaddEmployees = () => {
+
+        };
+
+
+
 
         $scope.checkSuper = (mode, id) => {
             $scope.adminmode = mode;
@@ -3273,18 +3236,25 @@ angular.module('ControllersModule', [])
 
     function GeneralController($scope, $log, $state, Transporter, Utilities, Notification) {
         $(".ui.active.dimmer").css("display", "none");
+        Utilities.toTop();
 
         let user = store.get("user");
 
-        setTimeout(() => {
-            $("#edit_fullname").val(user.data.fullname);
-            $("#edit_work_location").val(user.data.work);
-            $("#edit_home_location").val(user.data.home);
-            $("#edit_org").val(user.data.org);
-            $("#edit_phone").val(user.data.phone);
-            $("#edit_username").val(user.data.username);
-            $("#edit_email").val(user.data.email);
-        }, 300);
+        if(user) {
+            setTimeout(() => {
+                $("#edit_fullname").val(user.data.fullname);
+                $("#edit_work_location").val(user.data.work);
+                $("#edit_home_location").val(user.data.home);
+                $("#edit_org").val(user.data.org);
+                $("#edit_phone").val(user.data.phone);
+                $("#edit_username").val(user.data.username);
+                $("#edit_email").val(user.data.email);
+            }, 300);
+        }
+        else {
+            store.remove("user");
+            $state.go("login");
+        }
 
         $scope.updateDetails = () => {
             Utilities.showGeneralLoader();

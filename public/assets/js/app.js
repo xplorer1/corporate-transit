@@ -30,7 +30,7 @@ angular.module('MainModule', [
             .state('cverify', {
                 url: '/cverify/:vccode',
                 templateUrl: '../views/pages/companyverify.html',
-                controller: 'CompanyController'
+                controller: 'CompanySignUpController'
             })
             .state('signup', {
                 url: '/signup',
@@ -94,11 +94,6 @@ angular.module('MainModule', [
                 url: '/adminlogin',
                 templateUrl: '../views/admin/adminlogin.html',
                 controller: "AdminController"
-            })
-            .state('companylogin', {
-                url: '/companylogin',
-                templateUrl: '../views/company/companylogin.html',
-                controller: "CompanyLoginController"
             })
             .state('company', {
                 url: '/company',

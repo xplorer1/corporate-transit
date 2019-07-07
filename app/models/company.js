@@ -28,6 +28,7 @@ let CompanySchema = new Schema({
             message: '{VALUE} is not a valid phone number!'
         }
     },
+    payments: {type: [String]},
     createdon: { type: Date, select: false, default: Date.now },
     verified: { type: Boolean, select: false, default: false },
     verifiedon: { type: Date, select: false },

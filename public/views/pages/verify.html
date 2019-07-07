@@ -22,7 +22,7 @@
 
                 <div class="row"><div class="column">&nbsp;</div></div>
 
-                <div class="ui fluid large teal submit button" ui-sref="login" style="max-width: 300px; margin: 0 auto; background: #4d5862; display: none;">Login</div>
+                <div class="ui fluid large teal submit button" ui-sref="login" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Login</div>
 
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>
@@ -34,7 +34,7 @@
         <div class="ui loader"></div>
     </div>
 
-    <div class="column incr_code" style="max-width: 100% !important;" id="notverified">
+    <div class="column incr_code" style="max-width: 100% !important; display: none;" id="notverified">
         <div>
             <div class="pagetitle">
                 <div class="row"><div class="column">&nbsp;</div></div>
@@ -48,6 +48,26 @@
                 <div class="row"><div class="column">&nbsp;</div></div>
 
                 <div class="ui fluid large teal submit button" ng-click="resendCode()" style="max-width: 300px; margin: 0 auto;">Resend Link</div>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column incr_code" id="confirmed">
+        <div>
+            <div class="pagetitle">
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="act_title">Your account has already been verified.</div>
+            </div>
+            <div class="pagetext">
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <button class="ui fluid large teal submit button resendcodebutton" id="resetbtn" ui-sref="login" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Login</button>
 
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>

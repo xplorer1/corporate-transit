@@ -29,7 +29,7 @@ module.exports = {
         });
     },
 
-    sendPasswordResetMail: function sendPasswordResetMail(fullname, recipients, pwdresetlink){
+    sendPasswordResetMail: function sendPasswordResetMail(recipients, pwdresetlink){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -44,8 +44,8 @@ module.exports = {
             from: '"Hello From Corporate Transit" <hello@corporatetransit.com>', // sender address
             to: recipients,
             subject: 'Corporate Transit Password Reset ✔',
-            text: 'Hello ' + fullname + '! We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password. ' + pwdresetlink + '. This link is valid for only 1 hour. If you didn\'t try to reset your password, simply ignore this email. The Corporate Transit Team.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password.<br><br><a target="_blank" href="' + pwdresetlink + '">' + pwdresetlink + '/</a><br><br>This link is valid for only 1 hour. <br><br>If you didn\'t try to reset your password, simply ignore this mail, and we\'ll forget this ever happened.<br><br>The Corporate Transit Team' // html body
+            text: 'Hello! We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password. ' + pwdresetlink + '. This link is valid for only 1 hour. If you didn\'t try to reset your password, simply ignore this email. The Corporate Transit Team.', // plaintext body
+            html: 'Hello!<br><br>We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password.<br><br><a target="_blank" href="' + pwdresetlink + '">' + pwdresetlink + '/</a><br><br>This link is valid for only 1 hour. <br><br>If you didn\'t try to reset your password, simply ignore this mail, and we\'ll forget this ever happened.<br><br>The Corporate Transit Team' // html body
         };
 
         // send mail with defined transport object
@@ -83,7 +83,7 @@ module.exports = {
         });
     },
 
-    sendSuccessfulBookingMail: function sendSuccessfulBookingMail(fullname, recipients, booking){
+    sendSuccessfulBookingMail: function sendSuccessfulBookingMail(recipients, booking){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -98,8 +98,8 @@ module.exports = {
             from: '"Hello From Corporate Transit" <hello@corporatetransit.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Booking Successful. ✔', // Subject line
-            text: 'Hello ' + fullname + '!This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + 'Booking Id: ' + booking.id + 'Departure: ' + booking.from + 'Destination: ' + booking.to + 'Route: ' + booking.route + 'Booking Date' + booking.bookedon, // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + '<br><br>' + 'Booking Id: ' + booking.id + '<br><br>' + ' From: ' + booking.from + '<br><br>' + 'To: ' + booking.to + '<br><br>' + 'Route: ' + booking.route + '<br><br>' + 'Booking Date: ' + booking.bookedon // html body // html body
+            text: 'Hello!This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + 'Departure: ' + booking.from + 'Destination: ' + booking.to + 'Route: ' + booking.route + 'Booking Date' + booking.bookedon, // plaintext body
+            html: 'Hello!<br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + '<br><br>' + ' From: ' + booking.from + '<br><br>' + 'To: ' + booking.to + '<br><br>' + 'Route: ' + booking.route + '<br><br>' + 'Booking Date: ' + booking.bookedon // html body // html body
         }; //
 
         // send mail with defined transport object

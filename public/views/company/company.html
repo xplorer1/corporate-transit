@@ -84,7 +84,7 @@
                 </div>
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="cardnumber_l">
-                    Card Bal: N<span ng-bind="company_balance"></span>
+                    Card Bal: N <span ng-bind="company_balance"></span>
                 </div>
             </div>
 
@@ -246,7 +246,7 @@
 
             <div class="l_btns">
                 <div class="bk_trip_btn">
-                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showBookTrip()">Add New Employees</button>
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showaddEmployees()">Add New Employees</button>
                 </div>
 
                 <div class="fd_card_btn">
@@ -508,24 +508,7 @@
                                             <label></label>
                                             <select class="ui search dropdown" id="dep" name="dep" ng-model="dep">
                                                 <option disabled value="" selected>Route From</option>
-                                                <!-- <option value="AJAH - AJH">AJAH - AJH</option>
-                                                <option value="ANTHONY - ANY">ANTHONY - ANY</option>
-                                                <option value="APAPA - APA">APAPA - APA</option>
-                                                <option value="EPE -EPE">EPE - EPE</option>
-                                                <option value="FESTAC - FTC">FESTAC - FTC</option> -->
-                                                <option value="IKEJA - KJA">IKEJA - KJA</option>
-                                                <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
-                                                <option value="IKOYI - KYI">IKOYI - KYI</option>
-                                                <option value="ISOLO - ISL">ISOLO - ISL</option>
-                                                <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
-                                                <option value="LEKKI - LKK">LEKKI - LKK</option>
-                                                <option value="MAGODO - MGD">MAGODO - MGD</option>
-                                                <option value="MARYLAND - MYD">MARYLAND - MYD</option>
-                                                <option value="OGBA - GBA">OGBA - GBA</option>
-                                                <option value="OMOLE - MLE">OMOLE - MLE</option>
-                                                <option value="SURULERE - SRL">SURULERE - SRL</option>
-                                                <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                                                <option value="YABA - YBA">YABA - YBA</option> -->
+                                                <option ng-repeat="place in home">{{place}}</option>
                                             </select>
                                         </div>
 
@@ -533,24 +516,7 @@
                                             <label></label>
                                             <select class="ui search dropdown" id="dest" name="dest" ng-model="dest">
                                                 <option disabled value="" selected>Route To</option>
-                                                <!-- <option value="AJAH - AJH">AJAH - AJH</option>
-                                                <option value="ANTHONY - ANY">ANTHONY - ANY</option>
-                                                <option value="APAPA - APA">APAPA - APA</option>
-                                                <option value="EPE -EPE">EPE - EPE</option>
-                                                <option value="FESTAC - FTC">FESTAC - FTC</option>
-                                                <option value="IKEJA - KJA">IKEJA - KJA</option>
-                                                <option value="IKORODU - KRD">IKORODU - KRD</option> -->
-                                                <option value="IKOYI - KYI">IKOYI - KYI</option>
-                                                <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
-                                                <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
-                                                <option value="LEKKI - LKK">LEKKI - LKK</option>
-                                                <option value="MAGODO - MGD">MAGODO - MGD</option>
-                                                <option value="MARYLAND - MYD">MARYLAND - MYD</option>
-                                                <option value="OGBA - GBA">OGBA - GBA</option>
-                                                <option value="OMOLE - MLE">OMOLE - MLE</option>
-                                                <option value="SURULERE - SRL">SURULERE - SRL</option>
-                                                <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                                                <option value="YABA - YBA">YABA - YBA</option> -->
+                                                <option ng-repeat="place in work">{{place}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -676,11 +642,12 @@
 
                             <div class="row"><div class="column">&nbsp;</div></div>
 
-                            <button class="ui fluid large teal submit button log_in_btn clickbtn" ng-click="payInstant()" style="width: 80%;">Pay</button>
+                            <button class="ui fluid large teal submit button log_in_btn clickbtn" id="payinst" ng-click="payInstant()" style="width: 80%;">Pay</button>
                         </form>
                     </div>
                 </div>
             </div>
+
         </div>
     </ui-view>
 

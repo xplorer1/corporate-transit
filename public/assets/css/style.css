@@ -1408,7 +1408,7 @@ button#contact-btn {
 }
 
 .act_title {
-    font-size: 25pt;
+    font-size: 20pt;
     color: #20669b;
     line-height: 1;
 }
@@ -2572,18 +2572,18 @@ li#item1548456588046-1 {
 }
 
 #contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform {
-    position: fixed;
-    top: 15%;
-    width: 40%;
+   position: absolute;
+    top: 13%;
+    width: 50%;
     height: 0px;
     background: white;
-    /*right: 20px;*/
+    /* right: 20px; */
     z-index: 1000000;
     border-radius: 2px;
     padding: 15px 16px 3px 20px;
     opacity: 0;
-    left: calc(30%);
-    /*overflow-y: scroll;*/
+    left: calc(17%);
+    /* overflow-y: scroll; */
     overflow-x: hidden;
     display: flex;
 }
@@ -3109,7 +3109,7 @@ i.icon.circle:before {
     padding: 5px 0;
 }
 
-#email_confirmation {
+#email_confirmation, #confirmed {
     max-width: 100% !important; 
     display: none;
     width: 100% !important;

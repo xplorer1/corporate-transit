@@ -19,9 +19,12 @@ let crypto = require("crypto");
 let fs = require('fs');
 let axios = require('axios');
 let moment = require('moment');
+let storage = require('node-persist');
 moment().format();
 
 let corporatemail = "customerservice@corporatetransit.com.ng";
+//let BASE_URL = "https://corporatetransit.com.ng";
+let BASE_URL = "https://2b736707.ngrok.io";
 
 module.exports =(app, express, appstorage) => {
     let apiRouter = express.Router();
@@ -38,14 +41,20 @@ module.exports =(app, express, appstorage) => {
         return retVal;
     }
 
+    app.set("name", "james");
+    var n = app.get("name");
+
+    console.log("n: ", n);
+
     apiRouter.post("/confirm", (req, res) => {
         let vcode = req.body.token;
 
         if(vcode) {
-            User.findOne({vcode: vcode}, {"verified" : 1, "email" : 1, "fullname" : 1}, (err, user) => {
-                if(err) return res.json({status: false, data: "Email verification error." + err.message});
+            User.findOne({vcode: vcode}, (err, user) => {
+                if(err) return res.json({status: false, data: err.message});
 
                 if(user) {
+
                     if(user.verified) {
                         return res.json({status: false, data: "account_activated"});
                     }
@@ -53,6 +62,7 @@ module.exports =(app, express, appstorage) => {
                     if(!user.verified) {
                         let tempnumber = generatePassword();
 
+                        
                         User.updateOne({email: user.email}, {
                             $set: {
                                 verified: true,
@@ -86,7 +96,7 @@ module.exports =(app, express, appstorage) => {
                                     }
                                 });*/
 
-                                mailer.sendCardNumberMail(user.fullname, user.email, "ewew23232");
+                                mailer.sendCardNumberMail(user.email, tempnumber);
 
                                 return res.json({status: true, data: "Verified", user: user.email});
                             }
@@ -115,13 +125,13 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.routefrom) return res.json({status: false, data: "routefrom_required"});
         if(!req.body.routeto) return res.json({status: false, data: "routeto_required"});
 
-        User.findOne({email: req.body.email}, function(err, email) {
+        User.findOne({email: req.body.companyemail}, function(err, email) {
             if(err) return res.json({status: false, data: err.message});
 
             if(email) return res.json({status: false, data: "email_exists"});
 
             if(!email) {
-                User.findOne({phone: req.body.phone}, (err, phone) => {
+                Company.findOne({phone: req.body.companyphone}, (err, phone) => {
                     if(err) return res.json({status: false, data: err.message});
 
                     if(phone) return res.json({status: false, data: "phone_exists"});
@@ -139,8 +149,6 @@ module.exports =(app, express, appstorage) => {
                         company.companyname = req.body.companyname;
                         company.password = req.body.password;
                         company.employeescount = req.body.employeesno;
-                        company.vcode = vcode;
-                        company.verified = false;
                         company.role = "company";
 
                         user.email = req.body.companyemail;
@@ -156,12 +164,14 @@ module.exports =(app, express, appstorage) => {
                             if(success) {
 
                                 user.save((err, success) => {
+                                    if(err) console.log("err: ", err.message);
 
+                                    if(success) {
+                                        mailer.sendEmailVerificationMail(req.body.companyname, BASE_URL+"/verify/"+vcode, req.body.companyemail);
+
+                                        return res.json({status: true, data: "signup_successful"})
+                                    }
                                 });
-                                
-                                mailer.sendEmailVerificationMail(req.body.org_name.split(" ")[0], "https://corporatetransit.com.ng/companyverify/"+vcode, req.body.email);
-
-                                return res.json({status: true, data: "signup_successful"})
                             }
                             else {
                                 return res.json({status: false, data: "unknown_error"})
@@ -220,7 +230,7 @@ module.exports =(app, express, appstorage) => {
                                 ind.username = req.body.username;
                                 ind.fullname = req.body.fullname;
 
-                                user.email = req.body.companyemail;
+                                user.email = req.body.email;
                                 user.password = req.body.password;
                                 user.role = "individual";
                                 user.createdon = new Date();
@@ -228,13 +238,13 @@ module.exports =(app, express, appstorage) => {
                                 user.verified = false;
 
                                 user.save((err, success) => {
-                                    if(err) console.log("Error saving user.");
+                                    if(err) console.log("Error saving user: ", err.message);
 
                                     if(success) {
                                         ind.save((err, success) => {
                                             if(err) console.log("err: ", err.message);
 
-                                            mailer.sendEmailVerificationMail(req.body.fullname.split(" ")[0], "https://corporatetransit.com.ng/verify/"+vcode, req.body.email);
+                                            mailer.sendEmailVerificationMail(req.body.fullname.split(" ")[0], BASE_URL+"/verify/"+vcode, req.body.email);
 
                                             return res.json({status: true, data: "signup_successful"});
                                         });
@@ -280,7 +290,7 @@ module.exports =(app, express, appstorage) => {
                         return res.json({status: false, data: err})
                     }
                     if(user) {
-                        mailer.sendEmailVerificationMail(status.fullname, "https://corporatetransit.com.ng/verify/"+vcode, req.body.email);
+                        mailer.sendEmailVerificationMail(status.fullname, BASE_URL+"/verify/"+vcode, req.body.email);
 
                         return res.json({status: true, data: "vcode_sent", reason: "Verification link has been sent to user's email address. confirmation page."});
                     }
@@ -355,7 +365,7 @@ module.exports =(app, express, appstorage) => {
                     if(err) console.log("err: ", err);
 
                     if(reset) {
-                        mailer.sendPasswordResetMail(user.fullname, req.body.email, "https://corporatetransit.com.ng/reset/"+resettoken);
+                        mailer.sendPasswordResetMail(user.fullname, req.body.email, BASE_URL+"/reset/"+resettoken);
                         return res.json({status: true, data: "password_resetlink_sent", resettoken: resettoken});
                     }
                     else {
@@ -384,7 +394,7 @@ module.exports =(app, express, appstorage) => {
                             return res.json({status: false, data: err.message});
                         }
                         if(user) {
-                            mailer.sendEmailVerificationMail(user.fullname, "https://corporatetransit.com.ng/verify/"+vcode, req.body.email);
+                            mailer.sendEmailVerificationMail(user.fullname, BASE_URL+"/verify/"+vcode, req.body.email);
 
                             return res.json({status: false, data: "not_activated"});
                         }
@@ -453,19 +463,21 @@ module.exports =(app, express, appstorage) => {
 
                                             let userobj = {};
 
+                                            let rou = ind.route.split("To");
+
+                                            console.log("rou: ", rou);
+
+                                            let rou1 = rou[0].split(' - ')[1].trim();
+                                            let rou2 = rou[1].split(' - ')[1].trim();
+
                                             Routes.findOne({route: rou1 +" - "+ rou2}, (err, routeinfo) => {
                                                 if(err) console.log("err: ", err.message);
-
-                                                let rou = ind.route.split(",");
-
-                                                let rou1 = rou[0].split(' - ')[1].trim();
-                                                let rou2 = rou[1].split(' - ')[1].trim();
 
                                                 userobj.balance = ind.balance;
                                                 userobj.email = ind.email;
                                                 userobj.fullname = ind.fullname;
                                                 userobj.username = ind.username;
-                                                userobj.cardnumber = ind.ct_cardnumber;
+                                                userobj.cardnumber = user.ct_cardnumber;
                                                 userobj.phone = ind.phone;
                                                 userobj.work = ind.work;
                                                 userobj.home = ind.home;
@@ -561,7 +573,7 @@ module.exports =(app, express, appstorage) => {
                                                 userobj.balance = com.balance;
                                                 userobj.email = com.email;
                                                 userobj.companyname = com.companyname;
-                                                userobj.cardnumber = com.ct_cardnumber;
+                                                userobj.cardnumber = user.ct_cardnumber;
                                                 userobj.route = com.route;
                                                 userobj.routeinfo = routeinfo;
                                                 userobj.token = token;
@@ -613,7 +625,7 @@ module.exports =(app, express, appstorage) => {
 
                     if(reset) {
 
-                        mailer.sendPasswordResetMail(user.fullname, req.body.email, "https://corporatetransit.com.ng/reset/"+token);
+                        mailer.sendPasswordResetMail(req.body.email, BASE_URL+"/reset/"+token);
                         return res.json({status: true, data: "password_resetlink_sent", resettoken: token});
                     }
                 });
@@ -623,6 +635,7 @@ module.exports =(app, express, appstorage) => {
 
     apiRouter.post("/checkcode", (req, res) => {
         let token = req.body.token;
+        console.log("req.body: ", req.body);
 
         if(!token) return res.json({status: false, data: "token_required"});
 
@@ -662,17 +675,34 @@ module.exports =(app, express, appstorage) => {
 
                     if(user) {
                         PaymentJournal.find({email: req.body.email, paymentstatus: "Confirmed"}, (err, paid) => {
-                        if(err) console.log("Err: ", err.message);
+                            if(err) console.log("Err: ", err.message);
 
-                        if(paid) {
-                            
-                            paid.forEach(item => {
-                                totaldeposited += item.amount;
-                            });
+                            if(paid) {
+                                
+                                paid.forEach(item => {
+                                    totaldeposited += item.amount;
+                                });
 
-                            return res.json({status: true, data: user.balance, totaldeposited: totaldeposited});
-                        }
-                    })
+                                if(user.role === "individual") {
+                                    Individual.findOne({email: req.body.email}, (err, individual) => {
+                                        if(err) console.log("err: ", err.message);
+
+                                        if(individual) {
+                                            return res.json({status: true, data: individual.balance, totaldeposited: totaldeposited});
+                                        }
+                                    });
+                                }
+                                else if(user.role === "company") {
+                                    Company.findOne({email: req.body.email}, (err, com) => {
+                                        if(err) console.log("err: ", err.message);
+
+                                        if(com) {
+                                            return res.json({status: true, data: com.balance, totaldeposited: totaldeposited});
+                                        }
+                                    });
+                                }
+                            }
+                        });
                     }
                     else {
                         return res.json({status: false, data: "unknown_error"});
@@ -728,7 +758,7 @@ module.exports =(app, express, appstorage) => {
         bookingjournal.booking.ct_cardnumber = ct_cardnumber;
         bookingjournal.booking.tripmode = tripmode;
 
-        let booking_info = {status: "Pending", id: bookingid, from: from, to: to, bookedon: new Date().toLocaleString()};
+        let booking_info = {status: "Pending", from: from, to: to, route: routefrom + " To " + routeto, bookedon: new Date().toLocaleString()};
         bookingjournal.save((err, success) => {
             if(err) {
                 console.log("err: ", err.message);
@@ -1143,19 +1173,35 @@ module.exports =(app, express, appstorage) => {
                         payment.paymentstatus = "Pending";
 
                         payment.save(function (err) {
-                            if (err) return res.send(err);
+                            if (err) console.log("err: ", err.message);
 
-                            User.update({email: req.body.email}, {$push: {"payments": id}}, function (err, payment) {
-                                if (err) return res.send(err);
+                            if(ctime.role === "individual") {
 
-                                if (payment.nModified > 0) {
-                                    
-                                    return res.json({status: true, ref: id, email: ctime.email, phone: ctime.phone});
-                                    
-                                } else {
-                                    return res.json({status: false, message: "There was a problem initiating payment."});
-                                }
-                            });
+                                Individual.update({email: req.body.email}, {$push: {"payments": id}}, function (err, payment) {
+                                    if (err) return res.send(err);
+
+                                    if (payment.nModified > 0) {
+                                        
+                                        return res.json({status: true, ref: id, email: ctime.email, phone: ctime.phone});
+                                        
+                                    } else {
+                                        return res.json({status: false, message: "There was a problem initiating payment."});
+                                    }
+                                });
+                            }
+                            else {
+                                Company.update({email: req.body.email}, {$push: {"payments": id}}, function (err, payment) {
+                                    if (err) return res.send(err);
+
+                                    if (payment.nModified > 0) {
+                                        
+                                        return res.json({status: true, ref: id, email: ctime.email, phone: ctime.phone});
+                                        
+                                    } else {
+                                        return res.json({status: false, message: "There was a problem initiating payment."});
+                                    }
+                                });
+                            }
                         });
                         
                     } else {
@@ -1227,13 +1273,32 @@ module.exports =(app, express, appstorage) => {
 
                         if(payment) {
                             if(req.body.status === "successful") {
-                                User.updateOne({email: req.body.customer.email}, {$inc: {balance: req.body.amount}}, (err, updated) => {
-                                    if(err) console.log("error updating balance: ", err);
-                                    if(updated) {
-                                        //return res.sendStatus(200);
-                                        //return res.json({status: true, data: "Balance updated."})
+                                User.findOne({email: req.body.customer.email}, (err, user) => {
+                                    if(err) console.log ("err: ", err.message);
+
+                                    if(user) {
+                                        if(user.role === "individual") {
+                                            Individual.updateOne({email: req.body.customer.email}, {$inc: {balance: req.body.amount}}, (err, updated) => {
+                                                if(err) console.log("error updating balance: ", err.message);
+                                                if(updated) {
+                                                    //console.log("update individual: ", updated)
+                                                    //return res.sendStatus(200);
+                                                    //return res.json({status: true, data: "Balance updated."})
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Company.updateOne({email: req.body.customer.email}, {$inc: {balance: req.body.amount}}, (err, updated) => {
+                                                if(err) console.log("error updating balance: ", err.message);
+                                                if(updated) {
+                                                    console.log("update company: ", updated)
+                                                    //return res.sendStatus(200);
+                                                    //return res.json({status: true, data: "Balance updated."})
+                                                }
+                                            });
+                                        }
                                     }
-                                });
+                                })
                             }
                         }
                     })
@@ -1335,7 +1400,24 @@ module.exports =(app, express, appstorage) => {
                 return res.json({status: false, data: err.message});
             }
             if(user) {
-                return res.json({status: true, data: user.balance});
+                if(user.role === "individual") {
+                    Individual.findOne({ct_cardnumber: req.body.cardnumber}, (err, ind) => {
+                        if(err) console.log("err: ", err.message);
+
+                        if(ind) {
+                            return res.json({status: true, data: ind.balance});
+                        }
+                    });
+                }
+                else if(user.role === "company") {
+                    Company.findOne({ct_cardnumber: req.body.cardnumber}, (err, com) => {
+                        if(err) console.log("err: ", err.message);
+
+                        if(com) {
+                            return res.json({status: true, data: com.balance});
+                        }
+                    });
+                }
             }
             else {
                 return res.json({status: false, data: "account_notfound"})
