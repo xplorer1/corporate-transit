@@ -10,6 +10,7 @@ let TransactionJournal = require("../models/transactions");
 let CardNumbers = require("../models/cardnumbers");
 let CardTransactions = require("../models/cardtransactions");
 let Routes = require("../models/routes");
+let Places = require("../models/places");
 let Company = require("../models/company");
 let jwt = require('jsonwebtoken');
 let config = require('../../config');
@@ -23,14 +24,16 @@ let storage = require('node-persist');
 moment().format();
 
 let corporatemail = "customerservice@corporatetransit.com.ng";
-//let BASE_URL = "https://corporatetransit.com.ng";
-let BASE_URL = "https://2b736707.ngrok.io";
+let BASE_URL = "https://corporatetransit.com.ng";
+//let BASE_URL = "https://2b736707.ngrok.io";
+//let BASE_URL = "http://127.0.0.1:8080";
 
 module.exports =(app, express, appstorage) => {
     let apiRouter = express.Router();
     let ravepublic = "FLWPUBK-8bfe4998fd6b9ba7e26740d4959535f3-X";
     let ravesecret = "FLWSECK-6e3c53e9f283aff4c35c6b8d55bf27eb-X";
     let raveenckey = "6e3c53e9f283315642573777";
+
     let generatePassword = () => {
         var length = 8,
             charset = "0123456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -41,10 +44,50 @@ module.exports =(app, express, appstorage) => {
         return retVal;
     }
 
-    app.set("name", "james");
-    var n = app.get("name");
+    let uniqueSuffix = (id) => {
+        var length = id,
+            charset = "abcdefghijklmnopqrstuvwxyz",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
 
-    console.log("n: ", n);
+    let test = (home, work) => {
+        //cut out the first three letters before save.
+        Places.update({}, {$push: {"home": home.toUpperCase(), "work": work.toUpperCase()}}, {new: true}, (err, updated) => {
+            if(err) console.log("err: ", err.message);
+
+            if(updated.nModified) {
+                console.log("saved!");
+               // return res.json({status: true, data: "stuffsaved"});
+            }
+            else {
+                console.log("update query wrong.");
+            }
+        });
+    }
+
+    //test("yaba", "Victoria-Island")
+
+    apiRouter.get("/getplaces", (req, res) => {
+        if(app.get("places")) {
+            return res.json({status: true, data: app.get("places")});
+        }
+        else {
+            Places.find({}, (err, places) => {
+                console.log("places: ", places);
+                
+                if(err) console.log("err: ", err.message);
+
+                if(places) {
+                    app.set("places", places);
+                    return res.json({status: true, data: app.get("places")});
+                }
+            })
+        }
+    });
 
     apiRouter.post("/confirm", (req, res) => {
         let vcode = req.body.token;
@@ -143,7 +186,7 @@ module.exports =(app, express, appstorage) => {
                         let vcode = uuid.v4();
 
                         company.email = req.body.companyemail;
-                        company.offlice_location = req.body.offlice_location;
+                        company.office_location = req.body.officelocation;
                         company.phone = req.body.companyphone;
                         company.route = req.body.routefrom + " To " + req.body.routeto;
                         company.companyname = req.body.companyname;
@@ -464,8 +507,6 @@ module.exports =(app, express, appstorage) => {
                                             let userobj = {};
 
                                             let rou = ind.route.split("To");
-
-                                            console.log("rou: ", rou);
 
                                             let rou1 = rou[0].split(' - ')[1].trim();
                                             let rou2 = rou[1].split(' - ')[1].trim();
@@ -1428,6 +1469,107 @@ module.exports =(app, express, appstorage) => {
     apiRouter.post("/confirmbalancewritten", (req, res) => {
         if(!req.body.cardnumber) return res.json({status: false, data: "ct_cardnumber_required"});
         if(!req.body.status) return res.json({status: false, data: "status_required"});
+
+        User.findOne({ct_cardnumber: req.body.cardnumber}, {"fullname" : 1}, (err, user) => {
+            if(err) {
+                console.log("Error finding user: ", err.message);
+                return res.json({status: false, data: err.message});
+            }
+            if(user) {
+                User.updateOne({ct_cardnumber: req.body.cardnumber}, {$set: {updatestatus: req.body.status}}, (err, update) => {
+                    if(err) {
+                        
+                        return res.json({status: false, data: err.message});
+                    }
+                    if(update.nModified > 0){
+                        console.log("Write to card balance successful.");
+                    }
+                })
+            }
+            else {
+                return res.json({status: false, data: "account_notfound"})
+            }
+        })
+    });
+
+    apiRouter.post("/addemployee", (req, res) => {
+        if(!req.body.fullname) return res.json({status: false, data: "fullname_required"});
+        if(!req.body.gender) return res.json({status: false, data: "gender_required"});
+        if(!req.body.home) return res.json({status: false, data: "home_required"});
+        if(!req.body.email) return res.json({status: false, data: "email_required"});
+        if(!req.body.phone) return res.json({status: false, data: "phone_required"});
+        if(!req.body.owner) return res.json({status: false, data: "owner_required"});
+
+        Company.findOne({email: req.body.owner}, (err, company) => {
+            if(err) console.log("err: ", err.message);
+
+            if(company) {
+
+                Individual.findOne({email: req.body.email}, (err, user) => {
+                    if(err) console.log("err: ", err.message);
+
+                    if(user) {
+                        return res.json({status: false, data: "email_exists"});
+                    } 
+                    else if(user && user.phone.toString() === req.body.phone.toString()) {
+                        return res.json({status: false, data: "phone_exists"});
+                    }
+                    else {
+
+                        User.findOne({email: req.body.email}, (err, user) => {
+                            if(err) console.log("err: ", err.message);
+
+                            if(user) {
+                                return res.json({status: false, data: "email_exists"});
+                            }
+                            else {
+                                let user = new User();
+                                let ind = new Individual();
+                                let vcode = uuid.v4();
+                                let password = uniqueSuffix(10);
+
+                                ind.work = company.office_location;
+                                ind.home = req.body.home;
+                                ind.route = req.body.home + " To " + company.office_location;
+                                ind.gender = req.body.gender;
+                                ind.password = password;
+                                ind.org = company.companyname;
+                                ind.email = req.body.email;
+                                ind.phone = req.body.phone;
+                                ind.username = req.body.fullname.split(" ")[0]+uniqueSuffix(3);
+                                ind.fullname = req.body.fullname;
+
+                                user.email = req.body.email;
+                                user.password = password
+                                user.role = "individual";
+                                user.createdon = new Date();
+                                user.vcode = vcode;
+                                user.verified = false;
+
+                                ind.save((err, success) => {
+                                    if(err) console.log("err: ", err.message);
+
+                                    if(success) {
+                                        user.save((err, success) => {
+                                            if(err) console.log("err: ", err.message);
+
+                                            if(success) {
+                                                mailer.sendAddedMail(req.body.fullname, req.body.email, company.companyname, BASE_URL+"/verify/"+vcode);
+                                                return res.json({status: false, data: "employeeadded"});
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                console.log("no such company");
+                return res.json({status: false, data: "company_notfound"})
+            }
+        })
 
         User.findOne({ct_cardnumber: req.body.cardnumber}, {"fullname" : 1}, (err, user) => {
             if(err) {

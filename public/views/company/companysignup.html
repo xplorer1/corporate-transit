@@ -13,7 +13,7 @@
          <div class="collapse navbar-collapse nav_o" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" ui-sref="companylogin">Sign In</a>
+                    <a class="nav-link" ui-sref="login">Sign In</a>
                 </li>
             </ul>
         </div>
@@ -38,24 +38,7 @@
                                 <label></label>
                                 <select class="ui search dropdown" id="co_dep" name="co_dep" ng-model="co_dep">
                                     <option disabled value="" selected>Route From</option>
-                                    <!-- <option value="AJAH - AJH">AJAH - AJH</option>
-                                    <option value="ANTHONY - ANY">ANTHONY - ANY</option>
-                                    <option value="APAPA - APA">APAPA - APA</option>
-                                    <option value="EPE -EPE">EPE - EPE</option>
-                                    <option value="FESTAC - FTC">FESTAC - FTC</option> -->
-                                    <option value="IKEJA - KJA">IKEJA - KJA</option>
-                                    <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
-                                    <option value="IKOYI - KYI">IKOYI - KYI</option>
-                                    <option value="ISOLO - ISL">ISOLO - ISL</option>
-                                    <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
-                                    <option value="LEKKI - LKK">LEKKI - LKK</option>
-                                    <option value="MAGODO - MGD">MAGODO - MGD</option>
-                                    <option value="MARYLAND - MYD">MARYLAND - MYD</option>
-                                    <option value="OGBA - GBA">OGBA - GBA</option>
-                                    <option value="OMOLE - MLE">OMOLE - MLE</option>
-                                    <option value="SURULERE - SRL">SURULERE - SRL</option>
-                                    <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                                    <option value="YABA - YBA">YABA - YBA</option> -->
+                                    <option ng-repeat="place in home">{{place}}</option>
                                 </select>
                             </div>
 
@@ -63,24 +46,7 @@
                                 <label></label>
                                 <select class="ui search dropdown" id="co_dest" name="co_dest" ng-model="co_dest">
                                     <option disabled value="" selected>Route To</option>
-                                    <!-- <option value="AJAH - AJH">AJAH - AJH</option>
-                                    <option value="ANTHONY - ANY">ANTHONY - ANY</option>
-                                    <option value="APAPA - APA">APAPA - APA</option>
-                                    <option value="EPE -EPE">EPE - EPE</option>
-                                    <option value="FESTAC - FTC">FESTAC - FTC</option>
-                                    <option value="IKEJA - KJA">IKEJA - KJA</option>
-                                    <option value="IKORODU - KRD">IKORODU - KRD</option> -->
-                                    <option value="IKOYI - KYI">IKOYI - KYI</option>
-                                    <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
-                                    <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
-                                    <option value="LEKKI - LKK">LEKKI - LKK</option>
-                                    <option value="MAGODO - MGD">MAGODO - MGD</option>
-                                    <option value="MARYLAND - MYD">MARYLAND - MYD</option>
-                                    <option value="OGBA - GBA">OGBA - GBA</option>
-                                    <option value="OMOLE - MLE">OMOLE - MLE</option>
-                                    <option value="SURULERE - SRL">SURULERE - SRL</option>
-                                    <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                                    <option value="YABA - YBA">YABA - YBA</option> -->
+                                    <option ng-repeat="place in work">{{place}}</option>
                                 </select>
                             </div>
                         </div>
@@ -118,13 +84,12 @@
                     </div>
                 </div>
 
-                <div class="field">
+                <!-- <div class="field">
                     <div class="ui left icon input">
-                        <!-- <i class="lock icon"></i> -->
                         <input autocomplete="off" class="inpt" type="text" name="officelocation" id="officelocation" placeholder="Office Location" ng-model='officelocation' style="padding-left: 12px !important;">
                         <span class="ast">*</span>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="field">
                     <div class="ui left icon input">
@@ -171,6 +136,10 @@
                 <div class="row"><div class="column">&nbsp;</div></div>
 
                 <button class="ui fluid large teal submit button resendcodebutton" ng-click="resendCode()" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Resend Link</button>
+
+                <div class="row"><div class="column">&nbsp;</div></div>
+
+                <button class="ui fluid large teal submit button resendcodebutton" ui-sref="login" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Login</button>
 
                 <div class="row"><div class="column">&nbsp;</div></div>
                 <div class="row"><div class="column">&nbsp;</div></div>

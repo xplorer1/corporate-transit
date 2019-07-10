@@ -3,7 +3,7 @@ let Schema = mongoose.Schema;
 let bcrypt = require('bcrypt-nodejs');
 
 let CompanySchema = new Schema({
-    companyname: { type: String, trim: true },
+    companyname: { type: String, trim: true, uppercase: true},
     password: { type: String, minlength: 8},
     email: {
         type: String,

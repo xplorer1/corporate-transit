@@ -10,15 +10,15 @@ function TransporterFnc($http, $q) {
     //let baseurl = "https://039053aa.ngrok.io";
     //let baseurl = "https://corporatetransit.com.ng"
 
-    /*transporter.test = function(userData) {
-        return $http.post(baseurl+"/api/cardpayment", userData).then(
+    transporter.fetchplaces = function(userData) {
+        return $http.get(baseurl+"/api/getplaces", userData).then(
             function(response){
                 return $q.when(response.data);
             },
             function(err){
                 return $q.reject(err);
             });
-    };*/
+    };
 
     transporter.signup = function(userData) {
         return $http.post(baseurl+"/api/signup", userData).then(
@@ -92,16 +92,6 @@ function TransporterFnc($http, $q) {
 
     transporter.fund_ct = function(userData) {
         return $http.post(baseurl+"/api/fund_ct", userData).then(
-            function(response){
-                return $q.when(response.data);
-            },
-            function(err){
-                return $q.reject(err);
-            });
-    };
-
-    transporter.paytoravebank = function(userData) {
-        return $http.post("https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/charge", userData).then(
             function(response){
                 return $q.when(response.data);
             },
@@ -212,6 +202,16 @@ function TransporterFnc($http, $q) {
 
     transporter.updatedetails = function(userData) {
         return $http.post(baseurl+"/api/updatedetails", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.addemployee = function(userData) {
+        return $http.post(baseurl+"/api/addemployee", userData).then(
             function(response){
                 return $q.when(response.data);
             },

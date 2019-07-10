@@ -14,48 +14,6 @@ function UtilitiesFnc(Transporter) {
     utility.ravesecret = "FLWSECK_TEST-381f15e4245f9053fdd1bc29ce32a69a-X";
     utility.raveenckey = "FLWSECK_TEST31dbdcbb6286";
 
-    utility.home = [
-        "AJAH - AJH", 
-        "ANTHONY - ANY", 
-        "APAPA - APA", 
-        "EPE - EPE", 
-        "FESTAC - FTC", 
-        "IKEJA - KJA", 
-        "IKORODU - KRD", 
-        "IKOYI - KYI", 
-        "ISOLO - ISL",
-        "IYANA-IPAJA - IPJ",
-        "LEKKI - LKK",
-        "MAGODO - MGD",
-        "MARYLAND - MYD",
-        "OGBA - GBA",
-        "OMOLE - MLE",
-        "SURULERE - SRL",
-        "VICTORIA-ISLAND - VI",
-        "YABA - YBA"
-    ];
-
-    utility.work = [
-        "AJAH - AJH", 
-        "ANTHONY - ANY", 
-        "APAPA - APA", 
-        "EPE - EPE", 
-        "FESTAC - FTC", 
-        "IKEJA - KJA", 
-        "IKORODU - KRD", 
-        "IKOYI - KYI", 
-        "ISOLO - ISL",
-        "IYANA-IPAJA - IPJ",
-        "LEKKI - LKK",
-        "MAGODO - MGD",
-        "MARYLAND - MYD",
-        "OGBA - GBA",
-        "OMOLE - MLE",
-        "SURULERE - SRL",
-        "VICTORIA-ISLAND - VI",
-        "YABA - YBA"
-    ];
-
     utility.showForm = (id, height) => {
         utility.toTop();
         
@@ -164,6 +122,19 @@ function UtilitiesFnc(Transporter) {
         let newdate = year+"-"+month+"-"+day;
         
         return newdate;
+    }
+
+    utility.fetchPlaces = () => {
+        Transporter.fetchplaces({}).then(response => {
+            console.log("response: ", response);
+            
+            if(response.status) {
+                store.set("places", response.data[0]);
+            }
+            else {
+                console.log("data yet to arrive!");
+            }
+        })
     }
 
     utility.validateInput = (email, subject, text) => {

@@ -5,7 +5,7 @@ angular.module('ControllersModule', [])
     .controller('LoginPageController', ['$scope', '$log', 'Transporter', '$state', '$stateParams', 'Utilities', 'Notification', LoginPageController])
     .controller('LandingController', ['$scope', '$log', '$state', 'Transporter', 'Utilities', 'Notification', LandingController])
     .controller('GeneralController', ['$scope', '$log', '$state', 'Transporter', 'Utilities', 'Notification', GeneralController])
-    .controller('AdminController', ['$scope', '$log', '$state', '$stateParams', 'Utilities', 'AdminService', '$window', AdminController])
+    .controller('AdminController', ['$scope', '$log', '$state', '$stateParams', 'Utilities', 'AdminService', '$window', 'Notification', AdminController])
     .controller('BookingHistoryController', ['$scope', '$log', '$state', 'Transporter', 'Utilities', 'Notification', BookingHistoryController])
     .controller('TransactionController', ['$scope', 'Utilities', '$log', 'Transporter', '$state', 'Notification', TransactionController])
     .controller('CompanyController', ['$scope', 'Utilities', '$log', '$state', '$stateParams', 'CompanyService', '$window', 'Notification', 'Transporter', CompanyController])
@@ -13,20 +13,8 @@ angular.module('ControllersModule', [])
 
     function MainPageController($scope, $state, $log, $window, $location, Transporter, Utilities, Notification) {
 
-        /*let test = () => {
-            Transporter.test([{
-                cardSerial: "3037bd9b",
-                amount: 5000,
-                transID: "err4423ssfsfssfwkjs43f", //3037bd9b
-                transDate: new Date()
-            }])
-            .then(response => {
-                console.log("Response: ", response);
-            })
-        }
-
-        test();
-        */
+        Utilities.fetchPlaces();
+        
         let url = $location.url();
 
         if(url === "/" || url === "#" || url === "/#how_it_works" || url === "/#why_sec" || url === "/#about_sec") {
@@ -92,6 +80,13 @@ angular.module('ControllersModule', [])
     function SignUpPageController($scope, $log, Transporter, $stateParams, $state, Utilities, Notification) {
 
         let token = $stateParams.vcode;
+
+        let places = store.get("places");
+
+        if(places) {
+            $scope.home = places.home;
+            $scope.work = places.work;
+        }
 
         if(token) {
             Transporter.confirm({
@@ -495,6 +490,13 @@ angular.module('ControllersModule', [])
 
     function BookingHistoryController($scope, $log, $state, Transporter, Utilities, Notification) {
         Utilities.toTop();
+
+        let places = store.get("places");
+
+        if(places) {
+            $scope.home = places.home;
+            $scope.work = places.work;
+        }
 
         $scope.showContactUs = () => {
             Utilities.showForm("contactus", "400px");
@@ -1085,8 +1087,12 @@ angular.module('ControllersModule', [])
     function LandingController($scope, $log, $state, Transporter, Utilities, Notification) {
         $(".ui.active.dimmer").css("display", "none");
 
-        $scope.home = Utilities.home;
-        $scope.work = Utilities.work;
+        let places = store.get("places");
+
+        if(places) {
+            $scope.home = places.home;
+            $scope.work = places.work;
+        }
 
         let user = store.get("user");
 
@@ -1656,7 +1662,7 @@ angular.module('ControllersModule', [])
         }
     }
 
-    function AdminController($scope, $log, $state, $stateParams, Utilities, CompanyService, $window, Notification) { 
+    function AdminController($scope, $log, $state, $stateParams, Utilities, AdminService, $window, Notification) { 
         $(".ui.active.dimmer").css("display", "none");
 
         $('.timepicker').pickatime({
@@ -1667,7 +1673,7 @@ angular.module('ControllersModule', [])
 
         $scope.adminLogOut = () => {
             store.remove(admindata);
-            $state.go("adminlogin");
+            $state.go("login");
         }
 
         if(admindata) {
@@ -1702,18 +1708,16 @@ angular.module('ControllersModule', [])
                  $("#password").focus();
             }
             else {
-                $scope.loginclicked = true;
 
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("login_button", "Signing in...");
 
                 AdminService.adminlogin({
                     email: $scope.email,
                     password: $scope.password
                 }).then(response => {
                     $log.log("Response adminlogin: ", response);
-                    $scope.loginclicked = false;
 
-                    Utilities.hideGeneralLoader();
+                    Utilities.disableButton("login_button", "Sign In");
 
                     switch (response.data){
                         case "not_activated":
@@ -1907,11 +1911,16 @@ angular.module('ControllersModule', [])
             }
 
             else {
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("login_button", "Adding route...");
+
+                let shortdep = $scope.dep.toString().slice(0, 3);
+                let shortdest = $scope.dest.toString().slice(0, 3);
 
                 AdminService.addroute({
                     token: admindata.token,
-                    route: $scope.dep.split(" - ")[1] + " - " + $scope.dest.split(" - ")[1],
+                    dep: $scope.dep.toUpperCase(),
+                    dest: $scope.dest.toUpperCase(),
+                    route: shortdep.toUpperCase() + " - " + shortdest.toUpperCase(),
                     morningpickuptime: $("#morningpickup").val(),
                     eveningpickuptime: $("#eveningpickup").val(),
                     morningdroptime: $("#morningdrop").val(),
@@ -1924,7 +1933,7 @@ angular.module('ControllersModule', [])
                     farereturn: $scope.farereturn
                 })
                 .then(response => {
-                    Utilities.hideGeneralLoader();
+                    Utilities.disableButton("login_button", "Adding Route");
 
                     $log.log("response addroute: ", response);
 
@@ -2319,7 +2328,12 @@ angular.module('ControllersModule', [])
 
         let token = $stateParams.vcode;
 
-        console.log("token: ", token);
+        let places = store.get("places");
+
+        if(places) {
+            $scope.home = places.home;
+            $scope.work = places.work;
+        }
 
         if(token) {
             Transporter.confirm({
@@ -2352,13 +2366,13 @@ angular.module('ControllersModule', [])
 
             CompanyService.companysignup({
                 companyname: $scope.companyname,
-                officelocation: $scope.officelocation,
                 companyphone: phone,
                 companyemail: $scope.companyemail,
                 employeesno: $scope.employeesno,
                 password: $scope.companypassword,
                 routefrom: $scope.co_dep,
-                routeto: $scope.co_dest
+                routeto: $scope.co_dest,
+                officelocation: $scope.co_dest
             }).then(response => {
 
                 $log.log("company res: ", response);
@@ -2418,9 +2432,9 @@ angular.module('ControllersModule', [])
             else if(!$scope.employeesno) {
                 $("#employeesno").notify("Number of employees is required.", { position: "bottom-center" });
             }
-            else if(!$scope.officelocation) {
+            /*else if(!$scope.officelocation) {
                 $("#officelocation").notify("Office location is required.", { position: "bottom-center" });
-            }
+            }*/
             else if(!$scope.companyphone) {
                 $("#companyphone").notify("Phone number is required.", { position: "bottom-center" });
             }
@@ -2463,7 +2477,6 @@ angular.module('ControllersModule', [])
             Transporter.resendcode({
                 email: email
             }).then(response => {
-                $log.log("Response: ", response);
 
                 Utilities.hideGeneralLoader();
 
@@ -2494,8 +2507,13 @@ angular.module('ControllersModule', [])
 
     function CompanyController($scope, Utilities, $log, $state, $stateParams, CompanyService, $windo, Notification, Transporter) { 
         $(".ui.active.dimmer").css("display", "none");
-        $scope.home = Utilities.home;
-        $scope.work = Utilities.work;
+
+        let places = store.get("places");
+
+        if(places) {
+            $scope.home = places.home;
+            $scope.work = places.work;
+        }
 
         $('.timepicker').pickatime({
             interval: 5
@@ -2550,7 +2568,7 @@ angular.module('ControllersModule', [])
             $(".ui.active.dimmer").css("display", "none");
         }
         else {
-            $scope.companyLogOut();
+            //$scope.companyLogOut();
         }
 
         $scope.showFundCard = () => {
@@ -2676,9 +2694,88 @@ angular.module('ControllersModule', [])
             }
         };
 
-        $scope.showaddEmployees = () => {
-
+        $scope.showAddEmployees = () => {
+            Utilities.showForm("addemployee", "450px");
         };
+
+        $scope.closeAddEmployee = () => {
+            Utilities.closeForm("addemployee");
+        };
+
+        $scope.addEmployee = () => {
+            if(!$scope.employeefullname) {
+                $("#employeefullname").notify("Please provide employee fullname.", { position: "bottom-center" });
+                $("#employeefullname").focus();
+            }
+            else if($scope.employeefullname && $scope.employeefullname.split(" ").length < 2) {
+                $("#employeefullname").notify("Please provide both names.", { position: "bottom-center" });
+                $("#employeefullname").focus();
+            }
+            else if(!$scope.employeegender) {
+                $("#employeegender").notify("Please select employee gender.", { position: "bottom-center" });
+                $("#employeegender").focus();
+            }
+            else if(!$scope.employeehome_location) {
+                $("#employeehome_location").notify("Please select employee home location.", { position: "bottom-center" });
+                $("#employeehome_location").focus();
+            }
+            else if(!$scope.employeeemail) {
+                $("#employeeemail").notify("Please provide employee email address.", { position: "bottom-center" });
+                $("#employeeemail").focus();
+            }
+            else if(!Utilities.validmail($scope.employeeemail)) {
+                $("#employeeemail").notify("Please provide a valid email address.", { position: "bottom-center" });
+                $("#employeeemail").focus();
+            }
+            else if(!$scope.employeephone) {
+                $("#employeephone").notify("Please provide employee phone number.", { position: "bottom-center" });
+                $("#employeephone").focus();
+            }
+            else {
+                Utilities.disableButton("empsignup", "Adding employee...");
+
+                Transporter.addemployee({
+                    fullname: $scope.employeefullname,
+                    gender: $scope.employeegender,
+                    home: $scope.employeehome_location,
+                    email: $scope.employeeemail,
+                    phone: $scope.employeephone,
+                    owner: companydata.data.email
+                }).then(response => {
+                    Utilities.enableButton("empsignup", "Add Employee");
+
+                    $log.log("res: ", response);
+
+                    switch (response.data){
+                        case "email_exists":
+                            Notification.info("The email address you entered is registered.");
+                            $("#employeeemail").focus();
+                            break;
+                        case "employeeadded":
+                            Notification.success("Employee has been successfully added.");
+
+                            setTimeout(() => {
+                                Utilities.closeForm("addemployee");
+                            }, 2000)
+                            
+                            break;
+                        case "phone_exists":
+                            Notification.warning("The phone number your entered is registered.");
+                            $("#employeephone").focus();
+                            break;
+                        case "company_notfound":
+                            Notification.warning("Company account was not found. Logging out now ...");
+
+                            setTimeout(() => {
+                                $scope.companyLogOut();
+                            }, 2000);
+                    }
+                }).catch(error => {
+                    Notification.warning("There has been an error. Please try again later.");
+                    $log.log(error);
+                })
+            }
+        }
 
 
 

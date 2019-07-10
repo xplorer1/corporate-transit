@@ -27,6 +27,10 @@
             Edit Account
         </div>
 
+        <div class="item a_cc_title">
+            Remove Employee
+        </div>
+
         <div class="sidebar_logo">
             <a class="" ui-sref="home">
                 <img src="../../assets/img/logos/ctlogowhite.png" class=""  style="height: 25px;">
@@ -246,7 +250,7 @@
 
             <div class="l_btns">
                 <div class="bk_trip_btn">
-                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showaddEmployees()">Add New Employees</button>
+                    <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="showAddEmployees()">Add New Employees</button>
                 </div>
 
                 <div class="fd_card_btn">
@@ -646,6 +650,58 @@
                         </form>
                     </div>
                 </div>
+            </div>
+
+            <div id="addemployee">
+                <a href="#" class="closeaddemployee" ng-click="closeAddEmployee()">x</a>
+                <form class="ui large form" novalidate name="signupform" id="signupform">
+                    <div class="ui stacked secondary  segment removestyle">
+
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <!-- <i class="user icon"></i> -->
+                                <input class="inpt" type="text" name="employeefullname" id="employeefullname" placeholder="Employee Full Name" ng-model="employeefullname" style="padding-left: 12px !important;">
+                            </div>
+                        </div>
+
+                        <div class="field sel_field">
+                            <label></label>
+                            <select class="ui search dropdown" name="employeegender" id="employeegender" ng-model="employeegender">
+                                <option disabled value="">Select Emplyee Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="field sel_field">
+                            <label></label>
+                            <select class="ui search dropdown" id="employeehome_location" name="employeehome_location" ng-model="employeehome_location">
+                                <option disabled value="">Employee Home Location</option>
+                                <option ng-repeat="place in home">{{place}}</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <!-- <i class="user icon"></i> -->
+                                <input class="inpt" type="text" name="employeeemail" id="employeeemail" placeholder="Employee e-mail address" ng-model="employeeemail" style="padding-left: 12px !important;">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <!-- <i class="user icon"></i> -->
+                                <input class="inpt" type="tel" name="employeephone" id="employeephone" placeholder="Employee Phone" ng-model="employeephone" style="padding-left: 12px !important;">
+                            </div>
+                        </div>
+
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div>
+                            <button class="ui fluid large teal submit button log_in_btn" ng-click="addEmployee()" id="empsignup">Add Employee</button>
+                        </div>
+                    </div>
+                </form>
             </div>
 
         </div>

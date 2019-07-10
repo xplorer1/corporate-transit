@@ -1166,7 +1166,17 @@ input#edit_username {
     border-radius: 0 !important;
 }
 
-input#supportemail, input#onlineamount, input#onlineemail, input#bankamount, input#bankemail, input#supportsubject, input#demo1, input#demo2, textarea#supporttext, input#cardnumber, input#superpassword, input#superpassword, input#superpassword {
+input#supportemail, 
+input#onlineamount, 
+input#onlineemail, 
+input#bankamount, 
+input#bankemail, 
+input#supportsubject, 
+input#demo1, 
+input#demo2, 
+textarea#supporttext, 
+input#cardnumber,  
+input#superpassword {
     width: 100%;
     outline: none;
     background: none !important;
@@ -2571,7 +2581,7 @@ li#item1548456588046-1 {
     margin: 0 auto;
 }
 
-#contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform {
+#contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform, #addemployee {
    position: absolute;
     top: 13%;
     width: 50%;

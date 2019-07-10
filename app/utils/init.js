@@ -1,15 +1,15 @@
 var storage = require('node-persist');
-let Individual = require("../models/places");
+let Places = require("../models/places");
 
 module.exports = function(app, appstorage) {
     (function loadAppUtils() {
+        Places.find({}, (err, places) => {
+        	
+        	if(err) console.log("err: ", err.message);
 
-
-        //console.log("storage: ", storage);
-        //storage.clear();
-        /*storage.keys().forEach(function(key) {
-            app.set(key, appstorage.get(key));
-            console.log("KEYS: ", key, "VALUE: ", app.get(key))
-        });*/
+        	if(places) {
+        		app.set("places", places);
+        	}
+        })
     })();
 };

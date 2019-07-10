@@ -19,7 +19,7 @@ module.exports = {
             text: 'Hello ' + firstname + '! Thank you for choosing Corporate Transit. We are pleased to have you on board. To activate your account and verify your email, click or copy the link below to your browser.' + confirmlink + ' All future notifications will be sent to this email address. We look forward to enhancing your daily commute experience. For inquires and information; contact E: information@corporatetransit.com.ng \n' +
             '                                                                T: 080011122222\n' +
             '                                                                W: www.corporatetransit.com.ng\n', // plaintext body
-            html: 'Hello ' + firstname +'!<br><br>Thank you for choosing Corporate Transit. We are pleased to have you on board. <br><br>To activate your account and verify your email, click or copy the link below to your browser.<br><br><strong>' + confirmlink + '</strong><br><br> All future notifications will be sent to this email address.<br><br>We look forward to enhancing your daily commute experience.<br><br>Best regards!<br><br> For inquires and information; contact:<br>  E: information@corporatetransit.com.ng<br> T: 080011122222 <br>W: www.corporatetransit.com.ng' // html body
+            html: 'Hello ' + firstname +'!<br><br>Thank you for choosing Corporate Transit. We are pleased to have you on board. <br><br>To activate your account and verify your email, click or copy the link below to your browser.<br><br><strong>' + confirmlink + '</strong><br><br><br> <a  target="_blank" href="' + confirmlink + '" style="text-decoration: none; padding: 2% 4%; border: 1px solid #4d5862; color: #fff !important; cursor: pointer; background: #4d5862; width: 100%;">Confirm Email</a> <br><br><br>All future notifications will be sent to this email address.<br><br>We look forward to enhancing your daily commute experience.<br><br>Best regards!<br><br> For inquires and information; contact:<br>  E: information@corporatetransit.com.ng<br> T: 080011122222 <br>W: www.corporatetransit.com.ng' // html body
         };
 
         transporter.sendMail(mailOptions, function(error, info){
@@ -218,7 +218,7 @@ module.exports = {
         });
     },
 
-    sendCardNumberMail: function sendCardNumberMail(fullname, recipient, cardnumber){
+    sendCardNumberMail: function sendCardNumberMail(recipient, cardnumber){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -233,8 +233,8 @@ module.exports = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
             to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Your card number! ✔', // Subject line
-            text: 'Hello ' + fullname + 'Your email has been verified! This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
-            html: 'Hello ' + fullname + '!<br><br>Your account has been activated! <br><br> This is your card number. <br><br>' + cardnumber + '<br><br> Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
+            text: 'Hello !Your email has been verified! This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
+            html: 'Hello !<br><br>Your account has been activated! <br><br> This is your card number. <br><br>' + cardnumber + '<br><br> Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
         };
 
         // send mail with defined transport object
@@ -289,6 +289,33 @@ module.exports = {
             subject: 'Re: ' + prevsubject, // Subject line
             text: text, // plaintext body
             html: text // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                return console.log('Mail Error: ', error, ' : ', new Date());
+            }
+        });
+    },
+
+    sendAddedMail: function sendAddedMail(fullname, recipient, company, confirmlink) {
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            auth: {
+                user: 'cranky.uncle3@gmail.com',
+                pass: 'privateryan'
+            }
+        });
+
+        // setup e-mail data with unicode symbols
+        let mailOptions = {
+            from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
+            to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            subject: 'You have been added!', // Subject line
+            text: 'Hello ' + fullname + ', This is to inform you that you have been successfully added by your your company ' + company + ' on Corporate Transit! We are delighted to have you on board and look forward to starting an amazing journey with you. To get started, please click the button below to confirm your email address and receive your card number, or copy the link below and paste on your browser if the button does not work. We wish you a safe ride.', // plaintext body
+            html: 'Hello ' + fullname + ', <br><br>This is to inform you that you have been successfully added by your company ' + company + ' on Corporate Transit! <br><br> We are delighted to have you on board and look forward to starting an amazing journey with you. <br><br> To get started, please click on the button below to confirm your email and receive your card number, or copy the link below and paste on your browser if the button does not work. <br><br> ' + confirmlink + '<br><br><br> <a  target="_blank" href="' + confirmlink + '" style="text-decoration: none; padding: 2% 4%; border: 1px solid #4d5862; color: #fff !important; cursor: pointer; background: #4d5862; width: 100%;">Confirm Email</a> <br><br>Have a safe ride!' // html body
         };
 
         // send mail with defined transport object

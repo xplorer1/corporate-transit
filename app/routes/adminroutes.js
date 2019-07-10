@@ -8,6 +8,7 @@ let BookingJournal = require("../models/bookingjournal");
 let TransactionJournal = require("../models/transactions");
 let CardNumbers = require("../models/cardnumbers");
 let Routes = require("../models/routes");
+let Places = require("../models/places");
 let Fares = require("../models/fares");
 let jwt = require('jsonwebtoken');
 let config = require('../../config');
@@ -183,7 +184,6 @@ module.exports = function(app, express) {
             else if(decoded) {
                 Admin.findOne({id: req.body.id}, (err, user) => {
                     if(err) return res.json({status: false, data: err.message});
-                    console.log("user: ", user.role);
 
                     if(!user) {
                         return res.json({status: false, data: "account_notfound"});
@@ -292,6 +292,9 @@ module.exports = function(app, express) {
         if(!req.body.token) return res.json({status: false, data: "token_required"});
         if(!req.body.route) return res.json({status: false, data: "route_required"});
 
+        if(!req.body.dep) return res.json({status: false, data: "dep_required"});
+        if(!req.body.dest) return res.json({status: false, data: "dest_required"});
+
         if(!req.body.morningpickuptime) return res.json({status: false, data: "morningpickuptime_required"});
         if(!req.body.morningpickupplace) return res.json({status: false, data: "morningpickupplace_required"});
         if(!req.body.eveningpickuptime) return res.json({status: false, data: "eveningpickuptime_required"});
@@ -344,13 +347,24 @@ module.exports = function(app, express) {
                                 fare.route = req.body.route;
                                 fare.fareoneway = req.body.fareoneway;
                                 fare.farereturn = req.body.farereturn;
-
+ 
                                 fare.save((err, faresaved) => {
 
                                     if(err) return res.json({status: false, data: err.message});
 
                                     if(faresaved) {
-                                        return res.json({status: true, data: "stuffsaved"});
+
+                                        Places.update({}, {$push: {"home": req.body.dep.toUpperCase(), "work": req.body.dest.toUpperCase()}}, {new: true}, (err, updated) => {
+                                            if(err) console.log("err: ", err.message);
+
+                                            if(updated.nModified) {
+                                                console.log("saved!");
+                                                return res.json({status: true, data: "stuffsaved"});
+                                            }
+                                            else {
+                                                console.log("update query wrong.");
+                                            }
+                                        });
                                     }
                                     else {
                                         return res.json({status: false, data: "unknown_error2"});
@@ -540,6 +554,90 @@ module.exports = function(app, express) {
                                     })
                                 }
                         })
+                    }
+                })
+            }
+            else {
+                return res.json({status: false, data: "token_expired"})
+            }
+        });
+    });
+
+    adminRouter.post("/viewusers", (req, res) => {
+        if(!req.body.email) return res.json({status: false, data: "email_required"});
+        if(!req.body.token) return res.json({status: false, data: "token_required"});
+
+        jwt.verify(req.body.token, adminsecret, function (err, decoded) {
+
+            if (err) {
+                console.log("err: ", err.message);
+                return res.json({status: false, data: "token_expired"})
+            }
+            else if(decoded) {
+                Admin.findOne({email: req.body.email, superuser: true}, (err, admin) => {
+                    if(err) return res.json({status: false, data: err.message});
+
+                    if(!admin) {
+                        return res.json({status: false, data: "account_notfound"});
+                    }
+                    else if(admin) {
+                        User.find({}, {"email" : 1, "role" : 1, "verified": true}, (err, users) => {
+                            if(err) console.log("err: ", err.message);
+
+                            if(users) {
+                                let individuals = [];
+                                let companies = [];
+                                let motherarray = [];
+                                let userobject = {};
+
+                                users.forEach(user => {
+                                    if(user.role === "individual") {
+                                        individuals.push(user.email);
+                                    }
+
+                                    if(user.role === "company") {
+                                        companies.push(user.email);
+                                    }
+                                });
+
+                                individuals.forEach(email => {
+                                    console.log("email: ", email);
+
+                                    Individual.findOne({email: email}, {"fullname": 1, "email" : 1, "work" : 1, "org" : 1, "ct_cardnumber" : 1, "home": 1, "balance" : 1}, (err, user) => {
+                                        if(err) console.log("err: ", err.message);
+
+                                        if(user) {
+                                            console.log("user: ", user);
+                                            userobject["individual"] = user;
+                                        }
+                                    });
+                                });
+
+                                companies.forEach(email => {
+                                    console.log("email: ", email);
+
+                                    Company.findOne({email: email}, {"companyname": 1, "email" : 1, "office_location" : 1, "employeescount" : 1, "ct_cardnumber" : 1, "balance" : 1}, (err, user) => {
+                                        if(err) console.log("err: ", err.message);
+
+                                        if(user) {
+                                            console.log("user: ", user);
+                                            userobject["company"] = user;
+                                        }
+                                    });
+                                });
+
+                                motherarray.push(userobject);
+
+                                return res.json({status: true, data: motherarray});
+                            }
+                            else {
+                                console.log("no registered user found!");
+                                return res.json({status: false, data: "nouserfound"});
+                            }
+                        })
+                    }
+                    else {
+                        return res.json({status: false, data: "user_notfound"});
                     }
                 })
             }

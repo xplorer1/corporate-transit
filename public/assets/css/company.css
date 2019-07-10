@@ -34,3 +34,16 @@ select#co_dep, select#co_dest {
     border-left: none !important;
     border-radius: 0 !important;
 }
+
+input#employeefullname, select#employeegender, input#employeeemail, select#employeehome_location, input#employeephone{
+    width: 100%;
+    outline: none;
+    background: none !important;
+    color: #4d5862 !important;
+    border-bottom: 1px solid #4d5862 !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    padding: 15px 0 10px;
+}

@@ -162,7 +162,9 @@ input#morningdrop,
 input#eveningpickup, 
 input#eveningdrop, 
 input#fareoneway, 
-input#farereturn {
+input#farereturn,
+input#dep,
+input#dest {
     width: 100%;
     outline: none;
     background: none !important;
@@ -210,6 +212,16 @@ input#replytext {
     text-decoration: none;
     color: gray;
     font-size: 21px;
+}
+
+.closeaddemployee {
+    position: relative;
+    top: 9px;
+    left: 36rem;
+    text-decoration: none;
+    color: gray;
+    font-size: 21px;
+    cursor: pointer;
 }
 
 .stat_icon i.users.icon, 

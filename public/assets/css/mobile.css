@@ -220,6 +220,23 @@
 	    display: flex;
 	}
 
+	#addemployee {
+	    position: absolute;
+	    top: 13%;
+	    width: 90%;
+	    height: 0px;
+	    background: white;
+	    /* right: 20px; */
+	    z-index: 1000000;
+	    border-radius: 2px;
+	    padding: 15px 16px 3px 20px;
+	    opacity: 0;
+	    left: calc(6%);
+	    /* overflow-y: scroll; */
+	    overflow-x: hidden;
+	    display: flex;
+	}
+
 	#addrouteform, #changefareform {
 		position: absolute;
 		top: 13%;
