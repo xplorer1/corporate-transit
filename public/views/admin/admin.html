@@ -10,10 +10,8 @@
             <img src="../../assets/img/placeholder.png" style="height: 50px; border-radius: 50%;">
             <div class="row"><div class="column">&nbsp;</div></div>
 
-            <div class="item a_cc_title" ng-bind="name">  
+            <div class="item" ng-bind="name">  
             </div>
-
-            <div class="row"><div class="column">&nbsp;</div></div>
 
             <div>
                 <span class="" ng-bind="role"></span>
@@ -83,7 +81,7 @@
             <div class="l_layers">
                 <div class="layerone">
                     <div class="layerone_btn pymt_btn">
-                        <a class="">Welcome, <span ng-bind="name"></span></a>.
+                        <a class="wel-name">Welcome, <span ng-bind="name"></span></a>.
                     </div>
 
                     <div class="layerone_btn cnts_btn">
@@ -180,11 +178,11 @@
 
                     <div class="users_tab">
                         <div class="users_ic">
-                            <i class="users icon"></i>  Users
+                            <i class="users icon"></i>  Admins
                         </div>
                         
                         <div class="add_user" ng-click="checkSuper('add')">
-                            <i class="user plus icon"></i> Add User
+                            <i class="user plus icon"></i> Add Admin
                         </div>
                     </div>
 
@@ -258,11 +256,11 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div style="text-align: center;">
-                            <input type="password" ng-model="superpassword" id="superpassword" name="superpassword" placeholder="Password" style="padding-left: 15px !important;">
+                            <input autocomplete="off" type="password" ng-model="superpassword" id="superpassword" name="superpassword" placeholder="Password" style="padding-left: 15px !important;">
                         </div>   
                         <div class="row"><div class="column">&nbsp;</div></div>
 
-                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="verifySuper()" ng-disabled="loginclicked">Submit</button>         
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="verifySuper()" >Submit</button>         
                     </div>
                 </div>
             </div>
@@ -278,7 +276,7 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div style="text-align: center;">
-                            <input type="text" ng-model="deletehoice" id="deletehoice" name="deletehoice" placeholder="Type 'YES' or 'NO'" style="padding-left: 15px !important;">
+                            <input autocomplete="off" type="text" ng-model="deletehoice" id="deletehoice" name="deletehoice" placeholder="Type 'YES' or 'NO'" style="padding-left: 15px !important;">
                         </div>   
                         <div class="row"><div class="column">&nbsp;</div></div>
 
@@ -295,7 +293,7 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div style="text-align: center;">
-                            <textarea placeholder="Message" rows="7" name="replytext" id="replytext" ng-model="replytext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
+                            <textarea autocomplete="off" placeholder="Message" rows="7" name="replytext" id="replytext" ng-model="replytext" cols="40" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" style="padding-left: 15px !important;"></textarea>
                         </div>   
                         <div class="row"><div class="column">&nbsp;</div></div>
 
@@ -636,16 +634,16 @@
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div style="text-align: center;">
-                            <input type="text" ng-model="newadminemail" id="newadminemail" name="newadminemail" placeholder="Email address of new user..." style="padding-left: 15px !important;">
+                            <input autocomplete="off" type="text" ng-model="newadminemail" id="newadminemail" name="newadminemail" placeholder="Email address of new user..." style="padding-left: 15px !important;">
                         </div>
                         <div class="row"><div class="column">&nbsp;</div></div>
 
                         <div style="text-align: center;">
-                            <input type="text" ng-model="newadminname" id="newadminname" name="newadminname" placeholder="Name of new user..." style="padding-left: 15px !important;" maxlength="8">
+                            <input autocomplete="off" type="text" ng-model="newadminname" id="newadminname" name="newadminname" placeholder="Name of new user..." style="padding-left: 15px !important;" maxlength="8">
                         </div>
                         <div class="row"><div class="column">&nbsp;</div></div>
 
-                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="addUser()" ng-disabled="loginclicked">Submit</button>         
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="addUser()">Submit</button>         
                     </div>
                 </div>
             </div>
@@ -665,7 +663,7 @@
                         </div>
                         <div class="row"><div class="column">&nbsp;</div></div>
 
-                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="enableCard()" ng-disabled="loginclicked">Submit</button>         
+                        <button class="ui fluid large teal submit button log_in_btn" id="login_button" ng-click="enableCard()">Submit</button>         
                     </div>
                 </div>
             </div>

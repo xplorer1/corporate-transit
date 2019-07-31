@@ -6,9 +6,20 @@ function TransporterFnc($http, $q) {
 
     // create a new object
     let transporter = {};
-    let baseurl = "http://127.0.0.1:8080";
+    //let baseurl = "http://127.0.0.1:8080";
     //let baseurl = "https://039053aa.ngrok.io";
-    //let baseurl = "https://corporatetransit.com.ng"
+    let baseurl = "https://corporatetransit.com.ng";
+    //let baseurl = "https://a66e4d2c.ngrok.io";
+
+    transporter.test = function(userData) {
+        return $http.post(baseurl+"/api/assigncard", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
 
     transporter.fetchplaces = function(userData) {
         return $http.get(baseurl+"/api/getplaces", userData).then(
@@ -212,6 +223,16 @@ function TransporterFnc($http, $q) {
 
     transporter.addemployee = function(userData) {
         return $http.post(baseurl+"/api/addemployee", userData).then(
+            function(response){
+                return $q.when(response.data);
+            },
+            function(err){
+                return $q.reject(err);
+            });
+    };
+
+    transporter.removeemployee = function(userData) {
+        return $http.post(baseurl+"/api/removeemployee", userData).then(
             function(response){
                 return $q.when(response.data);
             },

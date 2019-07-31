@@ -38,8 +38,18 @@
     	left: 5%;
 	}
 
+	#signuptype {
+	    top: 20px;
+	    width: 316px;
+	}
+
+	.as-comp, .as-ind {
+	    width: 97%;
+	    margin: 1rem 1rem;
+	}
+
 	#signup, #login {
-		margin: 100px 0 150px;
+		margin: 100px 0 50vh;
 		height: -webkit-fill-available;
 	    max-width: 700px;
 	    padding: 20px 20px !important;

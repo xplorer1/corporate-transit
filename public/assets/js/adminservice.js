@@ -6,18 +6,8 @@ function AdminService($http, $q) {
 
     // create a new object
     let adminservice = {};
-    //let baseurl = "http://127.0.0.1:80";
-    let baseurl = "https://corporatetransit.com.ng"
-
-    adminservice.adminlogin = function(userData) {
-        return $http.post(baseurl+"/admin/adminlogin", userData).then(
-            function(response){
-                return $q.when(response.data);
-            },
-            function(err){
-                return $q.reject(err);
-            });
-    };
+    //let baseurl = "http://127.0.0.1:8080";
+    let baseurl = "https://corporatetransit.com.ng";
 
     adminservice.verifysuper = function(userData) {
         return $http.post(baseurl+"/admin/verifysuper", userData).then(

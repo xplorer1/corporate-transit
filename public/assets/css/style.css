@@ -1441,7 +1441,7 @@ button#contact-btn {
 .ui.loader {
     font-size: 8em !important;
     top: 40% !important;
-    left: calc(45%) !important;
+    left: calc(50%) !important;
 }
 
 .ui[class*="left icon"].input > input {
@@ -2581,7 +2581,7 @@ li#item1548456588046-1 {
     margin: 0 auto;
 }
 
-#contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform, #addemployee {
+#contactus, #booktrip, #pendingtrip, #inst_val, #bank_val, #fundcardform, #verifysuper, #adduserform, #addemployee, #removeemployee {
    position: absolute;
     top: 13%;
     width: 50%;
@@ -2598,9 +2598,9 @@ li#item1548456588046-1 {
     display: flex;
 }
 
-#verifysuper, #adduserform {
+/*#verifysuper, #adduserform {
     top: 30%;
-}
+}*/
 
 #pendingtrip {
     color: #4d5862;
@@ -2690,6 +2690,10 @@ li#item1548456588046-1 {
     border: 1px solid #4d5862;
     color: #4d5862 !important;
     cursor: pointer;
+ }
+
+ .cnts_btn a:hover {
+    background: #e1e1e1;
  }
 
 .layertwo_half_btn a {
@@ -3318,4 +3322,22 @@ i.boarding_img.bus.icon {
 
 .as-comp, .as-ind {
     cursor: pointer;
+}
+
+.bottombar {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    height: 75px;
+    background: rgb(77, 88, 98);
+}
+
+.bar {
+    display: flex;
+}
+
+.link {
+    padding: 0 15px;
+    line-height: 5;
+    color: white;
 }

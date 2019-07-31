@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let AdminSchema = new Schema({
-    name: {type: String},
+    fullname: { type: String, trim: true, uppercase: true },
     superuser: {type: Boolean, select: false, default: false},
     username: { type: String, lowercase: true, index: { unique: true }, trim: true },
     password: { type: String, minlength: 8},

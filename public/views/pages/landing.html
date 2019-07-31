@@ -4,8 +4,8 @@
     
     <div class="ui accordion">
 
-        <div class="item a_cc_title f_namee" ng-bind="user_fullname">
-        </div>
+        <!-- <div class="item a_cc_title f_namee" ng-bind="user_fullname">
+        </div> -->
 
         <div class="item a_cc_title" ui-sref="landing" ng-click="hide_bar()">
             Dashboard
@@ -70,12 +70,12 @@
             <div class="l_layers">
                 <div class="layerone">
                     <div class="layerone_btn pymt_btn">
-                        <a class="">Welcome, <span ng-bind="user_fullname.split(' ')[0]"></span></a>.
+                        <a class="wel-name">Welcome, <span ng-bind="user_fullname.split(' ')[0]"></span></a>.
                     </div>
 
                     <div class="layerone_btn cnts_btn">
                         <a class="new_a" ng-click="logOut()">Log Out</a>
-                        <a class="" ng-click="showContactUs()">Contact Us</a>
+                        <a class="hov" ng-click="showContactUs()">Contact Us</a>
                     </div>
                 </div>
 
@@ -133,14 +133,14 @@
 
                         <div class="b_rt"> 
                             <i class="boarding_img bus icon"></i> 
-                            <span class="route-pmorn-time"></span>: 
-                            <span class="route-pmorn-place"></span>
+                            <span class="route-pmorn-time">Morning pickup time</span>: 
+                            <span class="route-pmorn-place">Morning pickup place</span>
                         </div>
 
                         <div class="b_rt"> 
                             <img class="boarding_img" src="../../assets/img/dropoff.png"> 
-                            <span class="route-dmorn-time"></span>: 
-                            <span class="route-dmorn-place"></span>
+                            <span class="route-dmorn-time">Morning drop time</span>: 
+                            <span class="route-dmorn-place">Morning drop place</span>
                         </div>
 
                         <div class="row"><div class="column">&nbsp;</div></div>
@@ -152,14 +152,14 @@
 
                         <div class="b_rt"> 
                             <i class="boarding_img bus icon"></i>
-                            <span class="route-peven-time"></span> : 
-                            <span class="route-peven-place"></span>
+                            <span class="route-peven-time">Evening pickup time</span> : 
+                            <span class="route-peven-place">Evening pickup place</span>
                         </div>
 
                         <div class="b_rt"> 
                             <img class="boarding_img" src="../../assets/img/dropoff.png"> 
-                            <span class="route-deven-time"></span>: 
-                            <span class="route-deven-place"></span>
+                            <span class="route-deven-time">Evening drop time</span>: 
+                            <span class="route-deven-place">Evening drop place</span>
                         </div>
                         
                         <div class="row"><div class="column">&nbsp;</div></div>

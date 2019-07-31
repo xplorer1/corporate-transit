@@ -214,12 +214,12 @@ input#replytext {
     font-size: 21px;
 }
 
-.closeaddemployee {
+.closeaddemployee, .closeremoveemployee {
     position: relative;
     top: 9px;
     left: 36rem;
     text-decoration: none;
-    color: gray;
+    color: gray !IMPORTANT;
     font-size: 21px;
     cursor: pointer;
 }
@@ -350,4 +350,37 @@ input#replytext {
 .alert-orange {
   color:white;
   background-color: #E9573F;
+}
+
+#verifysuper, #adduserform {
+    top: 10%;
+}
+
+.wel-name {
+    font-size: 18pt !important;
+    cursor: auto;
+}
+
+.rou.addroute:hover {
+    background: #e1e1e1;
+}
+
+.hov:hover {
+    background: #e1e1e1;
+}
+
+a.new_a:hover {
+    background: #e1e1e1;
+}
+
+#login_button:hover, .log_in_btn:hover {
+    background: #8c949c !IMPORTANT;
+}
+
+.item.a_cc_title:hover {
+    color: #7bbdd8 !important;
+}
+
+button.massive.ui.button:hover, .transferrole:hover {
+    color: #7bbdd8 !important;
 }

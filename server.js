@@ -7,8 +7,8 @@ let mongoose = require('mongoose'); // for working w/ our database
 let compression = require('compression');
 let config = require('./config');
 let path = require('path');
-var appstorage = require('./app/utils/appstorage')(app);
-var init = require('./app/utils/init');
+let appstorage = require('./app/utils/appstorage')(app);
+let init = require('./app/utils/init');
 
 /*
 let fs = require('fs');

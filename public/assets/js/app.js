@@ -42,7 +42,11 @@ angular.module('MainModule', [
                 templateUrl: '../views/pages/edit.html',
                 controller: 'GeneralController'
             })
-
+            .state('comedit', {
+                url: '/edit',
+                templateUrl: '../views/pages/comedit.html',
+                controller: 'GeneralController'
+            })
             .state('login', {
                 url: '/login',
                 templateUrl: '../views/pages/login.html',
@@ -90,11 +94,6 @@ angular.module('MainModule', [
                 templateUrl: '../views/admin/admin.html',
                 controller: "AdminController"
             })
-            .state('adminlogin', {
-                url: '/adminlogin',
-                templateUrl: '../views/admin/adminlogin.html',
-                controller: "AdminController"
-            })
             .state('company', {
                 url: '/company',
                 templateUrl: '../views/company/company.html',
@@ -112,10 +111,6 @@ angular.module('MainModule', [
             enabled: true,
             requireBase: false
         });
-        //error
-        //info
-        //warning
-        //success
 
         NotificationProvider.setOptions({
             delay: 10000,

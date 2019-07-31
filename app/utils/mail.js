@@ -1,7 +1,7 @@
 let nodemailer = require('nodemailer');
 
 module.exports = {
-    sendEmailVerificationMail: function sendEmailVerificationMail(firstname, confirmlink, recipient){
+    sendEmailVerificationMail: function sendEmailVerificationMail(fullname, confirmlink, recipient){
 
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -13,13 +13,13 @@ module.exports = {
         });
 
         let mailOptions = {
-            from: '"Hello From Corporate Transit" <chijioke543@gmail.com>', // sender address
+            from: '"Hello From Corporate Transit" <cranky.uncle3@gmail.com>', // sender address
             to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
-                subject: 'WELCOME TO CORPORATE TRANSIT ✔', // Subject line
-            text: 'Hello ' + firstname + '! Thank you for choosing Corporate Transit. We are pleased to have you on board. To activate your account and verify your email, click or copy the link below to your browser.' + confirmlink + ' All future notifications will be sent to this email address. We look forward to enhancing your daily commute experience. For inquires and information; contact E: information@corporatetransit.com.ng \n' +
+            subject: 'WELCOME TO CORPORATE TRANSIT ✔', // Subject line
+            text: 'Hello ' + fullname + '! Thank you for choosing Corporate Transit. We are pleased to have you on board. To activate your account and verify your email, click or copy the link below to your browser.' + confirmlink + ' All future notifications will be sent to this email address. We look forward to enhancing your daily commute experience. For inquires and information; contact E: information@corporatetransit.com.ng \n' +
             '                                                                T: 080011122222\n' +
             '                                                                W: www.corporatetransit.com.ng\n', // plaintext body
-            html: 'Hello ' + firstname +'!<br><br>Thank you for choosing Corporate Transit. We are pleased to have you on board. <br><br>To activate your account and verify your email, click or copy the link below to your browser.<br><br><strong>' + confirmlink + '</strong><br><br><br> <a  target="_blank" href="' + confirmlink + '" style="text-decoration: none; padding: 2% 4%; border: 1px solid #4d5862; color: #fff !important; cursor: pointer; background: #4d5862; width: 100%;">Confirm Email</a> <br><br><br>All future notifications will be sent to this email address.<br><br>We look forward to enhancing your daily commute experience.<br><br>Best regards!<br><br> For inquires and information; contact:<br>  E: information@corporatetransit.com.ng<br> T: 080011122222 <br>W: www.corporatetransit.com.ng' // html body
+            html: 'Hello ' + fullname + '!<br><br>Thank you for choosing Corporate Transit. We are pleased to have you on board. <br><br>To activate your account and verify your email, click or copy the link below to your browser.<br><br><strong>' + confirmlink + '</strong><br><br><br> <a  target="_blank" href="' + confirmlink + '" style="text-decoration: none; padding: 2% 4%; border: 1px solid #4d5862; color: #fff !important; cursor: pointer; background: #4d5862; width: 100%;">Confirm Email</a> <br><br><br>All future notifications will be sent to this email address.<br><br>We look forward to enhancing your daily commute experience.<br><br>Best regards!<br><br> For inquires and information; contact:<br>  E: information@corporatetransit.com.ng<br> T: 080011122222 <br>W: www.corporatetransit.com.ng' // html body
         };
 
         transporter.sendMail(mailOptions, function(error, info){
@@ -29,7 +29,7 @@ module.exports = {
         });
     },
 
-    sendPasswordResetMail: function sendPasswordResetMail(recipients, pwdresetlink){
+    sendPasswordResetMail: function sendPasswordResetMail(fullname, recipients, pwdresetlink){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -44,8 +44,8 @@ module.exports = {
             from: '"Hello From Corporate Transit" <hello@corporatetransit.com>', // sender address
             to: recipients,
             subject: 'Corporate Transit Password Reset ✔',
-            text: 'Hello! We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password. ' + pwdresetlink + '. This link is valid for only 1 hour. If you didn\'t try to reset your password, simply ignore this email. The Corporate Transit Team.', // plaintext body
-            html: 'Hello!<br><br>We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password.<br><br><a target="_blank" href="' + pwdresetlink + '">' + pwdresetlink + '/</a><br><br>This link is valid for only 1 hour. <br><br>If you didn\'t try to reset your password, simply ignore this mail, and we\'ll forget this ever happened.<br><br>The Corporate Transit Team' // html body
+            text: 'Hello ' + fullname + '! We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password. ' + pwdresetlink + '. This link is valid for only 1 hour. If you didn\'t try to reset your password, simply ignore this email. The Corporate Transit Team.', // plaintext body
+            html: 'Hello ' + fullname + '!<br><br>We heard you need your password reset. Click the link below and you\'ll be redirected to a secure location from where you can set a new password.<br><br><a target="_blank" href="' + pwdresetlink + '">' + pwdresetlink + '/</a><br><br>This link is valid for only 1 hour. <br><br>If you didn\'t try to reset your password, simply ignore this mail, and we\'ll forget this ever happened.<br><br>The Corporate Transit Team' // html body
         };
 
         // send mail with defined transport object
@@ -83,7 +83,7 @@ module.exports = {
         });
     },
 
-    sendSuccessfulBookingMail: function sendSuccessfulBookingMail(recipients, booking){
+    sendSuccessfulBookingMail: function sendSuccessfulBookingMail(fullname, recipients, booking){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -98,8 +98,8 @@ module.exports = {
             from: '"Hello From Corporate Transit" <hello@corporatetransit.com>', // sender address
             to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Booking Successful. ✔', // Subject line
-            text: 'Hello!This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + 'Departure: ' + booking.from + 'Destination: ' + booking.to + 'Route: ' + booking.route + 'Booking Date' + booking.bookedon, // plaintext body
-            html: 'Hello!<br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + '<br><br>' + ' From: ' + booking.from + '<br><br>' + 'To: ' + booking.to + '<br><br>' + 'Route: ' + booking.route + '<br><br>' + 'Booking Date: ' + booking.bookedon // html body // html body
+            text: 'Hello ' + fullname + '! This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + 'Departure: ' + booking.from + 'Destination: ' + booking.to + 'Route: ' + booking.route + 'Booking Date' + booking.bookedon, // plaintext body
+            html: 'Hello ' + fullname + '! <br><br>This is to inform you that your booking was successful. Find below the details of you booking.<br><br> Status: ' + booking.status + '<br><br>' + ' From: ' + booking.from + '<br><br>' + 'To: ' + booking.to + '<br><br>' + 'Route: ' + booking.route + '<br><br>' + 'Booking Date: ' + booking.bookedon // html body // html body
         }; //
 
         // send mail with defined transport object
@@ -110,7 +110,7 @@ module.exports = {
         });
     },
 
-    sendComplaintRecieptMail: function sendComplaintRecieptMail(recipients){
+    sendComplaintRecieptMail: function sendComplaintRecieptMail(recipient){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -123,10 +123,10 @@ module.exports = {
         // setup e-mail data with unicode symbols
         let mailOptions = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
-            to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Complaint Received. ✔', // Subject line
-            text: 'Hello!This is to inform you that your message was received. We will get in touch soon.', // plaintext body
-            html: 'Hello!<br><br>This is to inform you that your message was received. We will get in touch soon.<br>' // html body
+            text: 'Hello! This is to inform you that your message was received. We will get in touch soon.', // plaintext body
+            html: 'Hello! <br><br>This is to inform you that your message was received. We will get in touch soon.<br>' // html body
         };
 
         // send mail with defined transport object
@@ -137,7 +137,7 @@ module.exports = {
         });
     },
 
-    sendComplaintMail: function sendComplaintMail(name, email, complaint, recipient){
+    sendComplaintMail: function sendComplaintMail(fullname, email, complaint, recipient){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -152,8 +152,8 @@ module.exports = {
             from: '"Hello" <customerservice@corporatetransit.com>', // sender address
             to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
             subject: 'Pending Complaint. ✔', // Subject line
-            text: 'Hello! There is a pending complaint for your to review. Find the details below. Name: + ' + name + '. Email: ' + email + '. Complaint: ' + complaint, // plaintext body
-            html: 'Hello!<br><br>There is a pending complaint for your to review. Find the details below.<br>' + 'Name: ' + name + '<br>' + 'Email: ' + email + '<br>' + 'Complaint: ' + complaint // html body
+            text: 'Hello! There is a pending complaint for your to review. Find the details below. Name: + ' + fullname + '. Email: ' + email + '. Complaint: ' + complaint, // plaintext body
+            html: 'Hello!<br><br>There is a pending complaint for your to review. Find the details below.<br>' + 'Name: ' + fullname + '<br>' + 'Email: ' + email + '<br>' + 'Complaint: ' + complaint // html body
         };
 
         // send mail with defined transport object
@@ -191,7 +191,7 @@ module.exports = {
         });
     },
 
-    sendBookingConcludedMail: function sendBookingConcludedMail(recipients){
+    sendBookingConcludedMail: function sendBookingConcludedMail(fullname, recipients){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -204,10 +204,10 @@ module.exports = {
         // setup e-mail data with unicode symbols
         let mailOptions = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
-            to: recipients, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
+            to: recipients, // list of receivers
             subject: 'You have a message. ✔', // Subject line
-            text: 'Hello!This is to inform your of your successful card payment. Thanks for choosing us.', // plaintext body
-            html: 'Hello! <br><br>This is to inform your of your successful card payment. Thanks for choosing us.<br>' // html body
+            text: 'Hello ' + fullname + '!This is to inform your of your successful card payment. Thanks for choosing us.', // plaintext body
+            html: 'Hello ' + fullname + '! <br><br>This is to inform your of your successful card payment. Thanks for choosing us.<br>' // html body
         };
 
         // send mail with defined transport object
@@ -218,7 +218,7 @@ module.exports = {
         });
     },
 
-    sendCardNumberMail: function sendCardNumberMail(recipient, cardnumber){
+    sendEmailConfirmedMail: function sendEmailConfirmedMail(fullname, recipient){
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -232,9 +232,9 @@ module.exports = {
         let mailOptions = {
             from: '"Hello From Corporate Transit" <customerservice@corporatetransit.com>', // sender address
             to: recipient, //'bar@blurdybloop.com, baz@blurdybloop.com' // list of receivers
-            subject: 'Your card number! ✔', // Subject line
-            text: 'Hello !Your email has been verified! This is your card number. ' + cardnumber + 'Save it, as you will need it to identify your card. Thanks for choosing us.', // plaintext body
-            html: 'Hello !<br><br>Your account has been activated! <br><br> This is your card number. <br><br>' + cardnumber + '<br><br> Save it, as you will need it to identify your card. <br>Thanks for choosing us.<br>' // html body
+            subject: 'Email Verified! ✔', // Subject line
+            text: 'Hello ' + fullname + '!Your email has been verified! Thanks for choosing us.', // plaintext body
+            html: 'Hello ' + fullname + '!<br><br>Your account has been activated! <br><br>Thanks for choosing us.<br>' // html body
         };
 
         // send mail with defined transport object

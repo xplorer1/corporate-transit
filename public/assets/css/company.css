@@ -35,7 +35,12 @@ select#co_dep, select#co_dest {
     border-radius: 0 !important;
 }
 
-input#employeefullname, select#employeegender, input#employeeemail, select#employeehome_location, input#employeephone{
+input#employeefullname, 
+select#employeegender, 
+input#employeeemail, 
+select#employeehome_location, 
+input#employeephone,
+input#e_email {
     width: 100%;
     outline: none;
     background: none !important;
@@ -46,4 +51,9 @@ input#employeefullname, select#employeegender, input#employeeemail, select#emplo
     border-left: none !important;
     border-radius: 0 !important;
     padding: 15px 0 10px;
+}
+
+.cp {
+    color: #4e5963;
+    font-size: 12pt;
 }

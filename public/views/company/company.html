@@ -27,7 +27,7 @@
             Edit Account
         </div>
 
-        <div class="item a_cc_title">
+        <div class="item a_cc_title" ng-click="showRemoveEmployee();">
             Remove Employee
         </div>
 
@@ -74,7 +74,7 @@
             <div class="l_layers">
                 <div class="layerone">
                     <div class="layerone_btn pymt_btn">
-                        <a class="">Welcome, <span ng-bind="companyname"></span></a>.
+                        <a class="wel-name">Welcome, <span ng-bind="companyname"></span></a>.
                     </div>
 
                     <div class="layerone_btn cnts_btn">
@@ -633,6 +633,7 @@
             </div>
 
             <div id="fundcardform">
+
                 <a href="#" class="closefundcard" ng-click="closeFundCard()">x</a>
 
                 <div class="user_register modalregister">
@@ -650,6 +651,7 @@
                         </form>
                     </div>
                 </div>
+
             </div>
 
             <div id="addemployee">
@@ -702,6 +704,26 @@
                         </div>
                     </div>
                 </form>
+            </div>
+
+            <div id="removeemployee" class="">
+                <a class="closeremoveemployee" ng-click="closeRemoveEmployee()">x</a>
+
+                <div class="mode_p cp">
+                    <header>
+                        <h3>Enter the email of the employee you want to remove.</h3>
+                    </header>
+                    <div class="mode_period_body">
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <div style="text-align: center;">
+                            <input type="text" ng-model="e_email" id="e_email" name="e_email" placeholder="Employee email" style="padding-left: 15px !important;">
+                        </div>
+                        <div class="row"><div class="column">&nbsp;</div></div>
+
+                        <button class="ui fluid large teal submit button log_in_btn" id="subcom" ng-click="removeEmployee()">Submit</button>         
+                    </div>
+                </div>
             </div>
 
         </div>

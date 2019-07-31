@@ -29,6 +29,7 @@ let CompanySchema = new Schema({
         }
     },
     payments: {type: [String]},
+    employees: {type: [String]},
     createdon: { type: Date, select: false, default: Date.now },
     verified: { type: Boolean, select: false, default: false },
     verifiedon: { type: Date, select: false },

@@ -100,7 +100,8 @@
                 Your Journey To Personal And Financial Success Starts Here!
             </div>
             <div class="centerbutton">
-                <a class="bigbutton button" ui-sref="signup">Sign Up</a>
+               <!-- <a class="bigbutton button" ng-click="test()">Sign Up</a>-->
+                <a class="bigbutton button" ng-click="determineSignUpType()">Sign Up</a>
             </div>
 
             <div class="bottomright">
@@ -141,7 +142,7 @@
                     <div class="h-25 small-txt grey">To And From Work; More Conveniently Than Ever Before!</div>
 
                     <div class="h-25 w-100">
-                        <button class="w-100 h-100 light-bg-button" ui-sref="signup">Register</button>
+                        <button class="w-100 h-100 light-bg-button" ng-click="determineSignUpType()">Register</button>
                     </div>
                 </div>
             </div>
@@ -160,7 +161,7 @@
                     <div class="h-25 small-txt grey">Enjoy Relaxing Trips, Get To Work Energized!</div>
 
                     <div class="h-25 w-100">
-                        <button class="w-100 h-100 dark-no-bg-button" ui-sref="signup">Register</button>
+                        <button class="w-100 h-100 dark-no-bg-button" ng-click="determineSignUpType()">Register</button>
                     </div>
                 </div>
             </div>
@@ -191,7 +192,7 @@
 
                 <div class="how_ic">
                     <div class="signuppart">
-                        <div class="howtitle" ui-sref="signup">
+                        <div class="howtitle" ng-click="determineSignUpType()">
                             Sign Up
                         </div>
                         <div class="row"><div class="column">&nbsp;</div></div>
@@ -452,6 +453,8 @@
 
 <link rel="stylesheet" href="../assets/lib/bootstrap/themes/classic.css"/>
 <link rel="stylesheet" href="../assets/lib/bootstrap/themes/classic.time.css"/>
+<!-- <link rel="stylesheet" href="css/jquery.dataTables.min.css">
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script> -->
 <script defer src="../assets/lib/bootstrap/picker.js"></script>
 <script defer src="../assets/lib/bootstrap/picker.time.js"></script>
 

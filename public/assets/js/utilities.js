@@ -14,6 +14,12 @@ function UtilitiesFnc(Transporter) {
     utility.ravesecret = "FLWSECK_TEST-381f15e4245f9053fdd1bc29ce32a69a-X";
     utility.raveenckey = "FLWSECK_TEST31dbdcbb6286";
 
+    utility.doSignOut = () => {
+        store.remove("user");
+        store.remove("companydata");
+        store.remove("admindata");
+    }
+
     utility.showForm = (id, height) => {
         utility.toTop();
         
@@ -31,6 +37,7 @@ function UtilitiesFnc(Transporter) {
     utility.loginCleanUp = () => {
         store.remove("user");
         store.remove("company");
+        store.remove("admin");
     }
 
     utility.toTop = () => {

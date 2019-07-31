@@ -1,5 +1,5 @@
 
-<div class="ui middle aligned center aligned grid forms signuppage" ng-controller="CompanySignUpController" id="ph_page">
+<div class="ui middle aligned center aligned grid forms signuppage" ng-controller="GeneralController" id="ph_page">
     <nav id="navbar" class="navbar navbar-expand-lg sticky-top navother">
         <div class="ct_logo">
             <a class="img_logo" ui-sref="home">
@@ -57,6 +57,7 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input autocomplete="off" class="inpt" type="text" name="companyname" id="companyname" placeholder="Company Name" ng-model="companyname" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -64,6 +65,7 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input autocomplete="off" class="inpt" type="text" name="companyemail" id="companyemail" placeholder="E-mail address" ng-model="companyemail" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -71,68 +73,27 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input autocomplete="off" class="inpt" type="tel" name="companyphone" id="companyphone" placeholder="Phone" ng-model="companyphone" style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
                         <input autocomplete="off" class="inpt" type="number" name="employeesno" id="employeesno" placeholder="Number of employees" ng-model="employeesno" style="padding-left: 12px !important;">
-                    </div>
-                </div>
-
-                <div class="field">
-                    <div class="ui left icon input">
-                        <!-- <i class="lock icon"></i> -->
-                        <input autocomplete="off" class="inpt" type="password" name="companypassword" id="companypassword" placeholder="Password" ng-model='companypassword' style="padding-left: 12px !important;">
+                        <span class="ast">*</span>
                     </div>
                 </div>
 
                 <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="noacct">
-                    By clicking Sign Up, you agree to <a ui-sref="terms">our terms and conditions.</a>
-                </div>
-                <div class="row"><div class="column">&nbsp;</div></div>
 
-                <div class="si_btn">
-                    <button id="companysignup" class="ui fluid large teal submit button log_in_btn" ng-click="companySignUp()" ng-disabled="signupclicked">Sign Up</button>
+                <div class="">
+                    <button id="companysignup" class="ui fluid large teal submit button log_in_btn" ng-click="updateAcct()" >Update Account</button>
                 </div>
             </div>
         </form>
 
         <div class="row"><div class="column">&nbsp;</div></div>
 
-        <div class="noacct">
-            Already has an account? <a ui-sref="login">Login</a>
-        </div>
-    </div>
-
-    <div class="column incr_code" id="email_confirmation">
-        <div>
-            <div class="pagetitle">
-                <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="act_title">Account successfully created.</div>
-            </div>
-            <div class="pagetext">
-                <div class="row"><div class="column">&nbsp;</div></div>
-                Please check your email for verification code to activate your account. Also check your spam/junk folders in case it's not in your inbox.
-
-                <div class="row"><div class="column">&nbsp;</div></div>
-                <span class="info_text">If you didn't find it, click on the button below.</span>
-
-                <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="row"><div class="column">&nbsp;</div></div>
-
-                <button class="ui fluid large teal submit button resendcodebutton" ng-click="resendCode()" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Resend Link</button>
-
-                <div class="row"><div class="column">&nbsp;</div></div>
-
-                <button class="ui fluid large teal submit button resendcodebutton" ui-sref="login" style="max-width: 300px; margin: 0 auto; background: #4d5862;">Login</button>
-
-                <div class="row"><div class="column">&nbsp;</div></div>
-                <div class="row"><div class="column">&nbsp;</div></div>
-            </div>
-        </div>
     </div>
 
     <div class="somebar_other">

@@ -14,6 +14,16 @@ angular.module('ControllersModule', [])
     function MainPageController($scope, $state, $log, $window, $location, Transporter, Utilities, Notification) {
 
         Utilities.fetchPlaces();
+
+        $scope.test = () => {
+            Transporter.test({
+                email: "zamuh@getnada.com",
+                cardnumber: "4c82b64a6209"
+            })
+            .then(response => {
+                $log.log("res: ", response);
+            })
+        };
         
         let url = $location.url();
 
@@ -78,6 +88,7 @@ angular.module('ControllersModule', [])
     }
 
     function SignUpPageController($scope, $log, Transporter, $stateParams, $state, Utilities, Notification) {
+        Utilities.toTop();
 
         let token = $stateParams.vcode;
 
@@ -281,6 +292,7 @@ angular.module('ControllersModule', [])
     }
 
     function LoginPageController($scope, $log, Transporter, $state, $stateParams, Utilities, Notification) {
+        Utilities.toTop();
 
         if($stateParams.resetcode) {
             Transporter.checkcode({
@@ -322,7 +334,6 @@ angular.module('ControllersModule', [])
                 $("#password").focus();
             }
             else {
-                $scope.loginclicked = true;
 
                 Utilities.disableButton("login_button", "Signing in...");
 
@@ -330,8 +341,7 @@ angular.module('ControllersModule', [])
                     email: $scope.email,
                     password: $scope.password
                 }).then(response => {
-                    $scope.loginclicked = false;
-                    console.log("response.data: ", response)
+                    Utilities.loginCleanUp();
 
                    Utilities.enableButton("login_button", "Sign In");
 
@@ -349,6 +359,10 @@ angular.module('ControllersModule', [])
                             else if(response.user.role === "company") {
                                 store.set("company", {data: response.user});
                                 $state.go("company");
+                            }
+                            else if (response.user.role === "admin") {
+                                store.set("admindata", {data: response.user});
+                                $state.go("admin");
                             }
 
                             break;
@@ -1547,7 +1561,7 @@ angular.module('ControllersModule', [])
                 }
                 else {
                     if(response.data === "token_expired") {
-                        store.remove("user");
+                        Utilities.doSignOut();
                         $state.go("login");
                     }
                 }
@@ -1603,7 +1617,7 @@ angular.module('ControllersModule', [])
                     $state.go("login");
                 }
             })
-        }
+        };
 
         $("#sort").on('change', function() {
             var filter = $('#sort').find(":selected").val();
@@ -1611,7 +1625,7 @@ angular.module('ControllersModule', [])
             if(filter) {
                 return $scope.loadHistory(filter);
             }
-        })
+        });
 
         $scope.searchHistory = () => {
 
@@ -1659,7 +1673,7 @@ angular.module('ControllersModule', [])
                     }
                 })
             }
-        }
+        };
     }
 
     function AdminController($scope, $log, $state, $stateParams, Utilities, AdminService, $window, Notification) { 
@@ -1677,71 +1691,23 @@ angular.module('ControllersModule', [])
         }
 
         if(admindata) {
-            $scope.name = admindata.name;
-            $scope.role = admindata.role;
-            $scope.numusers = admindata.numusers;
-            $scope.numbookings = admindata.numbookings;
-            $scope.numearned = Utilities.numberWithCommas(admindata.totaldeposited);
-            $scope.numtrips = admindata.numtaken;
+            $log.log("admindata: ", admindata);
 
-            $scope.messages = admindata.messages;
-            $scope.admins = admindata.admins;
-            $scope.regionscount = admindata.userregioncountarray;
-            $scope.routescount = admindata.userroutecountarray;
+            $scope.name = admindata.data.name;
+            $scope.role = admindata.data.role;
+            $scope.numusers = admindata.data.numusers;
+            $scope.numbookings = admindata.data.numbookings;
+            $scope.numearned = Utilities.numberWithCommas(admindata.data.totaldeposited);
+            $scope.numtrips = admindata.data.numtaken;
+
+            $scope.messages = admindata.data.messages;
+            $scope.admins = admindata.data.admins;
+            $scope.regionscount = admindata.data.userregioncountarray;
+            $scope.routescount = admindata.data.userroutecountarray;
         }
         else {
             $scope.adminLogOut();
         }
-
-        $scope.login = () => {
-
-            if(!$scope.email) {
-                $("#email").notify("Please enter your email address.", { position: "bottom-center" });
-                $("#email").focus();
-            }
-            else if(!Utilities.validmail($scope.email)){
-                $("#email").notify("Please enter a valid email.", { position: "bottom-center" });
-                 $("#email").focus();
-            }
-            else if(!$scope.password) {
-                $("#password").notify("Please enter your password.", { position: "bottom-center" });
-                 $("#password").focus();
-            }
-            else {
-
-                Utilities.disableButton("login_button", "Signing in...");
-
-                AdminService.adminlogin({
-                    email: $scope.email,
-                    password: $scope.password
-                }).then(response => {
-                    $log.log("Response adminlogin: ", response);
-
-                    Utilities.disableButton("login_button", "Sign In");
-
-                    switch (response.data){
-                        case "not_activated":
-                            Notification.info("Your account has not been verified. Activation link has been sent to your email address.");
-                            break;
-                        case "login_successful":
-                            let admindata = store.get("admindata");
-
-                            store.set("admindata", response.userdata);
-
-                            $state.go("admin");
-                            break;
-                        case "account_notfound":
-                            Notification.warning("Invalid username or password.");
-                            break;
-                        case "ErrorMongoError: Topology was destroyed":
-                            Notification.warning("There was an error. Please refresh your page and try again.");
-                        default:
-                            Notification.warning("There was an error. Please refresh your page and try again.");
-                            break;
-                    }
-                })
-            }
-        };
 
         $scope.checkSuper = (mode, id) => {
             $scope.adminmode = mode;
@@ -1977,15 +1943,16 @@ angular.module('ControllersModule', [])
             }
             else {
 
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("login_button", "Please wait...");
 
                 AdminService.verifysuper({
-                    email: admindata.email,
+                    email: admindata.data.email,
                     password: $scope.superpassword,
-                    token: admindata.token
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
+                    token: admindata.data.token
+                }).then(response => {
+                    Utilities.enableButton("login_button", "Submit");
+
+                    console.log("res: ", response);
 
                     if(response.data === "account_notfound") {
                         Notification.warning("Invalid password.");
@@ -2032,7 +1999,7 @@ angular.module('ControllersModule', [])
                     $scope.newadminname = $scope.newadminname.split(" ")[0]+$scope.newadminname.split(" ")[1]
                 }
 
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("login_button", "Please wait...");
 
                 AdminService.adduser({
                     email: $scope.newadminemail,
@@ -2040,7 +2007,7 @@ angular.module('ControllersModule', [])
                     token: admindata.token
                 })
                 .then(response => {
-                    Utilities.hideGeneralLoader();
+                    Utilities.enableButton("login_button", "Add User");
 
                     if(response.data === "username_exists") {
                         Notification.info("Name exists. Choose another.");
@@ -2084,14 +2051,14 @@ angular.module('ControllersModule', [])
             }
             else {
 
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("login_button", "Please wait...");
 
                 AdminService.deleteuser({
                     id: adminid,
                     token: admindata.token
                 })
                 .then(response => {
-                    Utilities.hideGeneralLoader();
+                    Utilities.enableButton("login_button", "Delete User");
 
                     if(response.data === "account_notfound") {
                         Notification.info("User does not exist.");
@@ -2375,7 +2342,6 @@ angular.module('ControllersModule', [])
                 officelocation: $scope.co_dest
             }).then(response => {
 
-                $log.log("company res: ", response);
                 Utilities.enableButton("companysignup", "Sign Up");
 
                 switch (response.data){
@@ -2417,10 +2383,10 @@ angular.module('ControllersModule', [])
             if(!$scope.co_dep) {
                 $("#co_dep").notify("Required.", { position: "bottom-center" });
             }
-            if(!$scope.co_dest) {
+            else if(!$scope.co_dest) {
                 $("#co_dest").notify("Required.", { position: "bottom-center" });
             }
-            if(!$scope.companyname) {
+            else if(!$scope.companyname) {
                 $("#companyname").notify("Company name is required.", { position: "bottom-center" });
             }
             else if(!$scope.companyemail) {
@@ -2432,9 +2398,6 @@ angular.module('ControllersModule', [])
             else if(!$scope.employeesno) {
                 $("#employeesno").notify("Number of employees is required.", { position: "bottom-center" });
             }
-            /*else if(!$scope.officelocation) {
-                $("#officelocation").notify("Office location is required.", { position: "bottom-center" });
-            }*/
             else if(!$scope.companyphone) {
                 $("#companyphone").notify("Phone number is required.", { position: "bottom-center" });
             }
@@ -2568,7 +2531,7 @@ angular.module('ControllersModule', [])
             $(".ui.active.dimmer").css("display", "none");
         }
         else {
-            //$scope.companyLogOut();
+            $scope.companyLogOut();
         }
 
         $scope.showFundCard = () => {
@@ -2702,6 +2665,14 @@ angular.module('ControllersModule', [])
             Utilities.closeForm("addemployee");
         };
 
+        $scope.showRemoveEmployee = () => {
+            Utilities.showForm("removeemployee", "230px");
+        };
+
+        $scope.closeRemoveEmployee = () => {
+            Utilities.closeForm("removeemployee");
+        };
+
         $scope.addEmployee = () => {
             if(!$scope.employeefullname) {
                 $("#employeefullname").notify("Please provide employee fullname.", { position: "bottom-center" });
@@ -2744,8 +2715,6 @@ angular.module('ControllersModule', [])
                 }).then(response => {
                     Utilities.enableButton("empsignup", "Add Employee");
 
-                    $log.log("res: ", response);
-
                     switch (response.data){
                         case "email_exists":
                             Notification.info("The email address you entered is registered.");
@@ -2777,555 +2746,62 @@ angular.module('ControllersModule', [])
             }
         }
 
-
-
-
-        $scope.checkSuper = (mode, id) => {
-            $scope.adminmode = mode;
-
-            if(id) {
-                $scope.admin_id = id;
+        $scope.removeEmployee = () => {
+            if(!$scope.e_email) {
+                $("#e_email").notify("Please enter employee email address.", { position: "bottom-center" });
+                $("#e_email").focus();
             }
-
-            Utilities.showForm("verifysuper", "220px");
-        }
-
-        $scope.enableUserCard = () => {
-            Utilities.showForm("enablecardform", "210px");
-        }
-
-        $scope.disableUserCard = () => {
-            Utilities.showForm("disablecardform", "210px");
-        }
-
-        $scope.closeVerifySuper = () => {
-            Utilities.closeForm("verifysuper");
-        }
-
-        $scope.showAddRouteForm = () => {
-            Utilities.showForm("addrouteform", "520px");
-        }
-
-        $scope.closeAddRouteForm = () => {
-            Utilities.closeForm("addrouteform");
-        }
-
-        $scope.showChangeFareForm = () => {
-            Utilities.showForm("changefareform", "300px");
-        }
-
-        $scope.closeChangeFareForm = () => {
-            Utilities.closeForm("changefareform");
-        }
-
-        $scope.closeEnableCardForm = () => {
-            Utilities.closeForm("enablecardform");
-        }
-
-        $scope.closeDisableCardForm = () => {
-            Utilities.closeForm("disablecardform");
-        }
-
-        $scope.changeFare = () => {
-            if(!$scope.c_dep) {
-                $("#c_dep").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.c_dest) {
-                $("#c_dest").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.c_fareoneway) {
-                $("#c_fareoneway").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.c_farereturn) {
-                $("#c_farereturn").notify("Required.", { position: "bottom-center" });
-            }
-
-            else {
-                Utilities.showGeneralLoader();
-
-                AdminService.changefare({
-                    token: admindata.token,
-                    route: $scope.c_dep.split(" - ")[1] + " - " + $scope.c_dest.split(" - ")[1],
-                    fareoneway: $scope.c_fareoneway,
-                    farereturn: $scope.c_farereturn
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
-
-                    $log.log("response changeFare: ", response);
-
-                    if(response.data === "fareupdated") {
-                        $(".fareheader").notify("Fare successfully updated.", "success", { position: "bottom-center" });
-                        $("#c_dep").val("");
-                        $("#c_dest").val("");
-                        $("#c_fareoneway").val("");
-                        $("#c_farereturn").val("");
-
-                        setTimeout(() => {
-                            Utilities.closeForm("changefareform");
-                        }, 5000)
-                    }
-                    else if(response.data === "unknown_error") {
-                        $(".fareheader").notify("Error. Please try again.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
-                    else if(response.data === "route_notfound") {
-                        $(".fareheader").notify("This route was not found.", { position: "bottom-center" });
-                    }
-                })
-            }
-        }
-
-        $scope.addRoute = () => {
-            if(!$scope.dep) {
-                $("#dep").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.dest) {
-                $("#dest").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$("#morningpickup").val()) {
-                $("#morningpickup").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$("#morningdrop").val()) {
-                $("#morningdrop").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$("#eveningpickup").val()) {
-                $("#eveningpickup").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$("#eveningdrop").val()) {
-                $("#eveningdrop").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.morningpickuppoint) {
-                $("#morningpickuppoint").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.morningdroppoint) {
-                $("#morningdroppoint").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.eveningpickuppoint) {
-                $("#eveningpickuppoint").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.eveningdroppoint) {
-                $("#eveningdroppoint").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.fareoneway) {
-                $("#fareoneway").notify("Required.", { position: "bottom-center" });
-            }
-
-            else if(!$scope.farereturn) {
-                $("#farereturn").notify("Required.", { position: "bottom-center" });
-            }
-
-            else {
-                Utilities.showGeneralLoader();
-
-                AdminService.addroute({
-                    token: admindata.token,
-                    route: $scope.dep.split(" - ")[1] + " - " + $scope.dest.split(" - ")[1],
-                    morningpickuptime: $("#morningpickup").val(),
-                    eveningpickuptime: $("#eveningpickup").val(),
-                    morningdroptime: $("#morningdrop").val(),
-                    eveningdroptime: $("#eveningdrop").val(),
-                    morningpickupplace: $scope.morningpickuppoint,
-                    morningdropplace: $scope.morningdroppoint,
-                    eveningpickupplace: $scope.eveningpickuppoint,
-                    eveningdropplace: $scope.eveningdroppoint,
-                    fareoneway: $scope.fareoneway,
-                    farereturn: $scope.farereturn
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
-
-                    $log.log("response addroute: ", response);
-
-                    if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
-                    else if(response.data === "route_exists") {
-                        $(".routeheader").notify("This route exists!", { position: "bottom-center" });
-                    }
-                    else if(response.data === "unknown_error1" || response.data === "unknown_error2") {
-                        $(".routeheader").notify("Error. Please try again later.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "stuffsaved") {
-                        $(".routeheader").notify("Route saved successfully.", { position: "bottom-center" });
-                        $("#dep").val("");
-                        $("#dest").val("");
-                        $("#morningpickup").val("");
-                        $("#eveningpickup").val("");
-                        $("#morningdrop").val("");
-                        $("#eveningdrop").val("");
-                        $("#morningpickuppoint").val("");
-                        $("#morningdroppoint").val("");
-                        $("#eveningpickuppoint").val("");
-                        $("#eveningdroppoint").val("");
-                        $("#fareoneway").val("");
-                        $("#farereturn").val("");
-
-                        setTimeout(() => {
-                            Utilities.closeForm("addrouteform");
-                        }, 5000)
-                    }
-                })
-            }
-        }
-
-        $scope.verifySuper = () => {
-            if(!$scope.superpassword) {
-                $("#superpassword").notify("Please enter your password.", { position: "bottom-center" });
+            else if(!Utilities.validmail($scope.e_email)) {
+                $("#e_email").notify("Please enter a valid email address.", { position: "bottom-center" });
+                $("#e_email").focus();
             }
             else {
 
-                Utilities.showGeneralLoader();
+                Utilities.disableButton("subcom", "Please wait ...");
 
-                AdminService.verifysuper({
-                    email: admindata.email,
-                    password: $scope.superpassword,
-                    token: admindata.token
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
+                Transporter.removeemployee({
+                    email: $scope.e_email,
+                    token: companydata.data.token
+                }).then(response => {
+                    Utilities.enableButton("subcom", "Submit");
 
-                    if(response.data === "account_notfound") {
-                        $("#superpassword").notify("Invalid password.", { position: "bottom-center" });
-                    }
-                    else if (response.data === "user_exists") {
-                        $("#superpassword").val("");
-                        $scope.closeVerifySuper();
+                    switch (response.data){
+                        case "account_notfound":
+                            Notification.info("The email address you entered was not found.");
+                            $("#e_email").focus();
+                            break;
+                        case "emp_notfound":
+                            Notification.info("The email address you entered was not found.");
+                            $("#e_email").focus();
+                            break;
+                        case "com_notfound":
+                            Notification.info("There is a problem with your account. Please log in again.");
 
-                        if($scope.adminmode === "delete" && $scope.admin_id) {
-                            $scope.targetadmin = admindata.admins.find(function(value) {
+                            setTimeout(() => {
+                                $scope.companyLogOut();
+                            }, 2000);
 
-                                return value.id === $scope.admin_id;
-                            });
+                            break;
+                        case "employeeremoved":
+                            Notification.success("Employee has been successfully removed.");
+                            $("#e_email").val("");
 
-                            Utilities.showForm("verifydelete", "200px");
-                        }
-                        else if($scope.adminmode === "add") {
-                            Utilities.showForm("adduserform", "250px");
-                        }
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
-                })
-            }
-        }
+                            setTimeout(() => {
+                                Utilities.closeForm("removeemployee");
+                            }, 2000);
+                            
+                            break;
+                        case "token_expired":
+                            Notification.warning("Access time expired. Logging out now ...");
 
-        $scope.addUser = () => {
-            if(!$scope.newadminemail) {
-                $("#newadminemail").notify("Please fill this form.", { position: "bottom-center" });
-            }
-            else if(!Utilities.validmail($scope.newadminemail)) {
-                $("#newadminemail").notify("Please enter valid email.", { position: "bottom-center" });
-            }
-            else if(!$scope.newadminname) {
-                $("#newadminname").notify("Please fill this form.", { position: "bottom-center" });
-            }
-            else {
-
-                if($scope.newadminname.length === 2) {
-                    $scope.newadminname = $scope.newadminname.split(" ")[0]+$scope.newadminname.split(" ")[1]
-                }
-
-                Utilities.showGeneralLoader();
-
-                AdminService.adduser({
-                    email: $scope.newadminemail,
-                    name: $scope.newadminname,
-                    token: admindata.token
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
-
-                    if(response.data === "username_exists") {
-                        $("#newadminname").notify("Name exists. Choose another.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "user_exists") {
-                        $("#newadminname").notify("Email address exists.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "admin_saved") {
-                        $("#newadminemail").notify("Admin added.", "success", { position: "bottom-center" });
-
-                        $scope.admins = response.admins;
-
-                        let obj = store.get("admindata");
-
-                        obj.admins = response.admins;
-
-                        store.set("admindata", obj);
-
-                        setTimeout(() => {
-                            Utilities.closeForm("adduserform");
-                        }, 10000);
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
+                            setTimeout(() => {
+                                $scope.companyLogOut();
+                            }, 2000);
                     }
                 })
-            }
-        }
-
-        $scope.deleteUser = (adminid) => {
-            if(!$scope.deletehoice) {
-                $("#deletehoice").notify("Required.", { position: "bottom-center" });
-            }
-            else if($scope.deletehoice.toUpperCase().trim() !== "YES" && $scope.deletehoice.toUpperCase().trim() !== "NO") {
-                $("#deletehoice").notify("Please enter YES or NO.", { position: "bottom-center" });
-            }
-            else if($scope.deletehoice.toUpperCase().trim() === "NO") {
-                Utilities.closeForm("verifydelete");
-            }
-            else {
-
-                Utilities.showGeneralLoader();
-
-                AdminService.deleteuser({
-                    id: adminid,
-                    token: admindata.token
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
-
-                    if(response.data === "account_notfound") {
-                        $("#deletehoice").notify("Please refresh your page and try again.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "found_superuser") {
-                        $("#deletehoice").notify("You can not delete a super user.", { position: "bottom-center" });
-                    }
-                    else if(response.message === "admin_deleted") {
-                        $("#deletehoice").notify("Admin removed.", "success", { position: "bottom-center" });
-
-                        $scope.admins = response.data;
-
-                        let obj = store.get("admindata");
-
-                        obj.admins = response.data;
-
-                        store.set("admindata", obj);
-
-                        //location.replace("main.html");
-
-                        setTimeout(() => {
-                            Utilities.closeForm("verifydelete");
-                        }, 5000);
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
-                })
-            }
-        }
-
-        let targetmessage;
-
-        $scope.replyMessage = (id, status) => {
-            if(status === "Pending") {
-                targetmessage = admindata.messages.find(function(value) {
-
-                    return value._id === id;
-                });
-
-                $scope.targetcomplaint = targetmessage;
-
-                Utilities.showForm("message", "370px");
-            }
-            else {
-
-                targetmessage = admindata.messages.find(function(value) {
-
-                    return value._id === id;
-                });
-
-                $scope.targetcomplaint = targetmessage;
-
-                Utilities.showForm("viewrepliedmessage", "370px");
-            }
-        }
-
-        $scope.transferRole = () => {
-            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                $('.ui.sidebar')
-                    .sidebar('toggle')
-                ;
-            }
-
-            $window.alert("Feature coming soon.");
-        }
-
-        $scope.viewReply = (id) => {
-            if(id) {
-                $scope.closeViewRepliedMessage();
-                Utilities.showForm("repliedmessage", "300px");
-            }
-        }
-
-        $scope.closeViewRepliedMessage = () => {
-            Utilities.closeForm("viewrepliedmessage");
-        }
-
-        $scope.closeRepliedMessage = () => {
-            Utilities.closeForm("repliedmessage");
-        }
-
-        $scope.closeMessage = () => {
-            Utilities.closeForm("message");
-        }
-
-        $scope.closeReplyComplaint = () => {
-            Utilities.closeForm("replycomplaint");
-        }
-
-        $scope.reply = (messageid) => {
-            if(messageid) {
-                $scope.closeMessage();
-                Utilities.showForm("replycomplaint", "300px");
-            }
-        }
-
-        $scope.replyComplaint = () => {
-            if(!$scope.replytext) {
-                $("#replytext").notify("Please enter some text.", { position: "bottom-center" });
-            }
-            else {
-                Utilities.showGeneralLoader();
-
-                AdminService.replymessage({
-                    id: targetmessage._id,
-                    subject: targetmessage.subject,
-                    token: admindata.token,
-                    replytext: $scope.replytext,
-                    replyfrom: admindata.fullname
-                })
-                .then(response => {
-                    Utilities.hideGeneralLoader();
-
-                    $log.log("replytext: ", response);
-                    if(response.data === "already_replied") {
-                        $("#replytext").notify("This message has already been replied.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "no_complaint") {
-                        $("#replytext").notify("Error! ID not found.", { position: "bottom-center" });
-                    }
-                    else if(response.data === "replied") {
-                        $("#replytext").notify("Replied.", "success", { position: "bottom-center" });
-
-                        $scope.messages = response.complaints;
-
-                        let obj = store.get("admindata");
-
-                        obj.messages = response.complaints;
-
-                        store.set("admindata", obj);
-
-                        setTimeout(() => {
-                            Utilities.closeForm("replycomplaint");
-                        }, 5000);
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
-                })
-            }
-        }
-
-        $scope.showSideBar = () => {
-            $(".staticsidebar").removeClass("visible inverted vertical menu staticsidebar for_desk").addClass("sid_barr");
-
-            $('.ui.sidebar')
-                .sidebar('toggle')
-            ;
-        }
-
-        $scope.hide_bar = () => {
-            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-                $('.ui.sidebar')
-                    .sidebar('toggle')
-                ;
-            }
-        }
-
-        $scope.enableCard = () => {
-            if(!$scope.e_cardnumber) {
-                $("#e_cardnumber").notify("Please enter card number.", { position: "bottom-center" });
-            }
-            else {
-                Utilities.showGeneralLoader();
-
-                AdminService.enablecard({
-                    cardnumber: $scope.e_cardnumber,
-                    token: admindata.token
-                })
-                .then (response => {
-                    Utilities.hideGeneralLoader();
-
-                    if(response.status) {
-                        $("#e_cardnumber").notify("Card successfully enabled.", "success", { position: "bottom-center" });
-                        $("#e_cardnumber").val("");
-
-                        setTimeout(() => {
-                            Utilities.closeForm("ensablecardform");
-                        }, 5000)
-                    }
-                    else if(response.data === "card_notfound") {
-                        $("#e_cardnumber").notify("Card number does not exist!", { position: "bottom-center" });
-                    }
-                    else if(response.data === "card_alreadyenabled") {
-                        $("#e_cardnumber").notify("Card number already enabled!", { position: "bottom-center" });
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
-
-                })
-            }
-        }
-
-        $scope.disableCard = () => {
-            if(!$scope.d_cardnumber) {
-                $("#d_cardnumber").notify("Please enter card number.", { position: "bottom-center" });
-            }
-            else {
-                Utilities.showGeneralLoader();
-
-                AdminService.disablecard({
-                    cardnumber: $scope.d_cardnumber,
-                    token: admindata.token
-                })
-                .then (response => {
-                    Utilities.hideGeneralLoader();
-
-                    if(response.status) {
-                        $("#d_cardnumber").notify("Card successfully disabled.", "success", { position: "bottom-center" });
-                        $("#d_cardnumber").val("");
-
-                        setTimeout(() => {
-                            Utilities.closeForm("disablecardform");
-                        }, 5000)
-                    }
-                    else if(response.data === "card_notfound") {
-                        $("#d_cardnumber").notify("Card number does not exist!", { position: "bottom-center" });
-                    }
-                    else if(response.data === "card_alreadydisabled") {
-                        $("#d_cardnumber").notify("Card number already disabled!", { position: "bottom-center" });
-                    }
-                    else if(response.data === "token_expired") {
-                        $scope.adminLogOut();
-                    }
+                .catch(error => {
+                    Utilities.enableButton("subcom", "Submit");
+                    Notification.info("There has been an error. Please try again later.");
                 })
             }
         }
@@ -3335,26 +2811,59 @@ angular.module('ControllersModule', [])
         $(".ui.active.dimmer").css("display", "none");
         Utilities.toTop();
 
+        let places = store.get("places");
+
+        if(places) {
+            $scope.home = places.home;
+            $scope.work = places.work;
+        }
+
         let user = store.get("user");
+        let comdata = store.get("company");
+
+        let handleIndividualEdit = () => {
+            if(user) {
+                $state.go("edit");
+                setTimeout(() => {
+                    $("#edit_fullname").val(user.data.fullname);
+                    $("#edit_work_location").val(user.data.work);
+                    $("#edit_home_location").val(user.data.home);
+                    $("#edit_org").val(user.data.org);
+                    $("#edit_phone").val(user.data.phone);
+                    $("#edit_username").val(user.data.username);
+                    $("#edit_email").val(user.data.email);
+                }, 300);
+            }
+            else {
+                $state.go("login");
+            }
+        }
+
+        let handleCompanyEdit = () => {
+            if(comdata) {
+                $state.go("comedit");
+
+                setTimeout(() => {
+                    $("#companyname").val(comdata.data.companyname);
+                    $("#companyemail").val(comdata.data.email);
+                    $("#companyphone").val(comdata.data.phone);
+                    $("#employeesno").val(comdata.data.employeescount);
+                }, 300);
+            }
+            else {
+                $state.go("login");
+            }
+        }
 
         if(user) {
-            setTimeout(() => {
-                $("#edit_fullname").val(user.data.fullname);
-                $("#edit_work_location").val(user.data.work);
-                $("#edit_home_location").val(user.data.home);
-                $("#edit_org").val(user.data.org);
-                $("#edit_phone").val(user.data.phone);
-                $("#edit_username").val(user.data.username);
-                $("#edit_email").val(user.data.email);
-            }, 300);
+            handleIndividualEdit();
         }
         else {
-            store.remove("user");
-            $state.go("login");
+            handleCompanyEdit();
         }
 
         $scope.updateDetails = () => {
-            Utilities.showGeneralLoader();
+            Utilities.disableButton("indup", "Updating...");
 
             Transporter.updatedetails({
                 token: user.data.token,
@@ -3363,18 +2872,24 @@ angular.module('ControllersModule', [])
                 work: $("#edit_work_location").val(),
                 home: $("#edit_home_location").val(),
                 email: $("#edit_email").val(),
+                old: user.data.email,
                 phone: $("#edit_phone").val(),
                 username: $("#edit_username").val()
             })
             .then(response => {
-                Utilities.hideGeneralLoader();
+                Utilities.disableButton("indup", "Save Changes");
 
                 if(response.data === "token_expired") {
-                    store.remove("user");
-                    $state.go("login");
+                    Notification.info("Access time expired.");
+
+                    setTimeout(() => {
+                        store.remove("user");
+                        $state.go("login");
+                    }, 1500);
                 }
                 else if(response.data === "updated") {
-                    $(".not_img").notify("Update Successful!", "success", { position: "bottom-center" });
+                    Notification.success("Account successfully updated.");
+
                     $("#edit_fullname").val("");
                     $("#edit_work_location").val("");
                     $("#edit_home_location").val("");
@@ -3384,8 +2899,50 @@ angular.module('ControllersModule', [])
                     $("#edit_email").val("");
                 }
                 else if(response.data === "unknown_error") {
-                    $(".not_img").notify("There has been a problem.", "success", { position: "bottom-center" });
+                    Notification.warning("Sorry. There has been a problem. Please try again later.", error); 
                 }
+            })
+        }
+
+        $scope.updateAcct = () => {
+            Utilities.disableButton("companysignup", "Updating...");
+
+            Transporter.updatedetails({
+                token: comdata.data.token,
+                companyname: $("#companyname").val(),
+                email: $("#companyemail").val(),
+                old: comdata.data.email,
+                phone: $("#companyphone").val(),
+                employeescount: $("#employeesno").val(),
+            })
+            .then(response => {
+                $log.log("res: ", response);
+
+                Utilities.enableButton("companysignup", "Update Account");
+
+                if(response.data === "token_expired") {
+                    Notification.info("Access time expired.");
+
+                    setTimeout(() => {
+                        store.remove("company");
+                        $state.go("login");
+                    }, 1500);
+                }
+                else if(response.data === "updated") {
+                    Notification.success("Account successfully updated.");
+
+                    $("#companyname").val("");
+                    $("#companyemail").val("");
+                    $("#companyphone").val("");
+                    $("#employeesno").val("");
+                }
+                else if(response.data === "unknown_error") {
+                    Notification.warning("Sorry. There has been a problem. Please try again later.", error);              
+                }
+            })
+            .catch(error => {
+                Utilities.enableButton("companysignup", "Update Account");
+                Notification.warning("Sorry. There has been a problem. Please try again later.", error);
             })
         }
     }

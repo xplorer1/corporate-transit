@@ -35,142 +35,6 @@ module.exports = function(app, express) {
         return '_' + Math.random().toString(36).substr(2, 9);
     };
 
-    adminRouter.post("/adminlogin", (req, res) => {
-
-        if(!req.body.email) return res.json({status: false, data: "email_required"});
-        if(!req.body.password) return res.json({status: false, data: "password_required"});
-
-        let totaldeposited = 0;
-        let numtaken = 0;
-        let num_cardpayments = 0;
-        let num_bankpayments = 0;
-
-        Admin.findOne({email: req.body.email, password: req.body.password}, {}, (err, admin) => {
-            if(err) return res.json({status: false, data: "Error"+err});
-
-            if(admin) {
-                let token = jwt.sign({
-                    email: req.body.email,
-                }, adminsecret, {
-                    expiresIn: 86400 // expires in 24 hours.
-                });
-
-                User.find({verified: true}, (err, users) => {
-                    if(err) return res.json({statu: false, data: err.message});
-
-                    if(users) {
-                        let numusers = users.length;
-                        let regions = [];
-                        let routes = [];
-                        let userregioncountarray = [];
-                        let userroutecountarray = [];
-
-                        users.forEach(key => {
-
-                            regions.push(key.home);
-                            routes.push(key.route);
-                        });
-
-                        let usersbyregion = regions.reduce(function (acc, curr) {
-                            if (typeof acc[curr] == 'undefined') {
-                                acc[curr] = 1;
-                            } else {
-                                acc[curr] += 1;
-                            }
-
-                                return acc;
-                        }, {});
-
-                        let usersbyroute = routes.reduce(function (acc, curr) {
-                            if (typeof acc[curr] == 'undefined') {
-                                acc[curr] = 1;
-                            } else {
-                                acc[curr] += 1;
-                            }
-
-                                return acc;
-                        }, {});
-
-                        Object.keys(usersbyregion).forEach(key => {
-                            userregioncountarray.push({region: key, regioncount: usersbyregion[key]})
-                        });
-
-                        Object.keys(usersbyroute).forEach(key => {
-                            userroutecountarray.push({route: key, routecount: usersbyroute[key]})
-                        });
-
-                        BookingJournal.find({}, (err, bookings) => {
-                            if(err) return res.json({status: false, data: err.message});
-
-                            if(bookings) {
-                                let numbookings = bookings.length;
-
-                                PaymentJournal.find({paymentstatus: "Confirmed"}, (err, payments) => {
-                                    if(err) return res.json({status: false, data: err.message});
-
-                                    if(payments) {
-                                        payments.forEach(payment => {
-                                            totaldeposited += payment.amount;
-
-                                            if(payment.paymenttype === "Online Instant") {
-                                                num_cardpayments += payment.amount;
-                                            }
-                                            else if(payment.paymenttype === "Bank Payment") {
-                                                num_bankpayments += payment.amount;
-                                            }
-                                        });
-
-                                        bookings.forEach(booking => {
-                                            if(booking.booking.bookingstatus === "Concluded") {
-                                                numtaken++;
-                                            }
-                                        });
-
-                                        Complaint.find({}, {"subject" : 1, "email" : 1, "complaint" : 1, "status" : 1, "createdon" : 1, "reply": 1, "replyfrom" : 1}, (err, complaints) => {
-                                            if(err) return res.json({status: false, data: err.message});
-
-                                            if(complaints) {
-                                                let messages = complaints;
-
-                                                Admin.find({}, {"username" : 1, "role" : 1, "id" : 1, name: 1}, (err, admins) => {
-                                                    if(err) return res.json({status: false, data: err.message});
-
-                                                    if(admins) {
-                                                        let adminobj = {};
-
-                                                        adminobj["numusers"] = numusers;
-                                                        adminobj["email"] = admin.email;
-                                                        adminobj["role"] = admin.role;
-                                                        adminobj["name"] = admin.name;
-                                                        adminobj["numbookings"] = numbookings;
-                                                        adminobj["totaldeposited"] = totaldeposited;
-                                                        adminobj["numtaken"] = numtaken;
-                                                        adminobj["messages"] = messages;
-                                                        adminobj["admins"] = admins;
-                                                        adminobj["token"] = token;
-                                                        adminobj["userregioncountarray"] = userregioncountarray;
-                                                        adminobj["num_bankpayments"] = num_bankpayments;
-                                                        adminobj["num_cardpayments"] = num_cardpayments;
-                                                        adminobj["userroutecountarray"] = userroutecountarray;
-
-                                                        return res.json({status: true, data: "login_successful", userdata: adminobj});
-                                                    }
-                                                })
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            }
-            else {
-                return res.json({status: false, data: "account_notfound"});
-            }
-        })
-    });
-
     adminRouter.post("/deleteadmin", (req, res) => {
         //remove({createdon: {$gt: new Date("2019-01-20")}})
         if(!req.body.id) return res.json({status: false, data: "id_required"});
@@ -194,19 +58,25 @@ module.exports = function(app, express) {
                             return res.json({status: false, data: "found_superuser"});
                         }
                         else {
-                            Admin.remove({id: req.body.id}, (err, deleted) => {
-                                if(err) return res.json({status: false, data: err.message});
+                            User.deleteOne({email: user.email}, (err, userremoved) => {
+                                if(err) console.log("err: ", err.message);
 
-                                if(deleted) {
-                                    Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+                                if(userremoved) {
+                                    Admin.deleteOne({id: req.body.id}, (err, deleted) => {
                                         if(err) return res.json({status: false, data: err.message});
 
-                                        if(admins) {
-                                            return res.json({status: false, data: admins, message: "admin_deleted"});
+                                        if(deleted) {
+                                            Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+                                                if(err) return res.json({status: false, data: err.message});
+
+                                                if(admins) {
+                                                    return res.json({status: true, data: admins, message: "admin_deleted"});
+                                                }
+                                            })
                                         }
                                     })
                                 }
-                            })
+                            });
                         }
                     }
                 });
@@ -404,13 +274,13 @@ module.exports = function(app, express) {
                         }
                         else {
                             User.findOneAndUpdate({ct_cardnumber: req.body.cardnumber}, 
-                            {$set: {cardstatus: "enabled"} }, {new: true},  (err, modified) => {
-                                if(err) return res.json({status: false, data: err.message});
+                                {$set: {cardstatus: "enabled"} }, {new: true},  (err, modified) => {
+                                    if(err) return res.json({status: false, data: err.message});
 
-                                if(modified) {
-                                    return res.json({status: true, data: "card_enabled"});
-                                }
-                        })
+                                    if(modified) {
+                                        return res.json({status: true, data: "card_enabled"});
+                                    }
+                            })
                         }
                     }
                 });
@@ -430,11 +300,11 @@ module.exports = function(app, express) {
                 return res.json({status: false, data: "token_expired"})
             }
             else if(decoded) {
-                Admin.findOne({username: req.body.name}, (err, exists) => {
+                User.findOne({email: req.body.email}, (err, exists) => {
                     if(err) return res.json({status: false, data: err.message});
 
                     if(exists) {
-                        return res.json({status: false, data: "username_exists"});
+                        return res.json({status: false, data: "email_exists"});
                     }
                     else if(!exists) {
                         Admin.findOne({email: req.body.email}, (err, email_exists) => {
@@ -447,6 +317,7 @@ module.exports = function(app, express) {
                             else if(!email_exists) {
 
                                 let admin = new Admin();
+                                let user = new User();
                                 let password = generatePassword();
                                 let id = ID();
 
@@ -464,14 +335,25 @@ module.exports = function(app, express) {
                                         if(err) return res.json({status: false, data: err.message});
 
                                         if(saved) {
-                                            Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+
+                                            user.email = req.body.email;
+                                            user.password = password;
+                                            user.role = "admin";
+
+                                            user.save((err, usersaved) => {
                                                 if(err) return res.json({status: false, data: err.message});
 
-                                                if(admins) {
-                                                    mailer.sendAdminMail(req.body.name, req.body.email, password);
-                                                    return res.json({status: true, data: "admin_saved", admins: admins});
+                                                if(usersaved) {
+                                                    Admin.find({}, {"username" : 1, "role" : 1, "id" : 1}, (err, admins) => {
+                                                        if(err) return res.json({status: false, data: err.message});
+
+                                                        if(admins) {
+                                                            mailer.sendAdminMail(req.body.name, req.body.email, password);
+                                                            return res.json({status: true, data: "admin_saved", admins: admins});
+                                                        }
+                                                    })
                                                 }
-                                            })
+                                            });
                                         }
                                     });
                                 }

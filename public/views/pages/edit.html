@@ -19,7 +19,6 @@
         </div>
     </nav>
 
-    <div class="generalloader"></div>
     <div class="column" id="signup">
         <h2 class="ui image header not_img" style="margin: 0 !important;">
             <div class="content">
@@ -35,7 +34,6 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="edit_fullname" id="edit_fullname" placeholder="Full Name" ng-model="edit_fullname" style="padding-left: 12px !important;">
-                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -43,67 +41,29 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="edit_org" id="edit_org" placeholder="Organization" ng-model="edit_org" style="padding-left: 12px !important;">
-                        <span class="ast">*</span>
                     </div>
                 </div>
 
                 <div class="field sel_field">
                     <label></label>
                     <select class="ui search dropdown" id="edit_work_location" name="edit_work_location" ng-model="edit_work_location">
-                        <option disabled value="">Work Location</option>
-                        <!-- <option value="AJAH - AJH">AJAH - AJH</option>
-                        <option value="ANTHONY - ANY">ANTHONY - ANY</option>
-                        <option value="APAPA - APA">APAPA - APA</option>
-                        <option value="EPE -EPE">EPE - EPE</option>
-                        <option value="FESTAC - FTC">FESTAC - FTC</option>
-                        <option value="IKEJA - KJA">IKEJA - KJA</option>
-                        <option value="IKORODU - KRD">IKORODU - KRD</option> -->
-                        <option value="IKOYI - KYI">IKOYI - KYI</option>
-                        <!-- <option value="ISOLO - ISL">ISOLO - ISL</option>
-                        <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
-                        <option value="LEKKI - LKK">LEKKI - LKK</option>
-                        <option value="MAGODO - MGD">MAGODO - MGD</option>
-                        <option value="MARYLAND - MYD">MARYLAND - MYD</option>
-                        <option value="OGBA - GBA">OGBA - GBA</option>
-                        <option value="OMOLE - MLE">OMOLE - MLE</option>
-                        <option value="SURULERE - SRL">SURULERE - SRL</option>
-                        <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                        <option value="YABA - YBA">YABA - YBA</option> -->
+                        <option disabled value="" selected>Route From</option>
+                        <option ng-repeat="place in home">{{place}}</option>
                     </select>
-                    <span class="ast">*</span>
                 </div>
 
                 <div class="field sel_field">
                     <label></label>
                     <select class="ui search dropdown" id="edit_home_location" name="edit_home_location" ng-model="edit_home_location">
-                        <option disabled value="">Home Location</option>
-                        <!-- <option value="AJAH - AJH">AJAH - AJH</option>
-                        <option value="ANTHONY - ANY">ANTHONY - ANY</option>
-                        <option value="APAPA - APA">APAPA - APA</option>
-                        <option value="EPE -EPE">EPE - EPE</option>
-                        <option value="FESTAC - FTC">FESTAC - FTC</option> -->
-                        <option value="IKEJA - KJA">IKEJA - KJA</option>
-                        <!-- <option value="IKORODU - KRD">IKORODU - KRD</option>
-                        <option value="IKOYI - KYI">IKOYI - KYI</option>
-                        <option value="ISOLO - ISL">ISOLO - ISL</option>
-                        <option value="IYANA-IPAJA - IPJ">IYANA-IPAJA - IPJ</option>
-                        <option value="LEKKI - LKK">LEKKI - LKK</option>
-                        <option value="MAGODO - MGD">MAGODO - MGD</option>
-                        <option value="MARYLAND - MYD">MARYLAND - MYD</option>
-                        <option value="OGBA - GBA">OGBA - GBA</option>
-                        <option value="OMOLE - MLE">OMOLE - MLE</option>
-                        <option value="SURULERE - SRL">SURULERE - SRL</option>
-                        <option value="VICTORIA-ISLAND - VI">VICTORIA-ISLAND - VI</option>
-                        <option value="YABA - YBA">YABA - YBA</option> -->
+                        <option disabled value="" selected>Route To</option>
+                        <option ng-repeat="place in work">{{place}}</option>
                     </select>
-                    <span class="ast">*</span>
                 </div>
 
                 <div class="field">
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="edit_email" id="edit_email" placeholder="E-mail address" ng-model="edit_email" style="padding-left: 12px !important;">
-                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -111,7 +71,6 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="tel" name="edit_phone" id="edit_phone" placeholder="Phone" ng-model="edit_phone" style="padding-left: 12px !important;">
-                        <span class="ast">*</span>
                     </div>
                 </div>
 
@@ -119,14 +78,13 @@
                     <div class="ui left icon input">
                         <!-- <i class="user icon"></i> -->
                         <input class="inpt" type="text" name="edit_username" id="edit_username" placeholder="Username" ng-model="edit_username" style="padding-left: 12px !important;">
-                        <span class="ast">*</span>
                     </div>
                 </div>
 
                 <div class="row"><div class="column">&nbsp;</div></div>
             
                 <div class="si_btn">
-                    <button class="ui fluid large teal submit button log_in_btn" ng-click="updateDetails()" ng-disabled="signupclicked">Save Changes</button>
+                    <button class="ui fluid large teal submit button log_in_btn" id="indup" ng-click="updateDetails()">Save Changes</button>
                 </div>
             </div>
         </form>
