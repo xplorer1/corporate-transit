@@ -6,9 +6,9 @@ function TransporterFnc($http, $q) {
 
     // create a new object
     let transporter = {};
-    //let baseurl = "http://127.0.0.1:8080";
+    let baseurl = "http://127.0.0.1:8080";
     //let baseurl = "https://039053aa.ngrok.io";
-    let baseurl = "https://corporatetransit.com.ng";
+    //let baseurl = "https://corporatetransit.com.ng";
     //let baseurl = "https://a66e4d2c.ngrok.io";
 
     transporter.test = function(userData) {

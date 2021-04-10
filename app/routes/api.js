@@ -529,19 +529,19 @@ module.exports =(app, express, appstorage) => {
         if(!req.body.email) return res.json({status: false, data: "email_required"});
         if(!req.body.password) return res.json({status: false, data: "password_required"});
 
-        User.findOne({email: req.body.email}, (err, user) => {
+        User.findOne({email: req.body.email, password: req.body.password}, (err, user) => {
             if(err) return res.json({status: false, data: err.message});
 
             if(!user) {
                 return res.json({status: false, data: "account_notfound"});
             }
 
-            let validpassword = user.comparePassword(req.body.password);
+            //let validpassword = user.comparePassword(req.body.password);
 
-            if(!validpassword) {
-                return res.json({status: false, data: "account_notfound"});
-            }
-            else {
+            //if(!validpassword) {
+                //return res.json({status: false, data: "account_notfound"});
+            //}
+            //else {
                 if(!user.verified) {
                     let vcode = uuid.v4();
 
@@ -889,7 +889,7 @@ module.exports =(app, express, appstorage) => {
                         }
                     })
                 }
-            }
+            //}
         })
     });
 
